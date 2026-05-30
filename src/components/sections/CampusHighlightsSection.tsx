@@ -44,12 +44,6 @@ export function CampusHighlightsSection() {
             className="lg:col-span-5 flex flex-col justify-center space-y-6 pr-0 lg:pr-8"
           >
             <div className="space-y-2">
-              <span
-                className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em]"
-                style={{ color: COLORS.primary }}
-              >
-                Spiritual Foundation
-              </span>
               <h2
                 className="text-4xl sm:text-5xl font-bold leading-[1.15]"
                 style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
