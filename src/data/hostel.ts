@@ -1,0 +1,182 @@
+export const hostelData = {
+  hostelInfo: {
+    siteName: "Atmiya Vidya Dham",
+    alternateName: "Harisaurabh Hostel",
+    url: "https://avdvvn.org",
+    tagline: "A value-centered student residence in Vallabh Vidyanagar, Gujarat",
+    description:
+      "Offering comfortable rooms, community living, and a focused environment for academic excellence and personal growth.",
+    contact: {
+      phone: "+919712977261",
+      email: "harisaurabh.hostel@gmail.com",
+      address: {
+        streetAddress: "Atmiya Marg, Bakrol Road",
+        locality: "Vallabh Vidyanagar",
+        city: "Anand",
+        region: "Gujarat",
+        postalCode: "388120",
+        country: "IN",
+      },
+      coordinates: {
+        latitude: 22.543,
+        longitude: 72.923,
+      },
+    },
+  },
+  amenities: [
+    { title: "Temple", description: "A serene space where peace and spirituality prevails" },
+    { title: "Free Parking", description: "Spacious parking facilities within campus grounds" },
+    { title: "CCTV Surveillance", description: "24/7 monitoring for complete student safety" },
+    { title: "Laundry Service", description: "Comprehensive washing and ironing included" },
+    { title: "Gymnasium", description: "Fully equipped gym for physical fitness" },
+    { title: "Dining Hall", description: "Hygienic vegetarian food served fresh daily" },
+    { title: "Reading Room", description: "Dedicated quiet space for focused study" },
+    { title: "Hospitality", description: "Warm staff dedicated to student wellbeing" },
+    { title: "Weekly Sabha", description: "Regular spiritual and cultural gatherings" },
+    { title: "Lift Access", description: "24/7 elevator access across all floors" },
+    { title: "Sports Ground", description: "Spacious grounds for sports and activities" },
+    { title: "TV Room", description: "Entertainment room for downtime and relaxation" },
+    { title: "First-Aid", description: "Medical facilities available round the clock" },
+    { title: "Water Cooler", description: "Purified drinking water on every floor" },
+  ],
+  livingSpaces: [
+    {
+      id: 1,
+      category: "Premium",
+      title: "A/C Room",
+      tagline: "Maximum comfort, zero compromise.",
+      description:
+        "Spacious air-conditioned rooms designed for deep focus and restful nights — because great academics start with great sleep.",
+      features: ["2 Sharing", "Attached Bathroom", "Smart AC", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      images: ["/ac-room/1.jpg", "/ac-room/2.jpg", "/ac-room/3.jpg", "/ac-room/4.jpg"],
+      tour360Available: true,
+    },
+    {
+      id: 2,
+      category: "Standard",
+      title: "Non-AC Room",
+      tagline: "Naturally ventilated, thoughtfully designed.",
+      description:
+        "Well-ventilated rooms with premium furniture and all essential amenities — comfort that breathes with you.",
+      features: ["2 Sharing", "Attached Bathroom", "Ventilated", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      images: ["/non-ac-room/2.jpg", "/non-ac-room/1.jpg"],
+      tour360Available: true,
+    },
+    {
+      id: 3,
+      category: "Economy",
+      title: "Dormitory",
+      tagline: "Community living at its finest.",
+      description:
+        "Budget-friendly shared spaces that foster lifelong friendships and a culture of collaborative growth.",
+      features: ["6 Sharing", "Attached Bathroom", "Spacious", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      images: ["https://www.avdvvn.org/assets/images/d1.jpg", "/dormitory/1.jpg", "/dormitory/2.jpg"],
+      tour360Available: false,
+    },
+    {
+      id: 4,
+      category: "Juniors",
+      title: "Junior Room",
+      tagline: "Safe, supervised, and made for young minds.",
+      description:
+        "Dedicated spaces for high school students with extra care and supervision for a smooth transition.",
+      features: ["3 Sharing", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      images: [
+        "https://www.avdvvn.org/assets/images/jr1.jpg",
+        "/junior-room/1.jpg",
+        "/junior-room/2.jpg",
+      ],
+      tour360Available: true,
+    },
+  ],
+  campusHighlights: [
+    {
+      id: 1,
+      title: "Hari Saurabh Hostel",
+      subtitle: "a home away from home",
+      description:
+        "A student is always an empty shell without a pure heart. Along with studies what good he imbibes in his life helps to shape a better future for him. We with the blessings of our Guru always try to impart brotherhood, humanity, love, and discipline in our students which are the sole practices an Indian culture is known for.",
+      image: "/hostel-building.jpg",
+      tag: "Student Residence",
+    },
+    {
+      id: 2,
+      title: "Temple",
+      subtitle: "where peace prevails",
+      description:
+        "A place of cool stone, beauty, shafting sunlight, warmth, and satisfaction where every heart flashes purity is what a temple implies. With the blessings of Lord Swaminarayan, AVD campus comprises of a beautiful temple with enormous devotees stepping in for peace and positivity.",
+      image: "/temple.jpg",
+      tag: "Spiritual Space",
+    },
+    {
+      id: 3,
+      title: "Prayer Hall",
+      subtitle: "togetherness is half success",
+      description:
+        "A large prayer hall with the capacity of 1000+ individuals is a symbol of togetherness. Prayer hall symbolizes the ancient Gurukul culture where students come together for prayers and augment positive energy. Every evening, prayer is performed here by the students of Harisaurabh Hostel.",
+      image: "/prayer-hall.jpg",
+      tag: "Community Space",
+    },
+  ],
+  reviews: [
+    {
+      id: 1,
+      name: "Mantra Sanathra",
+      tag: "Student",
+      rating: 5,
+      review:
+        "I never thought that somebody can be helpful without any expectations. Also, I never felt I am away from home as the place just suited me with itself. I found the best mentors here, came in contact with good individuals, and along with that my every expectation of college life is answered.",
+      image: "https://www.avdvvn.org/assets/images/mantra.jpg",
+    },
+    {
+      id: 2,
+      name: "Axat Patel",
+      tag: "4th yr Student (BE IT, ADIT)",
+      rating: 5,
+      review:
+        "Stepping out from the protected environment and studying far away from home was a challenge for me. But maybe my parent's decision of admitting me here at Harisaurabh Hostel was a blessing for me. Not only I secured my Academics but me being able with a healthy attitude and just cultural and moral values is possible because of the environment here I perceived.",
+      image: "https://www.avdvvn.org/assets/images/senior.jpg",
+    },
+    {
+      id: 3,
+      name: "Naitik Joshi",
+      tag: "Business Analyst, American Express",
+      rating: 5,
+      review:
+        "Frankly, it wasn't my initial choice but was more of a dad's. But till date, if I miss anything in about my entire academic life is staying at AVD. The atmosphere made an impact which I realized later when I cracked CAT. So much attention was paid to me. And damn that breakfast! Class-apart! I didn't make friends instead came out with a family. The guidance provided by Anand Sagar Swamiji and Gurus' talks enabled a life-altering experience at AVD.",
+      image: "https://www.avdvvn.org/assets/images/alumni2.jpeg",
+    },
+  ],
+  transportation: [
+    {
+      route: "01",
+      from: "Anand Railway Station",
+      distance: "7 km",
+      routePath: "Via GJ SH 60 & 100 Feet Rd",
+      mode: "Auto / Bus",
+      originQuery: "Anand+Railway+Station,+Gujarat",
+    },
+    {
+      route: "02",
+      from: "New Anand Bus Station",
+      distance: "6 km",
+      routePath: "Via Zydus Hospital & GJ SH 60 Rd",
+      mode: "Public Bus",
+      originQuery: "New+Anand+Bus+Station,+Gujarat",
+    },
+    {
+      route: "03",
+      from: "Personal Transport (NH-8)",
+      distance: "Highway",
+      routePath: "Via Samarkha Chokdi & Bhalej Rd",
+      mode: "Self Drive",
+      originQuery: "Samarkha+Chokdi,+Anand,+Gujarat",
+    },
+  ],
+};
+
+export type LivingSpace = (typeof hostelData.livingSpaces)[0];
+export type Review = (typeof hostelData.reviews)[0];
+export type Amenity = (typeof hostelData.amenities)[0];
+export type CampusHighlight = (typeof hostelData.campusHighlights)[0];
+export type TransportOption = (typeof hostelData.transportation)[0];
