@@ -2,70 +2,70 @@ export const COLORS = {
   // =========================
   // BRAND COLORS
   // =========================
-  primary: "#7C2D12",          // Royal Maroon
-  primaryLight: "#A1421C",
-  primaryDark: "#5B1F0D",
-  primaryTint: "#FDF2E9",
+  primary: "#C44D28",        // Burnt Terracotta
+  primaryLight: "#D86642",
+  primaryDark: "#7A3723",
+  primaryTint: "#F7E3DB",
 
-  secondary: "#1F2937",        // Dark Slate
-  secondaryLight: "#374151",
-  secondaryDark: "#111827",
+  secondary: "#8A5B36",      // Warm Camel
+  secondaryLight: "#B27642",
+  secondaryDark: "#654126",
 
-  accent: "#C9A227",           // Antique Gold
-  accentLight: "#F4E4A3",
-  accentDark: "#9E7B0D",
+  accent: "#4E4E52",         // Charcoal Grey
+  accentLight: "#76767B",
+  accentDark: "#2F2F33",
 
   // =========================
   // BACKGROUNDS
   // =========================
-  background: "#FAF8F3",       // Ivory
-  backgroundSecondary: "#FFFDF8",
+  background: "#F7F4F0",
+  backgroundSecondary: "#F1ECE6",
   surface: "#FFFFFF",
-  surfaceHover: "#F7F4EE",
+  surfaceHover: "#FBF8F5",
 
   // =========================
   // TEXT COLORS
   // =========================
-  textPrimary: "#1C1917",
-  textSecondary: "#57534E",
-  textMuted: "#78716C",
-  textLight: "#A8A29E",
+  textPrimary: "#2B2B2B",
+  textSecondary: "#5A5A5A",
+  textMuted: "#7D7D7D",
+  textLight: "#A3A3A3",
   textWhite: "#FFFFFF",
 
   // =========================
   // BORDERS
   // =========================
-  border: "#E7E5E4",
-  borderLight: "#F5F5F4",
-  borderPrimary: "#A1421C",
-  borderAccent: "#F4E4A3",
-  borderGold: "#F4E4A3",
+  border: "#DDD6CE",
+  borderLight: "#EAE5E0",
+  borderPrimary: "#D86642",
+  borderAccent: "#76767B",
+  borderGold: "#DDD6CE",
 
   // =========================
   // STATUS COLORS
   // =========================
-  success: "#15803D",
-  successLight: "#DCFCE7",
+  success: "#2E7D32",
+  successLight: "#E8F5E9",
 
-  warning: "#CA8A04",
-  warningLight: "#FEF3C7",
+  warning: "#C17817",
+  warningLight: "#FFF3E0",
 
-  error: "#DC2626",
-  errorLight: "#FEE2E2",
+  error: "#C62828",
+  errorLight: "#FFEBEE",
 
-  info: "#2563EB",
-  infoLight: "#DBEAFE",
+  info: "#1565C0",
+  infoLight: "#E3F2FD",
 
   // =========================
   // SHADOWS & OVERLAYS
   // =========================
-  overlay: "rgba(31, 41, 55, 0.70)",
-  shadow: "rgba(31, 41, 55, 0.10)",
+  overlay: "rgba(47,47,51,0.72)",
+  shadow: "rgba(47,47,51,0.10)",
 
   // =========================
-  // HOSTEL THEME SPECIFIC
+  // HOSTEL THEME
   // =========================
-  royalMaroon: "#7C2D12",
-  antiqueGold: "#C9A227",
-  ivory: "#FAF8F3",
+  terracotta: "#C44D28",
+  camel: "#8A5B36",
+  charcoal: "#4E4E52",
 };
