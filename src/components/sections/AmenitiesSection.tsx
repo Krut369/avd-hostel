@@ -32,8 +32,8 @@ export function AmenitiesSection() {
 
   return (
     <section
-      className="py-24 border-t overflow-hidden"
-      style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+      className="py-24 overflow-hidden"
+      style={{ backgroundColor: COLORS.background }}
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes marquee {
@@ -76,15 +76,15 @@ export function AmenitiesSection() {
           {duplicatedAmenities.map((amenity, i) => (
             <div
               key={`${amenity.title}-${i}`}
-              className="group relative w-[160px] sm:w-[220px] shrink-0 rounded-2xl p-5 flex flex-col items-center text-center justify-center cursor-pointer hover:border-amber-500/40 transition-all duration-300 border shadow-sm"
-              style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
+              className="group relative w-[160px] sm:w-[220px] shrink-0 rounded-2xl p-5 flex flex-col items-center text-center justify-center cursor-pointer hover:border-[var(--primary)]/40 transition-all duration-300 border shadow-sm glass-warm glass-shine"
+              style={{ borderColor: COLORS.borderGold }}
             >
               {/* Glow */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-amber-500/0 to-amber-500/0 group-hover:from-amber-500/5 group-hover:to-orange-500/5 transition-all duration-500 pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent to-transparent group-hover:from-[var(--primary)]/5 group-hover:to-[var(--accent)]/5 transition-all duration-500 pointer-events-none" />
 
               {/* Icon Container */}
               <div
-                className="w-12 h-12 rounded-xl border flex items-center justify-center mb-3 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300"
+                className="w-12 h-12 rounded-xl border flex items-center justify-center mb-3 group-hover:bg-[var(--primary)] group-hover:text-white transition-all duration-300"
                 style={{
                   backgroundColor: `${COLORS.primary}08`,
                   borderColor: COLORS.borderGold,

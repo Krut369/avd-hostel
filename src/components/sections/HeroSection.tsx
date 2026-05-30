@@ -54,10 +54,11 @@ export function HeroSection() {
         {mounted && Array.from({ length: 12 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1.5 h-1.5 rounded-full bg-amber-500/30"
+            className="absolute w-1.5 h-1.5 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+              backgroundColor: `${COLORS.accent}40`
             }}
             animate={{
               y: [0, -30, 0],
@@ -94,7 +95,8 @@ export function HeroSection() {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="w-24 h-0.5 mx-auto mb-4 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+          className="w-24 h-0.5 mx-auto mb-4"
+          style={{ backgroundImage: `linear-gradient(to right, transparent, ${COLORS.accent}, transparent)` }}
         />
 
         <motion.p
@@ -130,7 +132,11 @@ export function HeroSection() {
               e.preventDefault();
               document.getElementById("rooms")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-amber-500/30 hover:scale-105 transition-all duration-300 text-sm cursor-pointer"
+            className="group flex items-center gap-2 px-8 py-4 text-white font-semibold rounded-xl hover:scale-105 transition-all duration-300 text-sm cursor-pointer"
+            style={{
+              backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})`,
+              boxShadow: `0 10px 25px -5px ${COLORS.primary}40`
+            }}
           >
             Explore Rooms
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -141,7 +147,7 @@ export function HeroSection() {
               e.preventDefault();
               document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="flex items-center gap-2 px-8 py-4 text-sm font-semibold rounded-xl border hover:bg-amber-500/10 transition-all duration-300 cursor-pointer"
+            className="flex items-center gap-2 px-8 py-4 text-sm font-semibold rounded-xl border transition-all duration-300 cursor-pointer hover:bg-stone-100"
             style={{ color: COLORS.primary, borderColor: COLORS.primary }}
           >
             Apply Now

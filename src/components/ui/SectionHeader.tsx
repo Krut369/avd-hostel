@@ -27,13 +27,7 @@ export function SectionHeader({
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className={`mb-14 ${centered ? "text-center" : ""}`}
     >
-      {eyebrow && (
-        <div className="ornament-divider mb-5 justify-center">
-          <span className="text-amber-500 text-xs font-semibold uppercase tracking-[0.3em]">
-            {eyebrow}
-          </span>
-        </div>
-      )}
+
       <h2
         className={`text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${
           light ? "text-white" : "text-slate-900"

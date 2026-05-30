@@ -286,7 +286,7 @@ export function ContactContent() {
             className="text-5xl sm:text-6xl font-bold mb-6"
             style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
           >
-            Admission Enquiry
+            Admission <span className="gradient-text italic">Enquiry</span>
           </h1>
           <p className="text-lg max-w-xl mx-auto font-medium" style={{ color: COLORS.textPrimary }}>
             Fill out the details below in 3 quick steps and our admissions team will contact you shortly.
@@ -298,7 +298,7 @@ export function ContactContent() {
       <section className="px-4 sm:px-6 lg:px-8 relative z-10 animate-fade-in">
         <div className="max-w-3xl mx-auto w-full">
           <div
-            className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300 bg-white"
+            className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300 glass-warm glass-shine"
             style={{ borderColor: COLORS.borderGold }}
           >
             {!isSubmitted ? (

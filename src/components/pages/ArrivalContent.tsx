@@ -54,8 +54,8 @@ export function ArrivalContent() {
 
       {/* Map + Address */}
       <section
-        className="py-16 px-4 sm:px-6 lg:px-8 border-t"
-        style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+        className="py-16 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: COLORS.background }}
       >
         <div className="max-w-7xl mx-auto">
           {/* Combined Smart Navigation Card */}

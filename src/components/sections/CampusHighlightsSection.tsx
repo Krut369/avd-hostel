@@ -29,8 +29,8 @@ export function CampusHighlightsSection() {
   return (
     <section
       id="about"
-      className="py-24 px-4 sm:px-6 lg:px-8 border-t overflow-hidden"
-      style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+      className="py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      style={{ backgroundColor: COLORS.background }}
     >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">

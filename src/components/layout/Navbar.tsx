@@ -134,7 +134,7 @@ export function Navbar() {
                 >
                   Atmiya Vidya Dham
                 </div>
-                <div className="text-amber-500 text-xs font-semibold mt-0.5">Harisaurabh Hostel</div>
+                <div className="text-xs font-semibold mt-0.5" style={{ color: COLORS.accent }}>Harisaurabh Hostel</div>
               </div>
             </Link>
 
@@ -158,7 +158,8 @@ export function Navbar() {
                     {active && (
                       <motion.div
                         layoutId="nav-indicator"
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-amber-500 rounded-full"
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full"
+                        style={{ backgroundColor: COLORS.primary }}
                       />
                     )}
                   </Link>
@@ -167,7 +168,8 @@ export function Navbar() {
               <Link
                 href="/#contact"
                 onClick={(e) => handleNavClick(e, "/#contact")}
-                className="ml-4 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-amber-500/25 hover:scale-105 transition-all duration-300"
+                className="ml-4 px-5 py-2.5 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+                style={{ backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})` }}
               >
                 Apply Now
               </Link>
@@ -208,7 +210,7 @@ export function Navbar() {
                     <Link
                       href={link.href}
                       onClick={(e) => handleNavClick(e, link.href)}
-                      className="flex items-center justify-between py-3 text-2xl font-semibold border-b transition-all duration-300 hover:text-amber-500 hover:pl-2"
+                      className="flex items-center justify-between py-3 text-2xl font-semibold border-b transition-all duration-300 hover:pl-2"
                       style={{
                         fontFamily: "Playfair Display, serif",
                         color: (isHome && activeSection === link.id) ? COLORS.primary : COLORS.textPrimary,
@@ -219,7 +221,8 @@ export function Navbar() {
                       {(isHome && activeSection === link.id) && (
                         <motion.span
                           layoutId="mobile-nav-indicator"
-                          className="w-2.5 h-2.5 rounded-full bg-amber-500 mr-2"
+                          className="w-2.5 h-2.5 rounded-full mr-2"
+                          style={{ backgroundColor: COLORS.primary }}
                           transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         />
                       )}
@@ -236,7 +239,8 @@ export function Navbar() {
                 <Link
                   href="/#contact"
                   onClick={(e) => handleNavClick(e, "/#contact")}
-                  className="block w-full text-center py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-lg font-bold rounded-xl shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 transition-all duration-300"
+                  className="block w-full text-center py-3.5 text-white text-lg font-bold rounded-xl shadow-lg transition-all duration-300"
+                  style={{ backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})` }}
                 >
                   Apply Now
                 </Link>

@@ -78,49 +78,49 @@ const categoryData = [
     img: "/ac-room/1.jpg",
     icon: <LayoutGrid className="w-7 h-7" />,
     gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.secondary}22 100%)`,
-    gridClass: "col-span-2", h: "h-[150px] md:h-[240px]",
+    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Rooms",  label: "Living Rooms",         count: 14,
     img: "/ac-room/2.jpg",
     icon: <BedDouble className="w-7 h-7" />,
-    gradient: `linear-gradient(135deg, #D9770622 0%, #FBBF2422 100%)`,
-    gridClass: "col-span-1 row-span-2", h: "h-[318px] md:h-[508px]",
+    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryLight}22 100%)`,
+    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Gym",    label: "Gymnasium",            count: 1,
     img: `${BASE}/gym.jpg`,
     icon: <Dumbbell className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #6366f122 0%, #8b5cf622 100%)",
-    gridClass: "col-span-1", h: "h-[155px] md:h-[246px]",
+    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Dining", label: "Dining Hall",          count: 4,
     img: `${BASE}/dh1.jpg`,
     icon: <Utensils className="w-7 h-7" />,
-    gradient: "linear-gradient(135deg, #f4722022 0%, #fbbf2422 100%)",
-    gridClass: "col-span-1", h: "h-[155px] md:h-[246px]",
+    gradient: `linear-gradient(135deg, ${COLORS.primary}15 0%, ${COLORS.secondary}15 100%)`,
+    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Sports", label: "Sports & Cricket",    count: 10,
     img: `${BASE}/s9.jpg`,
     icon: <Trophy className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #10b98122 0%, #065f4622 100%)",
-    gridClass: "col-span-1", h: "h-[155px] md:h-[246px]",
+    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Temple", label: "Swaminarayan Mandir", count: 6,
     img: `${BASE}/t1.jpeg`,
     icon: <Church className="w-7 h-7" />,
-    gradient: "linear-gradient(135deg, #f59e0b22 0%, #b4530922 100%)",
-    gridClass: "col-span-1", h: "h-[155px] md:h-[246px]",
+    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryDark}22 100%)`,
+    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Events", label: "Cultural Events",     count: 10,
     img: `${BASE}/e1.jpg`,
     icon: <Calendar className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #ec489922 0%, #be185d22 100%)",
-    gridClass: "col-span-2", h: "h-[150px] md:h-[240px]",
+    gridClass: "col-span-2 md:col-span-3", h: "h-[180px] md:h-[260px]",
   },
 ];
 
@@ -302,8 +302,8 @@ export function GalleryContent() {
 
       {/* ── Category Grid ─────────────────────────────────────────── */}
       <section
-        className="py-14 px-4 sm:px-6 lg:px-8 border-t"
-        style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+        className="py-14 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: COLORS.background }}
       >
         <div className="max-w-6xl mx-auto">
 

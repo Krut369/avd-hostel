@@ -60,8 +60,8 @@ export function ReviewsContent() {
 
       {/* Reviews Masonry */}
       <section
-        className="py-24 px-4 sm:px-6 lg:px-8 border-t"
-        style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+        className="py-24 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: COLORS.background }}
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -282,7 +282,7 @@ export function CTASection() {
             className="text-4xl font-extrabold mb-4"
             style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
           >
-            Admission Enquiry
+            Admission <span className="gradient-text italic">Enquiry</span>
           </h2>
           <p className="text-sm max-w-md mx-auto" style={{ color: COLORS.textPrimary }}>
             Fill out the details below in 3 quick steps and our admissions team will contact you shortly.
@@ -291,7 +291,7 @@ export function CTASection() {
 
         {/* Stepper Card */}
         <div
-          className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300 bg-white"
+          className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300 glass-warm glass-shine"
           style={{ borderColor: COLORS.borderGold }}
         >
           {!isSubmitted ? (

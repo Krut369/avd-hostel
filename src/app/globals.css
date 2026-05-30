@@ -1,76 +1,181 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --saffron: #D97706;
-  --saffron-light: #F59E0B;
-  --slate-blue: #456779;
-  --slate-blue-mid: #5A7E91;
-  --warm-white: #FAF7F2;
-  --gold: #FBBF24;
-  --slate: #334155;
-  --slate-light: #64748B;
-  --cream: #FEF3C7;
+  /* Primary Theme */
+  --primary: #7C2D12;
+  --primary-light: #A1421C;
+  --primary-dark: #5B1F0D;
+
+  /* Secondary */
+  --secondary: #1F2937;
+  --secondary-light: #374151;
+
+  /* Accent */
+  --accent: #C9A227;
+  --accent-light: #F4E4A3;
+
+  /* Backgrounds */
+  --background: #FAF8F3;
+  --surface: #FFFFFF;
+  --surface-hover: #F7F4EE;
+
+  /* Text */
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #78716C;
+
+  /* Extras */
+  --border: #E7E5E4;
+  --shadow: rgba(31, 41, 55, 0.10);
+  --overlay: rgba(31, 41, 55, 0.70);
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #FAF7F2;
-  color: #1F2937;
+  background-color: var(--background);
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Playfair Display', serif;
+}
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #FAF7F2; }
-::-webkit-scrollbar-thumb { background: #D97706; border-radius: 3px; }
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
 
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* Glass Effects */
 .glass {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .glass-dark {
-  background: rgba(69,103,121,0.7);
+  background: rgba(31, 41, 55, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-warm {
-  background: rgba(250,247,242,0.9);
+  background: rgba(250, 248, 243, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(217,119,6,0.2);
+  border: 1px solid rgba(124, 45, 18, 0.15);
 }
 
+/* Text Gradients */
 .gradient-text {
-  background: linear-gradient(135deg, #D97706, #FBBF24);
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-light)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-white {
-  background: linear-gradient(135deg, #ffffff, #FBBF24);
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    var(--primary-light)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Premium Background Gradient */
+.bg-premium-gradient {
+  background: linear-gradient(
+    135deg,
+    #7C2D12 0%,
+    #A1421C 40%,
+    #C9A227 100%
+  );
+}
+
+/* Section Background */
+.bg-ivory-gradient {
+  background: linear-gradient(
+    180deg,
+    #FAF8F3 0%,
+    #F7F4EE 100%
+  );
+}
+
+/* Divider */
 .ornament-divider {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 16px;
 }
-.ornament-divider::before,
-.ornament-divider::after {
+
+/* Glass Shine Animation */
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shine::after {
   content: '';
-  display: none;
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+}
+
+.glass-shine:hover::after {
+  animation: glass-shining 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes glass-shining {
+  from {
+    left: -150%;
+  }
+  to {
+    left: 150%;
+  }
 }

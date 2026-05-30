@@ -56,7 +56,7 @@ export function FeaturedRoomsSection() {
   };
 
   return (
-    <section id="rooms" className="py-24 px-4 sm:px-6 lg:px-8 border-t overflow-hidden" style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}>
+    <section id="rooms" className="py-24 px-4 sm:px-6 lg:px-8 overflow-hidden" style={{ backgroundColor: COLORS.background }}>
       <style dangerouslySetInnerHTML={{ __html: `
         .scrollbar-none::-webkit-scrollbar {
           display: none;

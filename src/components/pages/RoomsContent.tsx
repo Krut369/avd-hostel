@@ -8,7 +8,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { COLORS } from "@/constants/colors";
 
 const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  Premium: { bg: "bg-amber-500", text: "text-white", border: "border-amber-400" },
+  Premium: { bg: "bg-[var(--accent)]", text: "text-white", border: "border-[var(--accent-light)]" },
   Standard: { bg: "bg-blue-500", text: "text-white", border: "border-blue-400" },
   Economy: { bg: "bg-emerald-500", text: "text-white", border: "border-emerald-400" },
   Juniors: { bg: "bg-purple-500", text: "text-white", border: "border-purple-400" },
@@ -57,8 +57,8 @@ export function RoomsContent() {
 
       {/* Rooms */}
       <section
-        className="py-24 px-4 sm:px-6 lg:px-8 border-t"
-        style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+        className="py-24 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: COLORS.background }}
       >
         <div className="max-w-7xl mx-auto space-y-16">
           {hostelData.livingSpaces.map((room, idx) => {
@@ -153,7 +153,11 @@ export function RoomsContent() {
 
                   <a
                     href={`mailto:harisaurabh.hostel@gmail.com?subject=Room Enquiry: ${room.title}`}
-                    className="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-amber-500/25 hover:scale-105 transition-all duration-300 text-sm"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 text-sm"
+                    style={{
+                      backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})`,
+                      boxShadow: `0 10px 15px -3px ${COLORS.primary}25`
+                    }}
                   >
                     Enquire About This Room
                   </a>

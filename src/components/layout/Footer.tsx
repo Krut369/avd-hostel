@@ -26,7 +26,7 @@ export function Footer() {
                 >
                   Atmiya Vidya Dham
                 </div>
-                <div className="text-amber-500 text-xs font-semibold">Harisaurabh Hostel</div>
+                <div className="text-xs font-semibold" style={{ color: COLORS.accent }}>Harisaurabh Hostel</div>
               </div>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: COLORS.textSecondary }}>
@@ -78,7 +78,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-9 h-9 rounded-lg border flex items-center justify-center text-sm cursor-pointer hover:bg-amber-500/20 hover:border-amber-500/40 transition-all duration-300 bg-white"
+                  className="w-9 h-9 rounded-lg border flex items-center justify-center text-sm cursor-pointer hover:bg-[var(--primary)]/10 hover:border-[var(--primary)]/30 transition-all duration-300 bg-white"
                   style={{ borderColor: COLORS.borderGold, color: COLORS.textSecondary }}
                 >
                   {social.icon}
@@ -104,10 +104,10 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm hover:text-amber-500 transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-sm hover:text-[var(--primary)] transition-colors duration-300 flex items-center gap-2 group"
                     style={{ color: COLORS.textSecondary }}
                   >
-                    <span className="w-1 h-1 rounded-full bg-amber-500/50 group-hover:bg-amber-500 transition-colors" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]/40 group-hover:bg-[var(--primary)] transition-colors" />
                     {link.label}
                   </Link>
                 </li>
@@ -122,27 +122,27 @@ export function Footer() {
             </h4>
             <ul className="space-y-4">
               <li className="flex gap-3 items-start">
-                <Phone className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                <Phone className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
                 <a
                   href={`tel:${contact.phone}`}
-                  className="text-sm hover:text-amber-500 transition-colors"
+                  className="text-sm hover:text-[var(--primary)] transition-colors"
                   style={{ color: COLORS.textSecondary }}
                 >
                   {contact.phone}
                 </a>
               </li>
               <li className="flex gap-3 items-start">
-                <Mail className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
                 <a
                   href={`mailto:${contact.email}`}
-                  className="text-sm hover:text-amber-500 transition-colors break-all"
+                  className="text-sm hover:text-[var(--primary)] transition-colors break-all"
                   style={{ color: COLORS.textSecondary }}
                 >
                   {contact.email}
                 </a>
               </li>
               <li className="flex gap-3 items-start">
-                <MapPin className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
                 <span className="text-sm leading-relaxed" style={{ color: COLORS.textSecondary }}>
                   {contact.address.streetAddress},<br />
                   {contact.address.locality},<br />
@@ -169,8 +169,7 @@ export function Footer() {
         </div>
 
         <div
-          className="mt-14 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
-          style={{ borderTopColor: COLORS.borderLight }}
+          className="mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
           <p className="text-xs" style={{ color: COLORS.textMuted }}>
             © {new Date().getFullYear()} Atmiya Vidya Dham. All rights reserved.
@@ -179,10 +178,10 @@ export function Footer() {
             href="https://maps.app.goo.gl/gfcDqDZsdvgEcfex7"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs hover:text-amber-500 transition-colors flex items-center gap-1 cursor-pointer"
+            className="text-xs hover:text-[var(--primary)] transition-colors flex items-center gap-1 cursor-pointer"
             style={{ color: COLORS.textSecondary }}
           >
-            <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+            <MapPin className="w-3.5 h-3.5 shrink-0" style={{ color: COLORS.primary }} />
             <span>Vallabh Vidyanagar, Anand, Gujarat — 388120</span>
           </a>
         </div>
