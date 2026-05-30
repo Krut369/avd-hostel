@@ -83,7 +83,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-none mb-4"
-          style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+          style={{ color: COLORS.textPrimary }}
         >
           Atmiya{" "}
           <span className="italic gradient-text">Vidya</span>
@@ -104,7 +104,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
           className="text-xl sm:text-2xl font-semibold mb-3"
-          style={{ fontFamily: "Playfair Display, serif", fontStyle: "italic", color: COLORS.primary }}
+          style={{ fontStyle: "italic", color: COLORS.primary }}
         >
           Harisaurabh Hostel
         </motion.p>
@@ -169,7 +169,7 @@ export function HeroSection() {
             { num: "4", label: "Room Types" },
           ].map((stat) => (
             <div key={stat.label} className="py-5 px-4 text-center backdrop-blur-sm">
-              <div className="text-2xl font-bold" style={{ fontFamily: "Playfair Display, serif", color: COLORS.primary }}>
+              <div className="text-2xl font-bold" style={{ color: COLORS.primary }}>
                 {stat.num}
               </div>
               <div className="text-xs mt-1" style={{ color: COLORS.textPrimary }}>{stat.label}</div>

@@ -47,7 +47,6 @@ export function AmenitiesSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <SectionHeader
-          eyebrow="What We Offer"
           title="World-Class"
           titleHighlight="Amenities"
           subtitle="Everything you need for a comfortable, fulfilling student life — all within the campus."

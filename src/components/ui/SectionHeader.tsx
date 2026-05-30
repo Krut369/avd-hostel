@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 
 interface SectionHeaderProps {
-  eyebrow?: string;
   title: string;
   titleHighlight?: string;
   subtitle?: string;
@@ -12,7 +11,6 @@ interface SectionHeaderProps {
 }
 
 export function SectionHeader({
-  eyebrow,
   title,
   titleHighlight,
   subtitle,
@@ -32,7 +30,6 @@ export function SectionHeader({
         className={`text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${
           light ? "text-white" : "text-slate-900"
         }`}
-        style={{ fontFamily: "Playfair Display, serif" }}
       >
         {title}{" "}
         {titleHighlight && (

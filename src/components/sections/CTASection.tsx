@@ -280,7 +280,7 @@ export function CTASection() {
         <div className="text-center mb-10">
           <h2
             className="text-4xl font-extrabold mb-4"
-            style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+            style={{ color: COLORS.textPrimary }}
           >
             Admission <span className="gradient-text italic">Enquiry</span>
           </h2>

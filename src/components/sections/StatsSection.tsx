@@ -40,7 +40,7 @@ export function StatsSection() {
               </div>
               <div
                 className="text-4xl font-bold mb-1"
-                style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                style={{ color: COLORS.textPrimary }}
               >
                 {stat.num}{stat.suffix}
               </div>

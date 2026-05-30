@@ -39,12 +39,9 @@ export function RoomsContent() {
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="ornament-divider justify-center mb-6">
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: COLORS.primary }}>Accommodation</span>
-            </div>
             <h1
               className="text-5xl sm:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+              style={{ color: COLORS.textPrimary }}
             >
               Find Your Perfect <span className="gradient-text italic">Room</span>
             </h1>
@@ -125,7 +122,7 @@ export function RoomsContent() {
 
                   <h2
                     className="text-4xl font-bold mb-2"
-                    style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                    style={{ color: COLORS.textPrimary }}
                   >
                     {room.title}
                   </h2>

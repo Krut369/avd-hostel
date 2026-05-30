@@ -22,11 +22,11 @@ export function Footer() {
               <div>
                 <div
                   className="font-bold text-base leading-tight"
-                  style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                  style={{ color: COLORS.textPrimary }}
                 >
                   Atmiya Vidya Dham
                 </div>
-                <div className="text-xs font-semibold" style={{ color: COLORS.accent }}>Harisaurabh Hostel</div>
+                <div className="text-xs font-semibold" style={{ color: COLORS.primary }}>Harisaurabh Hostel</div>
               </div>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: COLORS.textSecondary }}>

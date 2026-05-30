@@ -77,7 +77,7 @@ export function FeaturedRoomsSection() {
         >
           <h2
             className="text-4xl sm:text-5xl font-bold mb-4 text-center"
-            style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+            style={{ color: COLORS.textPrimary }}
           >
             Explore Our <span className="gradient-text italic">Rooms</span>
           </h2>
@@ -135,7 +135,7 @@ export function FeaturedRoomsSection() {
                 <p className="text-xs italic mb-1" style={{ color: COLORS.primary }}>{room.tagline}</p>
                 <h3
                   className="text-xl font-bold mb-2"
-                  style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                  style={{ color: COLORS.textPrimary }}
                 >
                   {room.title}
                 </h3>

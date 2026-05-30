@@ -39,7 +39,6 @@ export function TestimonialsSection() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <SectionHeader
-          eyebrow="Student Reviews"
           title="What Our Students"
           titleHighlight="Say"
           subtitle="Real stories from the people who call Harisaurabh Hostel their second home."
@@ -86,7 +85,6 @@ export function TestimonialsSection() {
                   >
                     <h3
                       className="text-white text-2xl lg:text-3xl font-bold leading-tight"
-                      style={{ fontFamily: "Playfair Display, serif" }}
                     >
                       {currentReview.name}
                     </h3>
@@ -116,7 +114,6 @@ export function TestimonialsSection() {
                   >
                     <p 
                       className="text-base sm:text-lg lg:text-xl leading-relaxed text-stone-600 font-medium italic"
-                      style={{ fontFamily: "Georgia, serif" }}
                     >
                       &ldquo;{currentReview.review}&rdquo;
                     </p>

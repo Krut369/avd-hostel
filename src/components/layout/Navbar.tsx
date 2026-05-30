@@ -130,11 +130,11 @@ export function Navbar() {
               <div className="block">
                 <div
                   className="font-bold text-sm leading-none"
-                  style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                  style={{ color: COLORS.textPrimary }}
                 >
                   Atmiya Vidya Dham
                 </div>
-                <div className="text-xs font-semibold mt-0.5" style={{ color: COLORS.accent }}>Harisaurabh Hostel</div>
+                <div className="text-xs font-semibold mt-0.5" style={{ color: COLORS.primary }}>Harisaurabh Hostel</div>
               </div>
             </Link>
 
@@ -212,7 +212,6 @@ export function Navbar() {
                       onClick={(e) => handleNavClick(e, link.href)}
                       className="flex items-center justify-between py-3 text-2xl font-semibold border-b transition-all duration-300 hover:pl-2"
                       style={{
-                        fontFamily: "Playfair Display, serif",
                         color: (isHome && activeSection === link.id) ? COLORS.primary : COLORS.textPrimary,
                         borderBottomColor: `${COLORS.primary}15`
                       }}

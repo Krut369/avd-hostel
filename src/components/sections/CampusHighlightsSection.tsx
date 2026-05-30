@@ -46,7 +46,7 @@ export function CampusHighlightsSection() {
             <div className="space-y-2">
               <h2
                 className="text-4xl sm:text-5xl font-bold leading-[1.15]"
-                style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                style={{ color: COLORS.textPrimary }}
               >
                 The Sanctuary of <span className="gradient-text italic">Growth</span>
               </h2>
@@ -98,7 +98,6 @@ export function CampusHighlightsSection() {
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.3 }}
                       className="text-white text-3xl font-bold drop-shadow-md"
-                      style={{ fontFamily: "Playfair Display, serif" }}
                     >
                       {slides[currentSlide].title}
                     </motion.h3>

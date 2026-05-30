@@ -279,12 +279,9 @@ export function ContactContent() {
       <section className="relative pt-28 pb-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative z-10 animate-fade-in">
-          <div className="ornament-divider justify-center mb-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: COLORS.primary }}>Reach Out</span>
-          </div>
           <h1
             className="text-5xl sm:text-6xl font-bold mb-6"
-            style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+            style={{ color: COLORS.textPrimary }}
           >
             Admission <span className="gradient-text italic">Enquiry</span>
           </h1>
