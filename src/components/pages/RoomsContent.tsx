@@ -112,9 +112,6 @@ export function RoomsContent() {
                 {/* Content */}
                 <div className={idx % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""}>
                   <div className="flex items-center gap-3 mb-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${colors.bg} ${colors.text}`}>
-                      {room.category}
-                    </span>
                     {room.tour360Available && (
                       <span
                         className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border bg-white"
@@ -155,10 +152,10 @@ export function RoomsContent() {
                   </div>
 
                   <a
-                    href={`mailto:harisaurabh.hostel@gmail.com?subject=Room Inquiry: ${room.title}`}
+                    href={`mailto:harisaurabh.hostel@gmail.com?subject=Room Enquiry: ${room.title}`}
                     className="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-amber-500/25 hover:scale-105 transition-all duration-300 text-sm"
                   >
-                    Inquire About This Room
+                    Enquire About This Room
                   </a>
                 </div>
               </motion.div>

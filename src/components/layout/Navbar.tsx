@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Flame } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 
 const navLinks = [
@@ -28,6 +28,23 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Prevent scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [open]);
+
+  // Close mobile menu on page navigation
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   // Update active section based on intersection observer (on homepage)
   useEffect(() => {
@@ -87,8 +104,8 @@ export function Navbar() {
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
-      setOpen(false);
     }
+    setOpen(false);
   };
 
   return (
@@ -97,24 +114,23 @@ export function Navbar() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled || !isHome
-            ? "glass-warm shadow-md"
-            : "bg-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-[#FAF7F2] shadow-sm border-b border-black/5"
+            : "bg-[#FAF7F2] lg:bg-transparent border-b border-black/5 lg:border-none lg:shadow-none"
         }`}
-        style={scrolled || !isHome ? { borderBottomColor: COLORS.borderGold } : {}}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <Flame className="w-5 h-5 text-white" />
+            <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 bg-white border" style={{ borderColor: `${COLORS.primary}30` }}>
+                <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain p-0.5" />
               </div>
-              <div className="hidden sm:block">
+              <div className="block">
                 <div
                   className="font-bold text-sm leading-none"
-                  style={{ fontFamily: "Playfair Display, serif", color: (scrolled || !isHome) ? COLORS.textPrimary : "#FFFFFF" }}
+                  style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
                 >
                   Atmiya Vidya Dham
                 </div>
@@ -135,9 +151,7 @@ export function Navbar() {
                     style={{
                       color: active
                         ? COLORS.primary
-                        : (scrolled || !isHome)
-                        ? COLORS.textPrimary
-                        : "#FFFFFF"
+                        : COLORS.textPrimary
                     }}
                   >
                     {link.label}
@@ -163,7 +177,7 @@ export function Navbar() {
             <button
               onClick={() => setOpen(!open)}
               className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors"
-              style={{ color: (scrolled || !isHome) ? COLORS.textPrimary : "#FFFFFF" }}
+              style={{ color: COLORS.textPrimary }}
             >
               {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -179,29 +193,36 @@ export function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 z-40 lg:hidden overflow-y-auto"
             style={{ background: "rgba(250, 247, 242, 0.98)", backdropFilter: "blur(20px)" }}
           >
-            <div className="flex flex-col h-full pt-24 px-8">
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col min-h-screen pt-24 pb-12 px-8">
+              <div className="flex flex-col gap-1">
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
                     initial={{ opacity: 0, x: 40 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06, duration: 0.4 }}
+                    transition={{ delay: i * 0.05, duration: 0.4 }}
                   >
                     <Link
                       href={link.href}
                       onClick={(e) => handleNavClick(e, link.href)}
-                      className="block py-4 text-2xl font-semibold border-b transition-colors hover:text-amber-500"
+                      className="flex items-center justify-between py-3 text-2xl font-semibold border-b transition-all duration-300 hover:text-amber-500 hover:pl-2"
                       style={{
                         fontFamily: "Playfair Display, serif",
                         color: (isHome && activeSection === link.id) ? COLORS.primary : COLORS.textPrimary,
                         borderBottomColor: `${COLORS.primary}15`
                       }}
                     >
-                      {link.label}
+                      <span>{link.label}</span>
+                      {(isHome && activeSection === link.id) && (
+                        <motion.span
+                          layoutId="mobile-nav-indicator"
+                          className="w-2.5 h-2.5 rounded-full bg-amber-500 mr-2"
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
+                      )}
                     </Link>
                   </motion.div>
                 ))}
@@ -209,18 +230,18 @@ export function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8"
+                transition={{ delay: 0.35 }}
+                className="mt-6"
               >
                 <Link
                   href="/#contact"
                   onClick={(e) => handleNavClick(e, "/#contact")}
-                  className="block w-full text-center py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-lg font-bold rounded-xl"
+                  className="block w-full text-center py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-lg font-bold rounded-xl shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 transition-all duration-300"
                 >
                   Apply Now
                 </Link>
               </motion.div>
-              <div className="mt-auto mb-12 text-sm" style={{ color: COLORS.textMuted }}>
+              <div className="mt-auto pt-12 text-sm" style={{ color: COLORS.textMuted }}>
                 Atmiya Vidya Dham · Vallabh Vidyanagar
               </div>
             </div>

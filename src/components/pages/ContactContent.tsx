@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronLeft } from "lucide-react";
 import { COLORS } from "@/constants/colors";
+import { hostelData } from "@/data/hostel";
+import { INDIAN_STATES, GUJARAT_DISTRICTS, GUJARAT_CITIES } from "@/constants/locations";
 
 // Custom CSS for transitions, steps, and shakes
 const customStyles = `
@@ -49,7 +51,7 @@ export function ContactContent() {
     fatherContact: "",
     city: "",
     district: "",
-    state: "",
+    state: "Gujarat",
     school: "",
     course: "",
     semester: "",
@@ -59,6 +61,9 @@ export function ContactContent() {
   const [shakingFields, setShakingFields] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isManualSchool, setIsManualSchool] = useState(false);
+  const [isManualDistrict, setIsManualDistrict] = useState(false);
+  const [isManualCity, setIsManualCity] = useState(false);
 
   // Confetti Canvas Ref
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -82,9 +87,27 @@ export function ContactContent() {
 
   // Handle Field Changes
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    let sanitizedValue = value;
+    if (field === "contactNumber" || field === "fatherContact") {
+      sanitizedValue = value.replace(/\D/g, ""); // Keep only digits
+    }
+    setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
     if (shakingFields[field]) {
       setShakingFields((prev) => ({ ...prev, [field]: false }));
+    }
+  };
+
+  const handleStateChange = (val: string) => {
+    setFormData((prev) => ({ ...prev, state: val, district: "", city: "" }));
+    if (shakingFields.state) {
+      setShakingFields((prev) => ({ ...prev, state: false }));
+    }
+    if (val !== "Gujarat") {
+      setIsManualDistrict(true);
+      setIsManualCity(true);
+    } else {
+      setIsManualDistrict(false);
+      setIsManualCity(false);
     }
   };
 
@@ -229,7 +252,7 @@ export function ContactContent() {
       fatherContact: "",
       city: "",
       district: "",
-      state: "",
+      state: "Gujarat",
       school: "",
       course: "",
       semester: "",
@@ -238,6 +261,9 @@ export function ContactContent() {
     setShakingFields({});
     setStep(1);
     setIsSubmitted(false);
+    setIsManualSchool(false);
+    setIsManualDistrict(false);
+    setIsManualCity(false);
   };
 
   return (
@@ -418,7 +444,10 @@ export function ContactContent() {
                         <input
                           id="contactNumber"
                           type="tel"
-                          placeholder="Mobile No."
+                          placeholder="Mobile No. (10 digits)"
+                          maxLength={10}
+                          pattern="[0-9]*"
+                          inputMode="numeric"
                           value={formData.contactNumber}
                           onChange={(e) => handleInputChange("contactNumber", e.target.value)}
                           className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
@@ -438,7 +467,10 @@ export function ContactContent() {
                         <input
                           id="fatherContact"
                           type="tel"
-                          placeholder="Emergency No."
+                          placeholder="Emergency No. (10 digits)"
+                          maxLength={10}
+                          pattern="[0-9]*"
+                          inputMode="numeric"
                           value={formData.fatherContact}
                           onChange={(e) => handleInputChange("fatherContact", e.target.value)}
                           className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
@@ -467,19 +499,58 @@ export function ContactContent() {
                         <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="city">
                           City / Village <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          id="city"
-                          type="text"
-                          placeholder="Enter City or Village"
-                          value={formData.city}
-                          onChange={(e) => handleInputChange("city", e.target.value)}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.city 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        />
+                        {isManualCity || formData.state !== "Gujarat" ? (
+                          <div className="flex gap-2">
+                            <input
+                              id="city"
+                              type="text"
+                              placeholder="Type City or Village"
+                              value={formData.city}
+                              onChange={(e) => handleInputChange("city", e.target.value)}
+                              className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                                shakingFields.city 
+                                  ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                              }`}
+                              style={{ color: COLORS.textPrimary }}
+                            />
+                            {formData.state === "Gujarat" && (
+                              <button
+                                type="button"
+                                onClick={() => { setIsManualCity(false); handleInputChange("city", ""); }}
+                                className="px-3 py-2 border rounded-xl text-xs hover:bg-stone-100 transition-colors bg-white font-medium whitespace-nowrap"
+                                style={{ color: COLORS.textSecondary, borderColor: COLORS.borderLight }}
+                              >
+                                Back to List
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <select
+                            id="city"
+                            value={formData.city}
+                            onChange={(e) => {
+                              if (e.target.value === "Other") {
+                                setIsManualCity(true);
+                                handleInputChange("city", "");
+                              } else {
+                                handleInputChange("city", e.target.value);
+                              }
+                            }}
+                            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.city 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            }`}
+                            style={{ color: COLORS.textPrimary }}
+                          >
+                            <option value="">Select City/Village</option>
+                            {GUJARAT_CITIES.map((city) => (
+                              <option key={city} value={city}>{city}</option>
+                            ))}
+                            <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
+                          </select>
+                        )}
                       </div>
 
                       {/* District */}
@@ -487,19 +558,58 @@ export function ContactContent() {
                         <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="district">
                           District <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          id="district"
-                          type="text"
-                          placeholder="Enter District"
-                          value={formData.district}
-                          onChange={(e) => handleInputChange("district", e.target.value)}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.district 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        />
+                        {isManualDistrict || formData.state !== "Gujarat" ? (
+                          <div className="flex gap-2">
+                            <input
+                              id="district"
+                              type="text"
+                              placeholder="Type District Name"
+                              value={formData.district}
+                              onChange={(e) => handleInputChange("district", e.target.value)}
+                              className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                                shakingFields.district 
+                                  ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                              }`}
+                              style={{ color: COLORS.textPrimary }}
+                            />
+                            {formData.state === "Gujarat" && (
+                              <button
+                                type="button"
+                                onClick={() => { setIsManualDistrict(false); handleInputChange("district", ""); }}
+                                className="px-3 py-2 border rounded-xl text-xs hover:bg-stone-100 transition-colors bg-white font-medium whitespace-nowrap"
+                                style={{ color: COLORS.textSecondary, borderColor: COLORS.borderLight }}
+                              >
+                                Back to List
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <select
+                            id="district"
+                            value={formData.district}
+                            onChange={(e) => {
+                              if (e.target.value === "Other") {
+                                setIsManualDistrict(true);
+                                handleInputChange("district", "");
+                              } else {
+                                handleInputChange("district", e.target.value);
+                              }
+                            }}
+                            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.district 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            }`}
+                            style={{ color: COLORS.textPrimary }}
+                          >
+                            <option value="">Select District</option>
+                            {GUJARAT_DISTRICTS.map((dist) => (
+                              <option key={dist} value={dist}>{dist}</option>
+                            ))}
+                            <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
+                          </select>
+                        )}
                       </div>
 
                       {/* State */}
@@ -507,19 +617,22 @@ export function ContactContent() {
                         <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="state">
                           State <span className="text-red-500">*</span>
                         </label>
-                        <input
+                        <select
                           id="state"
-                          type="text"
-                          placeholder="Enter State"
                           value={formData.state}
-                          onChange={(e) => handleInputChange("state", e.target.value)}
+                          onChange={(e) => handleStateChange(e.target.value)}
                           className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
                             shakingFields.state 
                               ? "border-red-400 focus:border-red-400 bg-red-50/10" 
                               : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
                           }`}
                           style={{ color: COLORS.textPrimary }}
-                        />
+                        >
+                          <option value="">Select State</option>
+                          {INDIAN_STATES.map((st) => (
+                            <option key={st} value={st}>{st}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -539,19 +652,56 @@ export function ContactContent() {
                         <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="school">
                           School / College <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          id="school"
-                          type="text"
-                          placeholder="School/College Name"
-                          value={formData.school}
-                          onChange={(e) => handleInputChange("school", e.target.value)}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.school 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        />
+                        {isManualSchool ? (
+                          <div className="flex gap-2">
+                            <input
+                              id="school"
+                              type="text"
+                              placeholder="Type School/College Name"
+                              value={formData.school}
+                              onChange={(e) => handleInputChange("school", e.target.value)}
+                              className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                                shakingFields.school 
+                                  ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                              }`}
+                              style={{ color: COLORS.textPrimary }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => { setIsManualSchool(false); handleInputChange("school", ""); }}
+                              className="px-3 py-2 border rounded-xl text-xs hover:bg-stone-100 transition-colors bg-white font-medium whitespace-nowrap"
+                              style={{ color: COLORS.textSecondary, borderColor: COLORS.borderLight }}
+                            >
+                              Back to List
+                            </button>
+                          </div>
+                        ) : (
+                          <select
+                            id="school"
+                            value={formData.school}
+                            onChange={(e) => {
+                              if (e.target.value === "Other") {
+                                setIsManualSchool(true);
+                                handleInputChange("school", "");
+                              } else {
+                                handleInputChange("school", e.target.value);
+                              }
+                            }}
+                            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.school 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            }`}
+                            style={{ color: COLORS.textPrimary }}
+                          >
+                            <option value="">Select School/College</option>
+                            {hostelData.institutions.map((item) => (
+                              <option key={item} value={item}>{item}</option>
+                            ))}
+                            <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
+                          </select>
+                        )}
                       </div>
 
                       {/* Course / Std */}
@@ -579,15 +729,18 @@ export function ContactContent() {
                         <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="semester">
                           Semester
                         </label>
-                        <input
+                        <select
                           id="semester"
-                          type="text"
-                          placeholder="Semester (Optional)"
                           value={formData.semester}
                           onChange={(e) => handleInputChange("semester", e.target.value)}
                           className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 focus:border-amber-700 bg-[#FDFCF9]/50 text-sm focus:bg-white transition-all duration-200 focus:outline-none"
                           style={{ color: COLORS.textPrimary }}
-                        />
+                        >
+                          <option value="">Semester (Optional)</option>
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                            <option key={sem} value={sem.toString()}>Semester {sem}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
 

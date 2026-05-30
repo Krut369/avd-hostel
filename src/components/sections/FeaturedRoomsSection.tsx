@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, View, X, ChevronLeft, ChevronRight, Snowflake, Users, DoorOpen, Wind, Shirt, Box, Maximize } from "lucide-react";
 import { hostelData } from "@/data/hostel";
-import { COLORS } from "@/constants/colors";
+import { COLORS } from "@/constants/colors"; 
 
 const categoryColors: Record<string, string> = {
   Premium: "bg-amber-500 text-white",
@@ -47,7 +47,7 @@ export function FeaturedRoomsSection() {
     setLightbox({ ...lightbox, index: next });
   };
 
-  const handleInquireClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleEnquireClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const el = document.getElementById("contact");
     if (el) {
@@ -68,7 +68,13 @@ export function FeaturedRoomsSection() {
       `}} />
 
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
+        <motion.div 
+          className="mb-12"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
           <h2
             className="text-4xl sm:text-5xl font-bold mb-4 text-center"
             style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
@@ -78,10 +84,10 @@ export function FeaturedRoomsSection() {
           <p className="text-center text-gray-500 max-w-xl mx-auto text-sm">
             Four thoughtfully designed room categories to match every need and budget. Click any card image to view the room gallery.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Responsive Horizontal Scroll on Mobile, Grid on Desktop */}
-        <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-none md:grid md:grid-cols-2 xl:grid-cols-4 md:overflow-x-visible md:pb-0">
+        {/* Horizontal Slider Layout */}
+        <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-none px-4 sm:px-8">
           {hostelData.livingSpaces.map((room, i) => (
             <motion.div
               key={room.id}
@@ -89,7 +95,7 @@ export function FeaturedRoomsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="snap-start shrink-0 w-[290px] sm:w-[350px] md:w-auto md:shrink rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 border"
+              className="snap-start shrink-0 w-[290px] sm:w-[350px] rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 border"
               style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
             >
               {/* Image with Click to Open Lightbox */}
@@ -107,9 +113,7 @@ export function FeaturedRoomsSection() {
 
                 {/* Badges */}
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${categoryColors[room.category] || "bg-gray-500 text-white"}`}>
-                    {room.category}
-                  </span>
+
                   {room.tour360Available && (
                     <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
                       <View className="w-3 h-3" />
@@ -151,10 +155,11 @@ export function FeaturedRoomsSection() {
 
                 <a
                   href="#contact"
-                  onClick={handleInquireClick}
-                  className="group/btn flex items-center justify-between w-full px-4 py-3 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-amber-600 transition-all duration-300"
+                  onClick={handleEnquireClick}
+                  style={{ backgroundColor: COLORS.primary }}
+                  className="group/btn flex items-center justify-between w-full px-4 py-3 text-white text-sm font-semibold rounded-xl hover:opacity-90 hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
                 >
-                  <span>Inquire Now</span>
+                  <span>Enquire Now</span>
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </a>
               </div>

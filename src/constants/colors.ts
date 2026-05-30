@@ -9,9 +9,9 @@ export const COLORS = {
   primaryDark: "#B45309",
   primaryTint: "#FEF3C7",
 
-  secondary: "#0F172A",        // Deep Navy
-  secondaryLight: "#1E293B",
-  secondaryDark: "#020617",
+  secondary: "#456779",        // Slate Blue-Teal
+  secondaryLight: "#5A7E91",
+  secondaryDark: "#314E5C",
 
   accent: "#FBBF24",           // Gold
   accentLight: "#FDE68A",
@@ -60,8 +60,8 @@ export const COLORS = {
   // =========================
   // SHADOWS & OVERLAYS
   // =========================
-  overlay: "rgba(15, 23, 42, 0.65)",
-  shadow: "rgba(15, 23, 42, 0.12)",
+  overlay: "rgba(69, 103, 121, 0.65)",
+  shadow: "rgba(69, 103, 121, 0.12)",
 
   // =========================
   // HOSTEL THEME SPECIFIC
@@ -69,7 +69,6 @@ export const COLORS = {
   templeGold: "#FBBF24",
   spiritualSaffron: "#D97706",
   heritageCream: "#FAF7F2",
-  deepNavy: "#0F172A",
 };
 
 export default COLORS;

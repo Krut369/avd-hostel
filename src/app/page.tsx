@@ -1,5 +1,4 @@
 import { HeroSection } from "@/components/sections/HeroSection";
-import { StatsSection } from "@/components/sections/StatsSection";
 import { CampusHighlightsSection } from "@/components/sections/CampusHighlightsSection";
 import { AmenitiesSection } from "@/components/sections/AmenitiesSection";
 import { FeaturedRoomsSection } from "@/components/sections/FeaturedRoomsSection";
@@ -12,7 +11,6 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <StatsSection />
       
       {/* About Section */}
       <CampusHighlightsSection />

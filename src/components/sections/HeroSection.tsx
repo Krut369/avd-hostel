@@ -8,6 +8,8 @@ import { COLORS } from "@/constants/colors";
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);
+  const [videoPlay, setVideoPlay] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -15,20 +17,40 @@ export function HeroSection() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ backgroundColor: COLORS.background }}>
-      {/* Background with light overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/hostel-building.jpg')`,
-        }}
-      />
+      {/* Intro Video */}
+      {!videoEnded && (
+        <video
+          autoPlay
+          muted
+          playsInline
+          onPlaying={() => setVideoPlay(true)}
+          onEnded={() => setVideoEnded(true)}
+          className={`fixed inset-0 w-screen h-screen object-contain bg-black transition-opacity duration-1000 z-50 ${
+            videoPlay ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <source src="/intro.mp4" type="video/mp4" />
+        </video>
+      )}
+
+      {/* Skip button for intro video */}
+      {!videoEnded && videoPlay && (
+        <button
+          onClick={() => setVideoEnded(true)}
+          className="fixed bottom-8 right-8 z-50 px-4 py-2 bg-black/50 text-white rounded-full text-sm font-semibold backdrop-blur-md hover:bg-black/70 transition-colors"
+        >
+          Skip Intro
+        </button>
+      )}
 
       {/* Light gradient overlays to ensure text readability while keeping the screen light */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/90 via-[#FAF7F2]/80 to-[#FAF7F2]/95" />
-      <div className="absolute inset-0 bg-gradient-to-r from-amber-50/30 via-transparent to-transparent" />
+      <div className={`absolute inset-0 transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/90 via-[#FAF7F2]/80 to-[#FAF7F2]/95" />
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-50/30 via-transparent to-transparent" />
+      </div>
 
-      {/* Animated particles (colored saffron/amber instead of gold/white) */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated particles */}
+      <div className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0"}`}>
         {mounted && Array.from({ length: 12 }).map((_, i) => (
           <motion.div
             key={i}
@@ -51,20 +73,8 @@ export function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="inline-flex items-center gap-3 mb-8"
-        >
-          <div className="h-px w-12 bg-amber-500/40" />
-          <span className="text-xs font-semibold uppercase tracking-[0.4em]" style={{ color: COLORS.primary }}>
-            Vallabh Vidyanagar, Gujarat
-          </span>
-          <div className="h-px w-12 bg-amber-500/40" />
-        </motion.div>
+      <div className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 lg:pt-0 transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+
 
         {/* Main heading */}
         <motion.h1

@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "Atmiya Vidya Dham | Harisaurabh Hostel - Vallabh Vidyanagar",
   description: "A value-centered student residence in Vallabh Vidyanagar, Gujarat. Comfortable rooms, spiritual growth, academic excellence, and community living.",
   keywords: "hostel, Vallabh Vidyanagar, student accommodation, Anand Gujarat, Harisaurabh Hostel, AVD",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "Atmiya Vidya Dham | Harisaurabh Hostel",
     description: "A value-centered student residence in Vallabh Vidyanagar, Gujarat",
