@@ -8,6 +8,9 @@ export const hostelData = {
       "Offering comfortable rooms, community living, and a focused environment for academic excellence and personal growth.",
     contact: {
       phone: "+919712977261",
+      phoneName: "Sharad bhai",
+      phone2 : "+919925004164",
+      phone2Name: "Vinit bhai",
       email: "harisaurabh.hostel@gmail.com",
       address: {
         streetAddress: "Atmiya Marg, Bakrol Road",

@@ -26,7 +26,7 @@ export function FloatingActions() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
             onClick={scrollToTop}
-            className="w-11 h-11 rounded-full bg-white shadow-xl shadow-black/10 border flex items-center justify-center group transition-all duration-300"
+            className="w-11 h-11 rounded-full bg-white border flex items-center justify-center group transition-all duration-300"
             style={{
               borderColor: `${COLORS.primary}20`
             }}
@@ -45,8 +45,7 @@ export function FloatingActions() {
         href="/#contact"
         className="w-11 h-11 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300"
         style={{
-          backgroundImage: `linear-gradient(to bottom right, ${COLORS.primary}, ${COLORS.primaryLight})`,
-          boxShadow: `0 20px 25px -5px ${COLORS.primary}40`
+          backgroundColor: COLORS.primary
         }}
       >
         <MessageCircle className="w-5 h-5 text-white" />

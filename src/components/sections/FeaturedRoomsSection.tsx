@@ -6,6 +6,7 @@ import { Check, ArrowRight, View, X, ChevronLeft, ChevronRight, Snowflake, Users
 import { hostelData } from "@/data/hostel";
 import { COLORS } from "@/constants/colors"; 
 
+
 const categoryColors: Record<string, string> = {
   Premium: "bg-amber-500 text-white",
   Standard: "bg-blue-500 text-white",
@@ -95,7 +96,7 @@ export function FeaturedRoomsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="snap-start shrink-0 w-[290px] sm:w-[350px] rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 border"
+              className="snap-start shrink-0 w-[290px] sm:w-[350px] rounded-3xl overflow-hidden shadow-sm transition-all duration-500 border"
               style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
             >
               {/* Image with Click to Open Lightbox */}
@@ -156,8 +157,7 @@ export function FeaturedRoomsSection() {
                 <a
                   href="#contact"
                   onClick={handleEnquireClick}
-                  style={{ backgroundColor: COLORS.primary }}
-                  className="group/btn flex items-center justify-between w-full px-4 py-3 text-white text-sm font-semibold rounded-xl hover:opacity-90 hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
+                  className="group/btn flex items-center justify-between w-full px-4 py-3 text-white text-sm font-semibold rounded-xl hover:opacity-90 hover:scale-[1.02] hover:shadow transition-all duration-300 bg-premium-gradient"
                 >
                   <span>Enquire Now</span>
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

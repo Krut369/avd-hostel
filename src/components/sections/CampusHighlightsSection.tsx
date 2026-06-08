@@ -66,7 +66,7 @@ export function CampusHighlightsSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
               className="group relative rounded-3xl overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 bg-black/5"
-              style={{ height: "400px", borderColor: COLORS.borderGold }}
+              style={{ height: "480px", borderColor: COLORS.borderGold }}
             >
               <AnimatePresence>
                 <motion.div

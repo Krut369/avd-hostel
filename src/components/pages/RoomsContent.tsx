@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, View, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, View, X, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { hostelData } from "@/data/hostel";
 import { CTASection } from "@/components/sections/CTASection";
 import { COLORS } from "@/constants/colors";
@@ -40,7 +40,7 @@ export function RoomsContent() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1
-              className="text-5xl sm:text-6xl font-bold mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
               style={{ color: COLORS.textPrimary }}
             >
               Find Your Perfect <span className="gradient-text italic">Room</span>
@@ -150,13 +150,10 @@ export function RoomsContent() {
 
                   <a
                     href={`mailto:harisaurabh.hostel@gmail.com?subject=Room Enquiry: ${room.title}`}
-                    className="inline-flex items-center gap-2 px-7 py-3.5 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 text-sm"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})`,
-                      boxShadow: `0 10px 15px -3px ${COLORS.primary}25`
-                    }}
+                    className="group inline-flex items-center gap-2 px-7 py-3.5 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 text-sm bg-premium-gradient"
                   >
                     Enquire About This Room
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </div>
               </motion.div>

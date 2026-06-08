@@ -18,10 +18,10 @@ export const COLORS = {
   // =========================
   // BACKGROUNDS
   // =========================
-  background: "#F7F4F0",
-  backgroundSecondary: "#F1ECE6",
+  background: "#FFF4EC",
+  backgroundSecondary: "#FFF9F5",
   surface: "#FFFFFF",
-  surfaceHover: "#FBF8F5",
+  surfaceHover: "#FFF9F5",
 
   // =========================
   // TEXT COLORS
@@ -59,8 +59,8 @@ export const COLORS = {
   // =========================
   // SHADOWS & OVERLAYS
   // =========================
-  overlay: "rgba(47,47,51,0.72)",
-  shadow: "rgba(47,47,51,0.10)",
+  overlay: "rgba(249, 185, 151, 0.18)",
+  shadow: "rgba(249, 185, 151, 0.18)",
 
   // =========================
   // HOSTEL THEME

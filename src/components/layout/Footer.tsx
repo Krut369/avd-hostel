@@ -12,12 +12,12 @@ export function Footer() {
       style={{ backgroundColor: COLORS.background }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
-          <div className="lg:col-span-1">
+          <div>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-md bg-white border" style={{ borderColor: `${COLORS.primary}30` }}>
-                <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain p-0.5" />
+              <div className="w-10 h-10 overflow-hidden flex items-center justify-center">
+                <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <div
@@ -79,7 +79,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                   className="w-9 h-9 rounded-lg border flex items-center justify-center text-sm cursor-pointer hover:bg-[var(--primary)]/10 hover:border-[var(--primary)]/30 transition-all duration-300 bg-white"
-                  style={{ borderColor: COLORS.borderGold, color: COLORS.textSecondary }}
+                  style={{ borderColor: COLORS.border, color: COLORS.primary }}
                 >
                   {social.icon}
                 </a>
@@ -88,82 +88,88 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-sm uppercase tracking-widest mb-6" style={{ color: COLORS.primary }}>
-              Quick Links
-            </h4>
-            <ul className="space-y-3">
-              {[
-                { href: "/", label: "Home" },
-                { href: "/about", label: "About Us" },
-                { href: "/rooms", label: "Rooms" },
-                { href: "/gallery", label: "Gallery" },
-                { href: "/reviews", label: "Reviews" },
-                { href: "/contact", label: "Contact" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm hover:text-[var(--primary)] transition-colors duration-300 flex items-center gap-2 group"
-                    style={{ color: COLORS.textSecondary }}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]/40 group-hover:bg-[var(--primary)] transition-colors" />
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="md:flex md:flex-col md:items-center">
+            <div>
+              <h4 className="font-semibold text-sm uppercase tracking-widest mb-6" style={{ color: COLORS.primary }}>
+                Quick Links
+              </h4>
+              <ul className="space-y-3">
+                {[
+                  { href: "/", label: "Home" },
+                  { href: "/about", label: "About Us" },
+                  { href: "/rooms", label: "Rooms" },
+                  { href: "/gallery", label: "Gallery" },
+                  { href: "/reviews", label: "Reviews" },
+                  { href: "/contact", label: "Contact" },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm hover:text-[var(--primary)] transition-colors duration-300 flex items-center gap-2 group"
+                      style={{ color: COLORS.textSecondary }}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]/40 group-hover:bg-[var(--primary)] transition-colors" />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
           </div>
+        </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="font-semibold text-sm uppercase tracking-widest mb-6" style={{ color: COLORS.primary }}>
-              Contact Info
-            </h4>
-            <ul className="space-y-4">
-              <li className="flex gap-3 items-start">
-                <Phone className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="text-sm hover:text-[var(--primary)] transition-colors"
-                  style={{ color: COLORS.textSecondary }}
-                >
-                  {contact.phone}
-                </a>
-              </li>
-              <li className="flex gap-3 items-start">
-                <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="text-sm hover:text-[var(--primary)] transition-colors break-all"
-                  style={{ color: COLORS.textSecondary }}
-                >
-                  {contact.email}
-                </a>
-              </li>
-              <li className="flex gap-3 items-start">
-                <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
-                <span className="text-sm leading-relaxed" style={{ color: COLORS.textSecondary }}>
-                  {contact.address.streetAddress},<br />
-                  {contact.address.locality},<br />
-                  {contact.address.city} - {contact.address.postalCode}
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Map preview */}
-          <div>
-            <h4 className="font-semibold text-sm uppercase tracking-widest mb-6" style={{ color: COLORS.primary }}>
-              Location
-            </h4>
-            <div className="rounded-xl overflow-hidden border h-40" style={{ borderColor: COLORS.borderGold }}>
-              <iframe
-                src={`https://www.google.com/maps?q=${contact.coordinates.latitude},${contact.coordinates.longitude}&z=15&output=embed`}
-                className="w-full h-full border-none"
-                loading="lazy"
-                title="Hostel Location"
-              />
+          <div className="md:flex md:flex-col md:items-center">
+            <div>
+              <h4 className="font-semibold text-sm uppercase tracking-widest mb-6" style={{ color: COLORS.primary }}>
+                Contact Info
+              </h4>
+              <ul className="space-y-4">
+                <li className="flex gap-3 items-start">
+                  <Phone className="w-4 h-4 mt-1 shrink-0" style={{ color: COLORS.primary }} />
+                  <div className="flex flex-row gap-x-8 gap-y-2 text-sm flex-wrap">
+                    <div className="flex flex-col">
+                      <span className="text-xs text-stone-500 font-medium">{contact.phoneName}</span>
+                      <a
+                        href={`tel:${contact.phone}`}
+                        className="hover:text-[var(--primary)] transition-colors mt-0.5 font-medium"
+                        style={{ color: COLORS.textPrimary }}
+                      >
+                        {contact.phone}
+                      </a>
+                    </div>
+                    {contact.phone2 && (
+                      <div className="flex flex-col">
+                        <span className="text-xs text-stone-500 font-medium">{contact.phone2Name}</span>
+                        <a
+                          href={`tel:${contact.phone2}`}
+                          className="hover:text-[var(--primary)] transition-colors mt-0.5 font-medium"
+                          style={{ color: COLORS.textPrimary }}
+                        >
+                          {contact.phone2}
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
+              <a
+                href={`mailto:${contact.email}`}
+                    className="text-sm hover:text-[var(--primary)] transition-colors break-all"
+                style={{ color: COLORS.textSecondary }}
+              >
+                {contact.email}
+              </a>
+            </li>
+                <li className="flex gap-3 items-start">
+                  <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COLORS.primary }} />
+                  <span className="text-sm leading-relaxed" style={{ color: COLORS.textSecondary }}>
+                    {contact.address.streetAddress},<br />
+                    {contact.address.locality},<br />
+                    {contact.address.city} - {contact.address.postalCode}
+                  </span>
+            </li>
+          </ul>
             </div>
           </div>
         </div>

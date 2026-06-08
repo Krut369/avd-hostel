@@ -116,16 +116,16 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[#FAF7F2] shadow-sm border-b border-black/5"
-            : "bg-[#FAF7F2] lg:bg-transparent border-b border-black/5 lg:border-none lg:shadow-none"
+            ? "bg-[#FFF4EC] shadow-sm border-b border-black/5"
+            : "bg-[#FFF4EC] lg:bg-transparent border-b border-black/5 lg:border-none lg:shadow-none"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 bg-white border" style={{ borderColor: `${COLORS.primary}30` }}>
-                <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain p-0.5" />
+              <div className="w-10 h-10 overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain" />
               </div>
               <div className="block">
                 <div
@@ -147,7 +147,10 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 relative group"
+                    className={`px-4 py-2 rounded-lg text-sm transition-all duration-300 relative group nav-link ${
+                      active ? "font-semibold" : "font-medium hover:font-semibold"
+                    }`}
+                    data-text={link.label}
                     style={{
                       color: active
                         ? COLORS.primary
@@ -169,7 +172,7 @@ export function Navbar() {
                 href="/#contact"
                 onClick={(e) => handleNavClick(e, "/#contact")}
                 className="ml-4 px-5 py-2.5 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
-                style={{ backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})` }}
+                style={{ backgroundColor: COLORS.primary }}
               >
                 Apply Now
               </Link>
@@ -196,7 +199,7 @@ export function Navbar() {
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-40 lg:hidden overflow-y-auto"
-            style={{ background: "rgba(250, 247, 242, 0.98)", backdropFilter: "blur(20px)" }}
+            style={{ background: "rgba(255, 244, 236, 0.98)", backdropFilter: "blur(20px)" }}
           >
             <div className="flex flex-col min-h-screen pt-24 pb-12 px-8">
               <div className="flex flex-col gap-1">
@@ -239,7 +242,7 @@ export function Navbar() {
                   href="/#contact"
                   onClick={(e) => handleNavClick(e, "/#contact")}
                   className="block w-full text-center py-3.5 text-white text-lg font-bold rounded-xl shadow-lg transition-all duration-300"
-                  style={{ backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})` }}
+                  style={{ backgroundColor: COLORS.primary }}
                 >
                   Apply Now
                 </Link>

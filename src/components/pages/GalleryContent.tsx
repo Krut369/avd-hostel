@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, ChevronLeft, ChevronRight,
-  Dumbbell, Utensils, Trophy, Church, Calendar, BedDouble, LayoutGrid,
+  Dumbbell, Utensils, Trophy, Church, Calendar, BedDouble, LayoutGrid, Sparkles,
 } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 
@@ -63,18 +63,24 @@ const galleryItems = [
   { src: `${BASE}/e2.jpg`,       cat: "Events", label: "Cultural Event" },
   { src: `${BASE}/e3.jpg`,       cat: "Events", label: "Cultural Event" },
   { src: `${BASE}/e4.jpg`,       cat: "Events", label: "Cultural Event" },
-  { src: `${BASE}/e13.jpg`,      cat: "Events", label: "Satsang Sabha" },
-  { src: `${BASE}/e14.jpg`,      cat: "Events", label: "Satsang Sabha" },
   { src: `${BASE}/e15.jpg`,      cat: "Events", label: "Cultural Program" },
   { src: `${BASE}/e16.jpg`,      cat: "Events", label: "Cultural Program" },
   { src: `${BASE}/e18.jpg`,      cat: "Events", label: "Campus Event" },
   { src: `${BASE}/e19.jpg`,      cat: "Events", label: "Campus Event" },
+
+  // Shibir — from AVD website
+  { src: `${BASE}/e13.jpg`,      cat: "Shibir", label: "Satsang Shibir" },
+  { src: `${BASE}/e14.jpg`,      cat: "Shibir", label: "Evening Sabha" },
+  { src: `${BASE}/e5.jpg`,       cat: "Shibir", label: "Youth Shibir Activity" },
+  { src: `${BASE}/e6.jpg`,       cat: "Shibir", label: "Pravachan Session" },
+  { src: `${BASE}/e7.jpg`,       cat: "Shibir", label: "Group Meditation" },
+  { src: `${BASE}/e8.jpg`,       cat: "Shibir", label: "Interactive Session" },
 ];
 
 // ─── Category cards — all thumbnails use real URLs (no nulls, no 404s) ────────
 const categoryData = [
   {
-    id: "All",    label: "All Photos",           count: galleryItems.length,
+    id: "All",    label: "All Photos",           count: 49,
     img: "/ac-room/1.jpg",
     icon: <LayoutGrid className="w-7 h-7" />,
     gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.secondary}22 100%)`,
@@ -116,15 +122,22 @@ const categoryData = [
     gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
-    id: "Events", label: "Cultural Events",     count: 10,
+    id: "Events", label: "Cultural Events",     count: 8,
     img: `${BASE}/e1.jpg`,
     icon: <Calendar className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #ec489922 0%, #be185d22 100%)",
-    gridClass: "col-span-2 md:col-span-3", h: "h-[180px] md:h-[260px]",
+    gridClass: "col-span-2 md:col-span-2", h: "h-[180px] md:h-[260px]",
+  },
+  {
+    id: "Shibir", label: "Shibir",    count: 6,
+    img: `${BASE}/e13.jpg`,
+    icon: <Sparkles className="w-7 h-7" />,
+    gradient: "linear-gradient(135deg, #f59e0b22 0%, #d9770622 100%)",
+    gridClass: "col-span-2 md:col-span-1", h: "h-[180px] md:h-[260px]",
   },
 ];
 
-const filterTabs = ["All", "Rooms", "Gym", "Dining", "Sports", "Temple", "Events"];
+const filterTabs = ["All", "Rooms", "Gym", "Dining", "Sports", "Temple", "Events", "Shibir"];
 
 // ─── Category card ────────────────────────────────────────────────────────────
 function CategoryCard({
@@ -144,10 +157,8 @@ function CategoryCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.55 }}
-      className={`group relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer border-2 transition-all duration-300 ${cat.gridClass} ${cat.h}`}
+      className={`group relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 ${cat.gridClass} ${cat.h}`}
       style={{
-        borderColor: isActive ? COLORS.primary : COLORS.borderGold,
-        boxShadow: isActive ? `0 12px 32px -5px ${COLORS.primary}40` : "none",
         background: cat.gradient,
       }}
       onClick={onClick}
@@ -189,15 +200,17 @@ function CategoryCard({
       )}
 
       {/* Badge */}
-      <div
-        className="absolute top-2.5 right-2.5 z-20 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider shadow"
-        style={{
-          backgroundColor: isActive ? COLORS.primary : "rgba(0,0,0,0.45)",
-          color: "#fff",
-        }}
-      >
-        {isActive ? "✓ Viewing" : `${cat.count} photo${cat.count !== 1 ? "s" : ""}`}
-      </div>
+      {!isActive && (
+        <div
+          className="absolute top-2.5 right-2.5 z-20 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider shadow"
+          style={{
+            backgroundColor: "rgba(0,0,0,0.45)",
+            color: "#fff",
+          }}
+        >
+          {`${cat.count} photo${cat.count !== 1 ? "s" : ""}`}
+        </div>
+      )}
 
       {/* Text */}
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5 z-10">
@@ -282,13 +295,13 @@ export function GalleryContent() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1
-              className="text-5xl sm:text-6xl font-bold mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
               style={{ color: COLORS.textPrimary }}
             >
               Our <span className="gradient-text italic">Gallery</span>
             </h1>
             <p className="text-lg max-w-xl mx-auto font-medium" style={{ color: COLORS.textSecondary }}>
-              Rooms · Gym · Dining · Sports · Temple · Events — click any card to explore.
+              Rooms · Gym · Dining · Sports · Temple · Events · Shibir — click any card to explore.
             </p>
           </motion.div>
         </div>

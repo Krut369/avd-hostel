@@ -37,10 +37,10 @@ export function ArrivalContent() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1
-              className="text-5xl sm:text-6xl font-bold mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
               style={{ color: COLORS.textPrimary }}
             >
-              Arrival &<br /><span className="gradient-text italic">Directions</span>
+              Arrival & <span className="gradient-text italic">Directions</span>
             </h1>
             <p className="text-lg max-w-xl mx-auto font-medium" style={{ color: COLORS.textPrimary }}>
               We&apos;re located in the heart of Vallabh Vidyanagar — easily accessible from Anand by multiple routes.
@@ -107,7 +107,7 @@ export function ArrivalContent() {
                   {/* Interactive Timeline Tabs */}
                   <div className="relative mb-10">
                     {/* Horizontal Line connecting tabs */}
-                    <div className="absolute top-7 left-1/12 right-1/12 h-0.5 bg-slate-200 -translate-y-1/2 z-0" />
+                    <div className="absolute top-7 left-[16.67%] right-[16.67%] h-0.5 -translate-y-1/2 z-0" style={{ backgroundColor: "#FFF1ED" }} />
                     
                     <div className="grid grid-cols-3 relative z-10">
                       {hostelData.transportation.map((t, idx) => {
@@ -121,19 +121,17 @@ export function ArrivalContent() {
                             <div
                               className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 border-2"
                               style={{
-                                backgroundColor: isActive ? COLORS.primary : "#FFFFFF",
-                                borderColor: isActive ? COLORS.primary : "#E2E8F0",
-                                color: isActive ? "#FFFFFF" : "#94A3B8",
+                                backgroundColor: isActive ? COLORS.primary : "#FFF1ED",
+                                borderColor: isActive ? COLORS.primary : "#FFF1ED",
+                                color: isActive ? "#FFFFFF" : COLORS.primary,
                                 boxShadow: isActive ? `0 10px 15px -3px ${COLORS.primary}40` : "none"
                               }}
                             >
                               {modeIcons[t.mode] || <Car className="w-5 h-5" />}
                             </div>
                             <span 
-                              className={`text-[9px] sm:text-xs font-bold tracking-widest uppercase mt-3 transition-colors duration-300 ${
-                                isActive ? "text-slate-800" : "text-stone-400 group-hover:text-stone-500"
-                              }`}
-                              style={isActive ? { color: COLORS.primary } : {}}
+                              className="text-[9px] sm:text-xs font-bold tracking-widest uppercase mt-3 transition-colors duration-300"
+                              style={{ color: COLORS.primary }}
                             >
                               {tabLabels[idx]}
                             </span>
@@ -151,11 +149,10 @@ export function ArrivalContent() {
                         <div
                           key={t.route}
                           onClick={() => setActiveIdx(idx)}
-                          className="flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer"
+                          className="flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-md"
                           style={{
                             borderColor: isActive ? COLORS.primary : "#F5F5F4",
                             backgroundColor: isActive ? `${COLORS.primary}05` : "#FFFFFF",
-                            transform: isActive ? "scale(1.01)" : "scale(1)",
                             boxShadow: isActive ? "0 4px 6px -1px rgba(0,0,0,0.05)" : "none"
                           }}
                         >
@@ -163,8 +160,8 @@ export function ArrivalContent() {
                           <div 
                             className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300"
                             style={{
-                              backgroundColor: isActive ? COLORS.primary : "#F5F5F4",
-                              color: isActive ? "#FFFFFF" : "#78716C"
+                              backgroundColor: isActive ? COLORS.primary : "#FFF1ED",
+                              color: isActive ? "#FFFFFF" : COLORS.primary
                             }}
                           >
                             {modeIcons[t.mode] || <Car className="w-5 h-5" />}
@@ -193,18 +190,16 @@ export function ArrivalContent() {
                   </div>
                 </div>
 
-                {/* Bottom Primary Trigger Button */}
+                {/* Bottom Primary Trigger Button with Enquire Now Style */}
                 <button
                   onClick={handleLiveDirections}
-                  className="w-full py-4 mt-8 text-white font-bold rounded-2xl flex items-center justify-center gap-2 text-sm sm:text-base shadow-md cursor-pointer transition-all duration-300 active:scale-98"
-                  style={{
-                    backgroundColor: COLORS.primary,
-                    boxShadow: `0 8px 20px -6px ${COLORS.primary}60`
-                  }}
+                  className="group/btn flex items-center justify-between w-full px-4 py-4 mt-8 text-white text-sm font-semibold rounded-xl hover:opacity-90 hover:scale-[1.02] hover:shadow transition-all duration-300 bg-premium-gradient cursor-pointer"
                 >
-                  <Navigation className="w-4 h-4 fill-current rotate-45" />
-                  <span>Get Live Directions</span>
-                  <ArrowRight className="w-4 h-4 ml-1" />
+                  <div className="flex items-center gap-2">
+                    <Navigation className="w-4 h-4 fill-current rotate-45" />
+                    <span>Get Live Directions</span>
+                  </div>
+                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
               </div>
 

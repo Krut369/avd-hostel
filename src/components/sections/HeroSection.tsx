@@ -17,7 +17,7 @@ export function HeroSection() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ backgroundColor: COLORS.background }}>
-      {/* Intro Video */}
+      {/* Intro Video with Full Screen Stretch */}
       {!videoEnded && (
         <video
           autoPlay
@@ -25,7 +25,7 @@ export function HeroSection() {
           playsInline
           onPlaying={() => setVideoPlay(true)}
           onEnded={() => setVideoEnded(true)}
-          className={`fixed inset-0 w-screen h-screen object-contain bg-black transition-opacity duration-1000 z-50 ${
+          className={`fixed inset-0 w-screen h-screen object-fill bg-black transition-opacity duration-1000 z-50 ${
             videoPlay ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -37,7 +37,7 @@ export function HeroSection() {
       {!videoEnded && videoPlay && (
         <button
           onClick={() => setVideoEnded(true)}
-          className="fixed bottom-8 right-8 z-50 px-4 py-2 bg-black/50 text-white rounded-full text-sm font-semibold backdrop-blur-md hover:bg-black/70 transition-colors"
+          className="fixed bottom-8 right-8 z-[60] px-4 py-2 bg-black/50 text-white rounded-full text-sm font-semibold backdrop-blur-md hover:bg-black/70 transition-colors shadow-lg"
         >
           Skip Intro
         </button>
@@ -45,7 +45,7 @@ export function HeroSection() {
 
       {/* Light gradient overlays to ensure text readability while keeping the screen light */}
       <div className={`absolute inset-0 transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/90 via-[#FAF7F2]/80 to-[#FAF7F2]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFF4EC]/90 via-[#FFF4EC]/80 to-[#FFF4EC]/95" />
         <div className="absolute inset-0 bg-gradient-to-r from-amber-50/30 via-transparent to-transparent" />
       </div>
 
@@ -74,7 +74,7 @@ export function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 lg:pt-0 transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+      <div className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-36 lg:pt-28 transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
 
 
         {/* Main heading */}
@@ -82,13 +82,13 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-none mb-4"
+          className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.15] mb-4"
           style={{ color: COLORS.textPrimary }}
         >
           Atmiya{" "}
           <span className="italic gradient-text">Vidya</span>
           <br />
-          Dham
+          <span className="inline-block mt-2">Dham</span>
         </motion.h1>
 
         <motion.div
@@ -134,7 +134,7 @@ export function HeroSection() {
             }}
             className="group flex items-center gap-2 px-8 py-4 text-white font-semibold rounded-xl hover:scale-105 transition-all duration-300 text-sm cursor-pointer"
             style={{
-              backgroundImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.primaryLight})`,
+              backgroundColor: COLORS.primary,
               boxShadow: `0 10px 25px -5px ${COLORS.primary}40`
             }}
           >

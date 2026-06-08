@@ -33,7 +33,7 @@ export function SectionHeader({
       >
         {title}{" "}
         {titleHighlight && (
-          <span className="gradient-text">{titleHighlight}</span>
+          <span className="italic gradient-text">{titleHighlight}</span>
         )}
       </h2>
       {subtitle && (
