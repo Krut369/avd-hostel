@@ -84,56 +84,48 @@ const categoryData = [
     img: "/ac-room/1.jpg",
     icon: <LayoutGrid className="w-7 h-7" />,
     gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.secondary}22 100%)`,
-    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
-  },
-  {
-    id: "Rooms",  label: "Living Rooms",         count: 14,
-    img: "/ac-room/2.jpg",
-    icon: <BedDouble className="w-7 h-7" />,
-    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryLight}22 100%)`,
-    gridClass: "col-span-2 md:col-span-2", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Gym",    label: "Gymnasium",            count: 1,
     img: `${BASE}/gym.jpg`,
     icon: <Dumbbell className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #6366f122 0%, #8b5cf622 100%)",
-    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Dining", label: "Dining Hall",          count: 4,
     img: `${BASE}/dh1.jpg`,
     icon: <Utensils className="w-7 h-7" />,
     gradient: `linear-gradient(135deg, ${COLORS.primary}15 0%, ${COLORS.secondary}15 100%)`,
-    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
+  },
+  {
+    id: "Rooms",  label: "Living Rooms",         count: 14,
+    img: "/ac-room/2.jpg",
+    icon: <BedDouble className="w-7 h-7" />,
+    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryLight}22 100%)`,
   },
   {
     id: "Sports", label: "Sports & Cricket",    count: 10,
     img: `${BASE}/s9.jpg`,
     icon: <Trophy className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #10b98122 0%, #065f4622 100%)",
-    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Temple", label: "Swaminarayan Mandir", count: 6,
     img: `${BASE}/t1.jpeg`,
     icon: <Church className="w-7 h-7" />,
     gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryDark}22 100%)`,
-    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Events", label: "Cultural Events",     count: 8,
     img: `${BASE}/e1.jpg`,
     icon: <Calendar className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #ec489922 0%, #be185d22 100%)",
-    gridClass: "col-span-2 md:col-span-2", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Shibir", label: "Shibir",    count: 6,
     img: `${BASE}/e13.jpg`,
     icon: <Sparkles className="w-7 h-7" />,
     gradient: "linear-gradient(135deg, #f59e0b22 0%, #d9770622 100%)",
-    gridClass: "col-span-2 md:col-span-1", h: "h-[180px] md:h-[260px]",
   },
 ];
 
@@ -143,10 +135,12 @@ const filterTabs = ["All", "Rooms", "Gym", "Dining", "Sports", "Temple", "Events
 function CategoryCard({
   cat,
   isActive,
+  gridClass,
   onClick,
 }: {
   cat: (typeof categoryData)[0];
   isActive: boolean;
+  gridClass: string;
   onClick: () => void;
 }) {
   const [imgOk, setImgOk] = useState(true);
@@ -157,7 +151,7 @@ function CategoryCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.55 }}
-      className={`group relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 ${cat.gridClass} ${cat.h}`}
+      className={`group relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 ${gridClass} h-[180px] md:h-[260px]`}
       style={{
         background: cat.gradient,
       }}
@@ -285,22 +279,54 @@ export function GalleryContent() {
     setLightbox({ src: filtered[next].src, index: next, cat: lightbox.cat });
   };
 
-  // Derive categories to display:
-  // When collapsed (showAllCategories is false):
-  // 1. All Photos (index 0)
-  // 2. Living Rooms (index 1)
-  // 3. Gymnasium (index 2)
-  // 4. Dining Hall (index 3)
-  // 5. Swaminarayan Mandir (index 5)
-  // 6. View More card (custom)
+  const getGridClass = (id: string, isExpanded: boolean) => {
+    if (!isExpanded) {
+      switch (id) {
+        case "All":
+          return "col-span-2 md:col-span-2";
+        case "Gym":
+          return "col-span-1 md:col-span-1";
+        case "Dining":
+          return "col-span-1 md:col-span-1";
+        case "Rooms":
+          return "col-span-2 md:col-span-2";
+        case "Sports":
+          return "col-span-2 md:col-span-3";
+        default:
+          return "col-span-1";
+      }
+    } else {
+      switch (id) {
+        case "All":
+          return "col-span-2 md:col-span-2";
+        case "Gym":
+          return "col-span-1 md:col-span-1";
+        case "Dining":
+          return "col-span-1 md:col-span-1";
+        case "Rooms":
+          return "col-span-2 md:col-span-2";
+        case "Sports":
+          return "col-span-2 md:col-span-1";
+        case "Temple":
+          return "col-span-1 md:col-span-1";
+        case "Events":
+          return "col-span-1 md:col-span-1";
+        case "Shibir":
+          return "col-span-2 md:col-span-3";
+        default:
+          return "col-span-1";
+      }
+    }
+  };
+
   const displayedCategories = showAllCategories
     ? categoryData
     : [
         categoryData[0], // All
-        categoryData[1], // Rooms
-        categoryData[2], // Gym
-        categoryData[3], // Dining
-        categoryData[5], // Temple
+        categoryData[1], // Gym
+        categoryData[2], // Dining
+        categoryData[3], // Rooms
+        categoryData[4], // Sports
       ];
 
   return (
@@ -341,6 +367,7 @@ export function GalleryContent() {
                   key={`${cat.id}-${i}`}
                   cat={cat as (typeof categoryData)[0]}
                   isActive={isActive}
+                  gridClass={getGridClass(cat.id, showAllCategories)}
                   onClick={() => handleCategoryClick(cat.id)}
                 />
               );

@@ -43,11 +43,8 @@ export function Navbar() {
 
   // Close mobile menu on page navigation
   useEffect(() => {
-    // Only close the mobile menu when it's open and the path changes
-    if (open) {
-      setOpen(false);
-    }
-  }, [pathname, open]);
+    setOpen(false);
+  }, [pathname]);
 
   // Update active section based on intersection observer (on homepage)
   useEffect(() => {
@@ -55,11 +52,16 @@ export function Navbar() {
 
     const observerOptions = {
       root: null,
-      rootMargin: "-30% 0px -50% 0px", // Trigger when the section occupies center viewport
-      threshold: 0.1,
+      rootMargin: "-40% 0px -55% 0px",
+      threshold: 0.05,
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      // If user is near the top of the page, always show "home" as active
+      if (window.scrollY < 200) {
+        setActiveSection("home");
+        return;
+      }
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
@@ -69,6 +71,14 @@ export function Navbar() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
+    // Also listen to scroll to reset to "home" when at top
+    const handleScroll = () => {
+      if (window.scrollY < 200) {
+        setActiveSection("home");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+
     const sectionIds = ["home", "about", "rooms", "arrival", "gallery", "reviews", "contact"];
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
@@ -76,6 +86,7 @@ export function Navbar() {
     });
 
     return () => {
+      window.removeEventListener("scroll", handleScroll);
       sectionIds.forEach((id) => {
         const el = document.getElementById(id);
         if (el) observer.unobserve(el);
@@ -103,6 +114,7 @@ export function Navbar() {
     const targetId = href.split("#")[1];
     if (targetId && isHome) {
       e.preventDefault();
+      setActiveSection(targetId);
       const el = document.getElementById(targetId);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
