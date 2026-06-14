@@ -118,6 +118,11 @@ textarea {
   margin-right: -0.15em;
 }
 
+/* .gradient-text {
+  color: #E99555;
+  background: none;
+  -webkit-text-fill-color: #E99555;
+} */
 .gradient-text-white {
   background: linear-gradient(
     135deg,

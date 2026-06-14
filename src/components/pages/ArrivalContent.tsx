@@ -57,7 +57,7 @@ export function ArrivalContent() {
         <div className="max-w-7xl mx-auto">
           {/* Combined Smart Navigation Card */}
           <div 
-            className="max-w-6xl mx-auto border rounded-[32px] p-6 lg:p-8 shadow-xl bg-white" 
+            className="max-w-6xl mx-auto border rounded-[32px] p-6 lg:p-8 bg-white" 
             style={{ borderColor: COLORS.borderGold }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -69,7 +69,7 @@ export function ArrivalContent() {
                   animate={{ opacity: 1, scale: 1 }}
                   key={activeIdx}
                   transition={{ duration: 0.5 }}
-                  className="w-full h-full flex-grow rounded-2xl overflow-hidden shadow-sm border"
+                  className="w-full h-full flex-grow rounded-2xl overflow-hidden border"
                   style={{ borderColor: COLORS.borderGold }}
                 >
                   <iframe
@@ -96,9 +96,10 @@ export function ArrivalContent() {
                   </div>
 
                   <h2
-                    className="text-3xl sm:text-4xl font-bold mb-2 text-slate-900"
+                    className="text-3xl sm:text-4xl font-bold mb-2"
+                    style={{ color: COLORS.textPrimary }}
                   >
-                    Smart Navigation
+                    Smart <span className="italic" style={{ color: COLORS.primary }}>Navigation</span>
                   </h2>
                   <p className="text-stone-500 text-sm mb-8 font-medium">
                     Select your arrival point to preview the best route.
@@ -124,7 +125,7 @@ export function ArrivalContent() {
                                 backgroundColor: isActive ? COLORS.primary : "#FFF1ED",
                                 borderColor: isActive ? COLORS.primary : "#FFF1ED",
                                 color: isActive ? "#FFFFFF" : COLORS.primary,
-                                boxShadow: isActive ? `0 10px 15px -3px ${COLORS.primary}40` : "none"
+                                boxShadow: "none"
                               }}
                             >
                               {modeIcons[t.mode] || <Car className="w-5 h-5" />}
@@ -149,11 +150,11 @@ export function ArrivalContent() {
                         <div
                           key={t.route}
                           onClick={() => setActiveIdx(idx)}
-                          className="flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-md"
+                          className="flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer hover:-translate-y-0.5"
                           style={{
                             borderColor: isActive ? COLORS.primary : "#F5F5F4",
                             backgroundColor: isActive ? `${COLORS.primary}05` : "#FFFFFF",
-                            boxShadow: isActive ? "0 4px 6px -1px rgba(0,0,0,0.05)" : "none"
+                            boxShadow: "none"
                           }}
                         >
                           {/* Circle icon */}
@@ -180,9 +181,6 @@ export function ArrivalContent() {
                                 {t.mode}
                               </span>
                             </div>
-                            <p className="text-[10px] sm:text-xs text-stone-500 mt-1 leading-snug">
-                              {t.distance} &middot; {t.routePath}
-                            </p>
                           </div>
                         </div>
                       );
@@ -193,7 +191,8 @@ export function ArrivalContent() {
                 {/* Bottom Primary Trigger Button with Enquire Now Style */}
                 <button
                   onClick={handleLiveDirections}
-                  className="group/btn flex items-center justify-between w-full px-4 py-4 mt-8 text-white text-sm font-semibold rounded-xl hover:opacity-90 hover:scale-[1.02] hover:shadow transition-all duration-300 bg-premium-gradient cursor-pointer"
+                  className="group/btn flex items-center justify-between w-full px-4 py-4 mt-8 text-white text-sm font-semibold rounded-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                  style={{ backgroundColor: COLORS.primary }}
                 >
                   <div className="flex items-center gap-2">
                     <Navigation className="w-4 h-4 fill-current rotate-45" />

@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Flame, Car, Shield, ShirtIcon, Dumbbell, Utensils, BookOpen,
+  Home, Car, Shield, ShirtIcon, Dumbbell, Utensils, BookOpen,
   Heart, Users, ArrowUpDown, Trophy, Tv, Cross, Droplets
 } from "lucide-react";
 import { hostelData } from "@/data/hostel";
@@ -9,8 +9,8 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { COLORS } from "@/constants/colors";
 
 const iconMap: Record<string, React.ReactNode> = {
-  "Temple": <Flame className="w-6 h-6" />,
-  "Free Parking": <Car className="w-6 h-6" />,
+  "Temple": <Home className="w-6 h-6" />,
+  "Parking": <Car className="w-6 h-6" />,
   "CCTV Surveillance": <Shield className="w-6 h-6" />,
   "Laundry Service": <ShirtIcon className="w-6 h-6" />,
   "Gymnasium": <Dumbbell className="w-6 h-6" />,
@@ -20,7 +20,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "Weekly Sabha": <Users className="w-6 h-6" />,
   "Lift Access": <ArrowUpDown className="w-6 h-6" />,
   "Sports Ground": <Trophy className="w-6 h-6" />,
-  "TV Room": <Tv className="w-6 h-6" />,
+  // "TV Room": <Tv className="w-6 h-6" />,
   "First-Aid": <Cross className="w-6 h-6" />,
   "Water Cooler": <Droplets className="w-6 h-6" />,
 };
@@ -41,7 +41,7 @@ export function AmenitiesSection() {
           100% { transform: translateX(-33.333%); }
         }
         .animate-marquee-scroll {
-          animation: marquee 35s linear infinite;
+          animation: marquee 55s linear infinite;
         }
       `}} />
 
@@ -84,7 +84,7 @@ export function AmenitiesSection() {
                   color: COLORS.primary
                 }}
               >
-                {iconMap[amenity.title] || <Flame className="w-6 h-6" />}
+                {iconMap[amenity.title] || <Home className="w-6 h-6" />}
               </div>
 
               <h3 className="text-xs sm:text-sm font-bold leading-tight mb-2" style={{ color: COLORS.textPrimary }}>

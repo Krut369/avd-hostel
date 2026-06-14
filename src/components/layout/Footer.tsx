@@ -16,18 +16,10 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 overflow-hidden flex items-center justify-center">
+              <div className="w-16 h-16 overflow-hidden flex items-center justify-center">
                 <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain" />
               </div>
-              <div>
-                <div
-                  className="font-bold text-base leading-tight"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  Atmiya Vidya Dham
-                </div>
-                <div className="text-xs font-semibold" style={{ color: COLORS.primary }}>Harisaurabh Hostel</div>
-              </div>
+    
             </div>
             <p className="text-sm leading-relaxed" style={{ color: COLORS.textSecondary }}>
               {hostelInfo.description}

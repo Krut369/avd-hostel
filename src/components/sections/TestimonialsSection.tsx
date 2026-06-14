@@ -46,10 +46,10 @@ export function TestimonialsSection() {
 
         {/* Carousel Outer Border Shadow Container */}
         <div 
-          className="rounded-[32px] overflow-hidden shadow-2xl border transition-all duration-300"
+          className="rounded-[32px] overflow-hidden border transition-all duration-300"
           style={{ borderColor: COLORS.borderGold }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[420px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[460px]">
             
             {/* LEFT COLUMN: Dark Student Profile Panel */}
             <div className="lg:col-span-5 relative bg-stone-950 flex flex-col justify-end p-6 lg:p-10 overflow-hidden h-[300px] lg:h-auto border-r lg:border-r-0 border-stone-800">
@@ -99,7 +99,7 @@ export function TestimonialsSection() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 bg-white p-6 lg:p-10 flex flex-col justify-between space-y-6 relative">
+            <div className="lg:col-span-7 bg-white p-6 lg:p-10 flex flex-col justify-between space-y-6 relative h-full">
               
               {/* Top Right Navigation Chevrons */}
               <div className="absolute top-6 right-6 lg:top-8 lg:right-8 flex items-center gap-1.5 z-20">
@@ -118,7 +118,7 @@ export function TestimonialsSection() {
               </div>
 
               {/* Quote Review Body text */}
-              <div className="flex-grow flex flex-col justify-center relative py-2">
+              <div className="flex-grow flex flex-col justify-start relative pt-8 pb-2">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentReview.id}

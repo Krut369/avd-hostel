@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 
 export function HeroSection() {
@@ -49,29 +48,7 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-amber-50/30 via-transparent to-transparent" />
       </div>
 
-      {/* Animated particles */}
-      <div className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0"}`}>
-        {mounted && Array.from({ length: 12 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1.5 h-1.5 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              backgroundColor: `${COLORS.accent}40`
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.8, 0.2],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 4,
-            }}
-          />
-        ))}
-      </div>
+
 
       {/* Content */}
       <div className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-36 lg:pt-28 transition-opacity duration-1000 ${videoEnded ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
@@ -104,19 +81,19 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
           className="text-xl sm:text-2xl font-semibold mb-3"
-          style={{ fontStyle: "italic", color: COLORS.primary }}
+          style={{ color: COLORS.primary }}
         >
-          Harisaurabh Hostel
+          Hari Saurabh Hostel
         </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="text-base sm:text-lg max-w-xl mx-auto mb-12 leading-relaxed"
+          className="text-base sm:text-lg max-w-xl mx-auto mb-12 leading-relaxed text-center"
           style={{ color: COLORS.textPrimary }}
         >
-          Value-Centered Student Residence — where brotherhood, discipline, and spiritual growth shape the leaders of tomorrow.
+          Developed in the laps of nature, AVD is the epitome of the education system that has diverse youth from across the country studying in various colleges. It is not just a hostel but a platform to instill cultural and moral values along with providing environment for academic proficiency. To make students learn from the best mentors and fostering a harmonious atmosphere is what we constantly strive for.
         </motion.p>
 
         {/* CTAs */}
@@ -147,7 +124,7 @@ export function HeroSection() {
               e.preventDefault();
               document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="flex items-center gap-2 px-8 py-4 text-sm font-semibold rounded-xl border transition-all duration-300 cursor-pointer hover:bg-stone-100"
+            className="flex items-center gap-2 px-8 py-4 text-sm font-semibold rounded-xl border transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95"
             style={{ color: COLORS.primary, borderColor: COLORS.primary }}
           >
             Apply Now
@@ -159,7 +136,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.5 }}
-          className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-px rounded-2xl overflow-hidden border shadow-sm"
+          className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-px rounded-2xl overflow-hidden border shadow-sm max-w-xl mx-auto sm:max-w-full"
           style={{ backgroundColor: `${COLORS.surface}b0`, borderColor: COLORS.borderGold }}
         >
           {[
@@ -168,33 +145,17 @@ export function HeroSection() {
             { num: "14", label: "Amenities" },
             { num: "4", label: "Room Types" },
           ].map((stat) => (
-            <div key={stat.label} className="py-5 px-4 text-center backdrop-blur-sm">
-              <div className="text-2xl font-bold" style={{ color: COLORS.primary }}>
+            <div key={stat.label} className="py-3 sm:py-5 px-2.5 sm:px-4 text-center backdrop-blur-sm">
+              <div className="text-lg sm:text-2xl font-bold" style={{ color: COLORS.primary }}>
                 {stat.num}
               </div>
-              <div className="text-xs mt-1" style={{ color: COLORS.textPrimary }}>{stat.label}</div>
+              <div className="text-[9px] sm:text-xs mt-1" style={{ color: COLORS.textPrimary }}>{stat.label}</div>
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2"
-          style={{ color: COLORS.textMuted }}
-        >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <ChevronDown className="w-4 h-4" />
-        </motion.div>
-      </motion.div>
+      {/* Scroll indicator removed per request */}
     </section>
   );
 }

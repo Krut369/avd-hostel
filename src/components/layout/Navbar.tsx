@@ -11,7 +11,7 @@ const navLinks = [
   { href: "/#home", label: "Home", id: "home" },
   { href: "/#about", label: "About", id: "about" },
   { href: "/#rooms", label: "Rooms", id: "rooms" },
-  { href: "/#arrival", label: "Arrival", id: "arrival" },
+  { href: "/#arrival", label: "Directions", id: "arrival" },
   { href: "/#gallery", label: "Gallery", id: "gallery" },
   { href: "/#reviews", label: "Reviews", id: "reviews" },
   { href: "/#contact", label: "Contact", id: "contact" },
@@ -43,8 +43,11 @@ export function Navbar() {
 
   // Close mobile menu on page navigation
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    // Only close the mobile menu when it's open and the path changes
+    if (open) {
+      setOpen(false);
+    }
+  }, [pathname, open]);
 
   // Update active section based on intersection observer (on homepage)
   useEffect(() => {
@@ -116,18 +119,18 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[#FFF4EC] shadow-sm border-b border-black/5"
-            : "bg-[#FFF4EC] lg:bg-transparent border-b border-black/5 lg:border-none lg:shadow-none"
+            ? "bg-[#FFF4EC]"
+            : "bg-[#FFF4EC] lg:bg-transparent lg:shadow-none"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <div className="w-22 h-22 overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain" />
               </div>
-              <div className="block">
+              {/* <div className="block">
                 <div
                   className="font-bold text-sm leading-none"
                   style={{ color: COLORS.textPrimary }}
@@ -135,7 +138,7 @@ export function Navbar() {
                   Atmiya Vidya Dham
                 </div>
                 <div className="text-xs font-semibold mt-0.5" style={{ color: COLORS.primary }}>Harisaurabh Hostel</div>
-              </div>
+              </div> */}
             </Link>
 
             {/* Desktop Nav */}
@@ -158,13 +161,6 @@ export function Navbar() {
                     }}
                   >
                     {link.label}
-                    {active && (
-                      <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full"
-                        style={{ backgroundColor: COLORS.primary }}
-                      />
-                    )}
                   </Link>
                 );
               })}

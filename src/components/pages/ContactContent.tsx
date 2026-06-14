@@ -209,7 +209,7 @@ export function ContactContent() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let particles: Array<{
+    const particles: Array<{
       x: number;
       y: number;
       vx: number;
@@ -329,7 +329,7 @@ export function ContactContent() {
       <section className="px-4 sm:px-6 lg:px-8 relative z-10 animate-fade-in">
         <div className="max-w-3xl mx-auto w-full">
           <div
-            className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300"
+            className="rounded-3xl p-6 md:p-8 border transition-all duration-300"
             style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
           >
             {!isSubmitted ? (

@@ -33,39 +33,35 @@ export function CampusHighlightsSection() {
       style={{ backgroundColor: COLORS.background }}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="flex flex-col items-center space-y-12">
           
-          {/* Left Content Column */}
+          {/* Top Content (Centered) */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-5 flex flex-col justify-center space-y-6 pr-0 lg:pr-8"
+            className="w-full max-w-3xl text-center space-y-4"
           >
-            <div className="space-y-2">
-              <h2
-                className="text-4xl sm:text-5xl font-bold leading-[1.15]"
-                style={{ color: COLORS.textPrimary }}
-              >
-                The Sanctuary of <span className="gradient-text italic">Growth</span>
-              </h2>
-            </div>
-            
-            <p className="text-base leading-relaxed text-gray-600 font-medium">
+            <h2
+              className="text-4xl sm:text-5xl font-bold leading-[1.15]"
+              style={{ color: COLORS.textPrimary }}
+            >
+              The Sanctuary of <span className="italic" style={{ color: COLORS.primary }}>Growth</span>
+            </h2>
+            <p className="text-base leading-relaxed text-gray-600 font-medium max-w-2xl mx-auto">
               Beyond architecture lies an environment carefully curated for spiritual alignment. Our sacred spaces are designed to foster inner peace and intellectual clarity.
             </p>
           </motion.div>
 
-          {/* Right Cards Column - Unified Crossfading Card */}
-          <div className="lg:col-span-7">
-            
+          {/* Centered Image Card */}
+          <div className="w-full max-w-4xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="group relative rounded-3xl overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 bg-black/5"
+              className="group relative rounded-3xl overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 bg-black/5 mx-auto"
               style={{ height: "480px", borderColor: COLORS.borderGold }}
             >
               <AnimatePresence>
@@ -88,8 +84,13 @@ export function CampusHighlightsSection() {
                     }}
                   />
 
-                  {/* Gradient Overlay for overlay text contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  {/* Diagonal gradient overlay from black to transparent */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(45deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0) 70%)"
+                    }}
+                  />
 
                   {/* Label Box */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 z-10">

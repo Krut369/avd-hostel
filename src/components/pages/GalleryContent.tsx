@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  X, ChevronLeft, ChevronRight,
+  X, ChevronLeft, ChevronRight, ChevronUp, ChevronDown,
   Dumbbell, Utensils, Trophy, Church, Calendar, BedDouble, LayoutGrid, Sparkles,
 } from "lucide-react";
 import { COLORS } from "@/constants/colors";
@@ -91,7 +91,7 @@ const categoryData = [
     img: "/ac-room/2.jpg",
     icon: <BedDouble className="w-7 h-7" />,
     gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryLight}22 100%)`,
-    gridClass: "col-span-1", h: "h-[180px] md:h-[260px]",
+    gridClass: "col-span-2 md:col-span-2", h: "h-[180px] md:h-[260px]",
   },
   {
     id: "Gym",    label: "Gymnasium",            count: 1,
@@ -215,15 +215,15 @@ function CategoryCard({
       {/* Text */}
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5 z-10">
         <p
-          className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-0.5"
-          style={{ color: imgOk && cat.img ? COLORS.accent : COLORS.primary }}
+          className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-2"
+          style={{ color: COLORS.background }}
         >
           {cat.id === "All" ? "Collection" : "Category"}
         </p>
         <h3
-          className="text-xs sm:text-sm md:text-xl font-bold leading-tight drop-shadow"
+          className="text-xs sm:text-sm md:text-xl font-bold leading-tight drop-shadow tracking-wide"
           style={{
-            color: imgOk && cat.img ? "#fff" : COLORS.textPrimary,
+            color: COLORS.background,
           }}
         >
           {cat.label}
@@ -265,6 +265,7 @@ function LightboxImage({ src, label }: { src: string; label: string }) {
 export function GalleryContent() {
   const [active, setActive] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<{ src: string; index: number; cat: string } | null>(null);
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   const getFiltered = (cat: string | null) =>
     !cat || cat === "All" ? galleryItems : galleryItems.filter((g) => g.cat === cat);
@@ -283,6 +284,24 @@ export function GalleryContent() {
     const next = (lightbox.index + dir + filtered.length) % filtered.length;
     setLightbox({ src: filtered[next].src, index: next, cat: lightbox.cat });
   };
+
+  // Derive categories to display:
+  // When collapsed (showAllCategories is false):
+  // 1. All Photos (index 0)
+  // 2. Living Rooms (index 1)
+  // 3. Gymnasium (index 2)
+  // 4. Dining Hall (index 3)
+  // 5. Swaminarayan Mandir (index 5)
+  // 6. View More card (custom)
+  const displayedCategories = showAllCategories
+    ? categoryData
+    : [
+        categoryData[0], // All
+        categoryData[1], // Rooms
+        categoryData[2], // Gym
+        categoryData[3], // Dining
+        categoryData[5], // Temple
+      ];
 
   return (
     <>
@@ -315,17 +334,47 @@ export function GalleryContent() {
         <div className="max-w-6xl mx-auto">
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
-            {categoryData.map((cat, i) => {
+            {displayedCategories.map((cat, i) => {
               const isActive = active === cat.id || (active === null && cat.id === "All");
               return (
                 <CategoryCard
                   key={`${cat.id}-${i}`}
-                  cat={cat}
+                  cat={cat as (typeof categoryData)[0]}
                   isActive={isActive}
                   onClick={() => handleCategoryClick(cat.id)}
                 />
               );
             })}
+          </div>
+
+          <div className="flex justify-center mt-8">
+            {!showAllCategories ? (
+              <button
+                onClick={() => setShowAllCategories(true)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 active:scale-95"
+                style={{
+                  borderColor: `${COLORS.primary}40`,
+                  color: COLORS.primary,
+                  backgroundColor: COLORS.background,
+                }}
+              >
+                <ChevronDown className="w-4 h-4" />
+                View More
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowAllCategories(false)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 active:scale-95"
+                style={{
+                  borderColor: `${COLORS.primary}40`,
+                  color: COLORS.primary,
+                  backgroundColor: COLORS.background,
+                }}
+              >
+                <ChevronUp className="w-4 h-4" />
+                View Less
+              </button>
+            )}
           </div>
 
           {/* Count hint */}
@@ -336,7 +385,7 @@ export function GalleryContent() {
             style={{ color: COLORS.textMuted }}
           >
             {getFiltered(active).length} photo{getFiltered(active).length !== 1 ? "s" : ""} in{" "}
-            <span style={{ color: COLORS.primary }}>{active ?? "All"}</span> — click a card to browse
+            <span>{active ?? "All"}</span> — click a card to browse
           </motion.p>
         </div>
       </section>

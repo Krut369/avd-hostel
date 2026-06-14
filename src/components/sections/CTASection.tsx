@@ -7,6 +7,7 @@ import { COLORS } from "@/constants/colors";
 import { hostelData } from "@/data/hostel";
 import { INDIAN_STATES, GUJARAT_DISTRICTS, GUJARAT_CITIES } from "@/constants/locations";
 import { PhoneInput, validatePhoneNumber } from "@/components/ui/PhoneInput";
+import { SectionHeader } from "../ui/SectionHeader";
 
 // Custom CSS for transitions, steps, and shakes
 const customStyles = `
@@ -121,7 +122,7 @@ export function CTASection() {
   // Validate only the current step's fields
   const validateCurrentStep = () => {
     const fieldsToValidate = stepRequiredFields[step];
-    let invalid: Record<string, boolean> = {};
+    const invalid: Record<string, boolean> = {};
     let firstInvalidField: string | null = null;
 
     fieldsToValidate.forEach((field) => {
@@ -209,7 +210,7 @@ export function CTASection() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let particles: Array<{
+    const particles: Array<{
       x: number;
       y: number;
       vx: number;
@@ -311,21 +312,16 @@ export function CTASection() {
 
       <div className="max-w-3xl mx-auto w-full relative z-10">
         {/* Header Section */}
-        <div className="text-center mb-10">
-          <h2
-            className="text-4xl font-extrabold mb-4"
-            style={{ color: COLORS.textPrimary }}
-          >
-            Admission <span className="gradient-text italic">Enquiry</span>
-          </h2>
-          <p className="text-sm max-w-md mx-auto" style={{ color: COLORS.textPrimary }}>
-            Fill out the details below in 3 quick steps and our admissions team will contact you shortly.
-          </p>
-        </div>
 
+          <SectionHeader
+                  title="Admission Enquiry"
+                  titleHighlight="Enquiry"
+                  subtitle="  Fill out the details below in 3 quick steps and our admissions team will contact you shortly.
+          "
+                />
         {/* Stepper Card */}
         <div
-          className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300"
+          className="rounded-3xl p-6 md:p-8 border transition-all duration-300"
           style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
         >
           {!isSubmitted ? (
