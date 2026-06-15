@@ -8,6 +8,9 @@ export const hostelData = {
       "Offering comfortable rooms, community living, and a focused environment for academic excellence and personal growth.",
     contact: {
       phone: "+919712977261",
+      phoneName: "Sharad bhai",
+      phone2 : "+919925004164",
+      phone2Name: "Vinit bhai",
       email: "harisaurabh.hostel@gmail.com",
       address: {
         streetAddress: "Atmiya Marg, Bakrol Road",
@@ -25,7 +28,7 @@ export const hostelData = {
   },
   amenities: [
     { title: "Temple", description: "A serene space where peace and spirituality prevails" },
-    { title: "Free Parking", description: "Spacious parking facilities within campus grounds" },
+    { title: "Parking", description: "Spacious parking facilities within campus grounds" },
     { title: "CCTV Surveillance", description: "24/7 monitoring for complete student safety" },
     { title: "Laundry Service", description: "Comprehensive washing and ironing included" },
     { title: "Gymnasium", description: "Fully equipped gym for physical fitness" },
@@ -35,7 +38,7 @@ export const hostelData = {
     { title: "Weekly Sabha", description: "Regular spiritual and cultural gatherings" },
     { title: "Lift Access", description: "24/7 elevator access across all floors" },
     { title: "Sports Ground", description: "Spacious grounds for sports and activities" },
-    { title: "TV Room", description: "Entertainment room for downtime and relaxation" },
+    // { title: "TV Room", description: "Entertainment room for downtime and relaxation" },
     { title: "First-Aid", description: "Medical facilities available round the clock" },
     { title: "Water Cooler", description: "Purified drinking water on every floor" },
   ],
@@ -47,7 +50,7 @@ export const hostelData = {
       tagline: "Maximum comfort, zero compromise.",
       description:
         "Spacious air-conditioned rooms designed for deep focus and restful nights — because great academics start with great sleep.",
-      features: ["2 Sharing", "Attached Bathroom", "Smart AC", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      features: ["2 Sharing", "Attached Bathroom", "Smart AC", "Personal Wardrobe"],
       images: ["/ac-room/1.jpg", "/ac-room/2.jpg", "/ac-room/3.jpg", "/ac-room/4.jpg"],
       tour360Available: true,
     },
@@ -58,7 +61,7 @@ export const hostelData = {
       tagline: "Naturally ventilated, thoughtfully designed.",
       description:
         "Well-ventilated rooms with premium furniture and all essential amenities — comfort that breathes with you.",
-      features: ["2 Sharing", "Attached Bathroom", "Ventilated", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      features: ["2 Sharing", "Attached Bathroom", "Ventilated", "Personal Wardrobe"],
       images: ["/non-ac-room/2.jpg", "/non-ac-room/1.jpg"],
       tour360Available: true,
     },
@@ -69,19 +72,8 @@ export const hostelData = {
       tagline: "Community living at its best.",
       description:
         "Spacious dormitories designed for maximum comfort and community bonding.",
-      features: ["4 Sharing", "Common Bathroom", "Ventilated", "Personal Wardrobe", "Study Table", "Laundry Bag"],
+      features: ["4 Sharing", "Common Bathroom", "Ventilated", "Personal Wardrobe"],
       images: ["/dormitory/1.jpg", "/dormitory/2.jpg"],
-      tour360Available: true,
-    },
-    {
-      id: 4,
-      category: "Juniors",
-      title: "Junior Room",
-      tagline: "Specially designed for younger students.",
-      description:
-        "Rooms with special care and guidance for our junior residents to ensure their growth.",
-      features: ["3 Sharing", "Attached Bathroom", "Ventilated", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-      images: ["/junior-room/1.jpg", "/junior-room/2.jpg"],
       tour360Available: true,
     },
   ],

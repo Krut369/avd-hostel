@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, MessageCircle } from "lucide-react";
+import { COLORS } from "@/constants/colors";
 
 export function FloatingActions() {
   const [showTop, setShowTop] = useState(false);
@@ -25,15 +26,27 @@ export function FloatingActions() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
             onClick={scrollToTop}
-            className="w-11 h-11 rounded-full bg-white shadow-xl shadow-black/10 border border-amber-200 flex items-center justify-center hover:bg-amber-500 hover:border-amber-500 group transition-all duration-300"
+            className="w-11 h-11 rounded-full bg-white border flex items-center justify-center group transition-all duration-300"
+            style={{
+              borderColor: `${COLORS.primary}20`
+            }}
+            whileHover={{
+              backgroundColor: COLORS.primary,
+              borderColor: COLORS.primary
+            }}
           >
-            <ChevronUp className="w-5 h-5 text-amber-600 group-hover:text-white transition-colors" />
+            <ChevronUp 
+              className="w-5 h-5 transition-colors text-stone-700 group-hover:text-white" 
+            />
           </motion.button>
         )}
       </AnimatePresence>
       <Link
-        href="/contact"
-        className="w-11 h-11 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 shadow-xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+        href="/#contact"
+        className="w-11 h-11 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300"
+        style={{
+          backgroundColor: COLORS.primary
+        }}
       >
         <MessageCircle className="w-5 h-5 text-white" />
       </Link>

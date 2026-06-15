@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, View, X, ChevronLeft, ChevronRight, Snowflake, Users, DoorOpen, Wind, Shirt, Box, Maximize } from "lucide-react";
 import { hostelData } from "@/data/hostel";
-import { COLORS } from "@/constants/colors"; 
+import { COLORS } from "@/constants/colors";
+import { SectionHeader } from "../ui/SectionHeader";
+
 
 const categoryColors: Record<string, string> = {
   Premium: "bg-amber-500 text-white",
@@ -34,6 +36,15 @@ const featureIconMap: Record<string, React.ReactNode> = {
 
 export function FeaturedRoomsSection() {
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const openLightbox = (images: string[], index: number) => {
     setLightbox({ images, index });
@@ -56,8 +67,9 @@ export function FeaturedRoomsSection() {
   };
 
   return (
-    <section id="rooms" className="py-24 px-4 sm:px-6 lg:px-8 border-t overflow-hidden" style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}>
-      <style dangerouslySetInnerHTML={{ __html: `
+    <section id="rooms" className="py-24 px-4 sm:px-6 lg:px-8 overflow-hidden" style={{ backgroundColor: COLORS.background }}>
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .scrollbar-none::-webkit-scrollbar {
           display: none;
         }
@@ -68,103 +80,208 @@ export function FeaturedRoomsSection() {
       `}} />
 
       <div className="max-w-7xl mx-auto">
-        <motion.div 
+        <motion.div
           className="mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2
+          {/* <h2
             className="text-4xl sm:text-5xl font-bold mb-4 text-center"
-            style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+            style={{ color: COLORS.textPrimary }}
           >
-            Explore Our <span className="gradient-text italic">Rooms</span>
+            Explore Our <span className="italic" style={{ color: COLORS.primary }}>Rooms</span>
           </h2>
           <p className="text-center text-gray-500 max-w-xl mx-auto text-sm">
             Four thoughtfully designed room categories to match every need and budget. Click any card image to view the room gallery.
-          </p>
+          </p> */}
+
+
+          <SectionHeader
+            title="Explore Our Rooms"
+            titleHighlight="Rooms"
+            subtitle="  Four thoughtfully designed room categories to match every need and budget. Click any card image to view the room gallery.
+                    "
+          />
         </motion.div>
 
         {/* Horizontal Slider Layout */}
-        <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-none px-4 sm:px-8">
-          {hostelData.livingSpaces.map((room, i) => (
-            <motion.div
-              key={room.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="snap-start shrink-0 w-[290px] sm:w-[350px] rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 border"
-              style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
-            >
-              {/* Image with Click to Open Lightbox */}
-              <div 
-                className="relative h-52 overflow-hidden cursor-pointer"
-                onClick={() => openLightbox(room.images, 0)}
-              >
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{
-                    backgroundImage: `url('${room.images[0]}'), linear-gradient(135deg, ${COLORS.primaryTint}, ${COLORS.background})`,
+        <div className="relative">
+          <div className="flex items-stretch overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-none px-4 sm:px-8">
+            {hostelData.livingSpaces.map((room, i) => {
+              const isExpanded = expandedCardId === room.id;
+              return (
+                <motion.div
+                  key={room.id}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="snap-start shrink-0 rounded-3xl overflow-hidden shadow-sm transition-all duration-500 border"
+                  style={{ 
+                    backgroundColor: COLORS.surface, 
+                    borderColor: COLORS.borderGold,
+                    width: isExpanded 
+                      ? (isMobile ? "290px" : "700px") 
+                      : (isMobile ? "290px" : "350px")
                   }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-
-                {/* Badges */}
-                <div className="absolute top-4 left-4 flex gap-2">
-
-                  {room.tour360Available && (
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
-                      <View className="w-3 h-3" />
-                      360°
-                    </span>
-                  )}
-                </div>
-
-                {/* Hover Indicator */}
-                <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <span className="text-white text-xs font-bold bg-black/65 px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <View className="w-3.5 h-3.5" /> View Photos
-                  </span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-5">
-                <p className="text-xs italic mb-1" style={{ color: COLORS.primary }}>{room.tagline}</p>
-                <h3
-                  className="text-xl font-bold mb-2"
-                  style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
                 >
-                  {room.title}
-                </h3>
-                <p className="text-xs leading-relaxed mb-4 line-clamp-2" style={{ color: COLORS.textPrimary }}>
-                  {room.description}
-                </p>
+                  <div className={`${isExpanded ? "flex flex-col sm:flex-row items-stretch" : "flex flex-col justify-between"} h-full`}>
+                    {/* Image Column */}
+                    <div
+                      className="relative overflow-hidden cursor-pointer shrink-0"
+                      onClick={() => openLightbox(room.images, 0)}
+                      style={{
+                        width: !isExpanded ? "100%" : (isMobile ? "100%" : "350px"),
+                        height: !isExpanded ? "208px" : (isMobile ? "208px" : "100%"),
+                        minHeight: !isExpanded ? "208px" : (isMobile ? "208px" : "450px")
+                      }}
+                    >
+                      <div
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                        style={{
+                          backgroundImage: `url('${room.images[0]}')`,
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-                {/* Features */}
-                <div className="grid grid-cols-2 gap-1.5 mb-5">
-                  {room.features.slice(0, 4).map((f) => (
-                    <div key={f} className="flex items-center gap-1.5 text-[11px]" style={{ color: COLORS.textPrimary }}>
-                      {featureIconMap[f] || <Check className="w-3.5 h-3.5 shrink-0" style={{ color: COLORS.primary }} />}
-                      {f}
+                      {/* Badges */}
+                      <div className="absolute top-4 left-4 flex gap-2">
+                        {room.tour360Available && (
+                          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+                            <View className="w-3 h-3" />
+                            360°
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Hover Indicator */}
+                      <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold bg-black/65 px-3 py-1.5 rounded-full flex items-center gap-1">
+                          <View className="w-3.5 h-3.5" /> View Photos
+                        </span>
+                      </div>
                     </div>
-                  ))}
-                </div>
 
-                <a
-                  href="#contact"
-                  onClick={handleEnquireClick}
-                  style={{ backgroundColor: COLORS.primary }}
-                  className="group/btn flex items-center justify-between w-full px-4 py-3 text-white text-sm font-semibold rounded-xl hover:opacity-90 hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
-                >
-                  <span>Enquire Now</span>
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </a>
-              </div>
-            </motion.div>
-          ))}
+                    {/* Content Column */}
+                    <div 
+                      className="p-5 flex flex-col justify-between flex-grow"
+                      style={{
+                        width: !isExpanded ? "100%" : (isMobile ? "100%" : "350px")
+                      }}
+                    >
+                      <div>
+                        <h3 className="text-xl font-bold mb-1" style={{ color: COLORS.textPrimary }}>
+                          {room.title}
+                        </h3>
+                        <p className="text-xs italic mb-3" style={{ color: COLORS.primary }}>{room.tagline}</p>
+
+                        {/* Features Grid (All Amenities shown here) */}
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                          {room.features.map((f) => (
+                            <div key={f} className="flex items-center gap-1.5 text-[11px]" style={{ color: COLORS.textPrimary }}>
+                              {featureIconMap[f] || <Check className="w-3.5 h-3.5 shrink-0" style={{ color: COLORS.primary }} />}
+                              {f}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons (when collapsed) */}
+                      {!isExpanded && (
+                        <div className="flex gap-2 mt-2">
+                          <a
+                            href="#contact"
+                            onClick={handleEnquireClick}
+                            className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-white text-xs font-semibold rounded-xl hover:-translate-y-0.5 hover:shadow transition-all duration-300 cursor-pointer"
+                            style={{ backgroundColor: COLORS.primary }}
+                          >
+                            <span>Enquire Now</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                          </a>
+                          <button
+                            onClick={() => setExpandedCardId(room.id)}
+                            className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-xs font-semibold rounded-xl border hover:-translate-y-0.5 hover:shadow transition-all duration-300 cursor-pointer bg-white"
+                            style={{ borderColor: COLORS.primary, color: COLORS.primary }}
+                          >
+                            <span>View Details</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" style={{ color: COLORS.primary }} />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Expanded Section */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden mt-4 pt-4 border-t"
+                            style={{ borderColor: `${COLORS.border}50` }}
+                          >
+                            <p className="text-[10px] uppercase font-bold tracking-wider mb-2 text-stone-400">Description</p>
+                            <p className="text-xs leading-relaxed mb-5" style={{ color: COLORS.textSecondary }}>
+                              {room.description}
+                            </p>
+
+                            {/* Room Gallery Thumbnails */}
+                            {room.images.length > 1 && (
+                              <div className="mb-4">
+                                <p className="text-[10px] uppercase font-bold tracking-wider mb-2 text-stone-400">Room Gallery</p>
+                                <div className="flex gap-2">
+                                  {room.images.map((img, idx) => (
+                                    <button
+                                      key={idx}
+                                      onClick={() => openLightbox(room.images, idx)}
+                                      className="w-10 h-10 rounded-lg overflow-hidden border border-stone-200 hover:border-primary transition-colors focus:outline-none cursor-pointer"
+                                    >
+                                      <img src={img} alt="" className="w-full h-full object-cover" />
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Expanded state actions: Enquire Now + Close Details */}
+                            <div className="flex gap-2 mt-4">
+                              <a
+                                href="#contact"
+                                onClick={handleEnquireClick}
+                                className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-white text-xs font-semibold rounded-xl hover:-translate-y-0.5 hover:shadow transition-all duration-300"
+                                style={{ backgroundColor: COLORS.primary }}
+                              >
+                                <span>Enquire Now</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                              </a>
+                              <button
+                                onClick={() => setExpandedCardId(null)}
+                                className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-xs font-semibold rounded-xl border hover:-translate-y-0.5 hover:shadow transition-all duration-300 cursor-pointer bg-white"
+                                style={{ borderColor: COLORS.primary, color: COLORS.primary }}
+                              >
+                                <span>Close Details</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform rotate-180" style={{ color: COLORS.primary }} />
+                              </button>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Right fade overlay to match background color */}
+          <div 
+            className="absolute top-0 right-0 bottom-8 w-28 pointer-events-none z-10"
+            style={{
+              background: `linear-gradient(to right, transparent, ${COLORS.background})`
+            }}
+          />
         </div>
       </div>
 

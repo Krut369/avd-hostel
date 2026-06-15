@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 
 interface SectionHeaderProps {
-  eyebrow?: string;
   title: string;
   titleHighlight?: string;
   subtitle?: string;
@@ -12,7 +11,6 @@ interface SectionHeaderProps {
 }
 
 export function SectionHeader({
-  eyebrow,
   title,
   titleHighlight,
   subtitle,
@@ -27,22 +25,15 @@ export function SectionHeader({
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className={`mb-14 ${centered ? "text-center" : ""}`}
     >
-      {eyebrow && (
-        <div className="ornament-divider mb-5 justify-center">
-          <span className="text-amber-500 text-xs font-semibold uppercase tracking-[0.3em]">
-            {eyebrow}
-          </span>
-        </div>
-      )}
+
       <h2
         className={`text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${
           light ? "text-white" : "text-slate-900"
         }`}
-        style={{ fontFamily: "Playfair Display, serif" }}
       >
         {title}{" "}
         {titleHighlight && (
-          <span className="gradient-text">{titleHighlight}</span>
+          <span className="italic gradient-text">{titleHighlight}</span>
         )}
       </h2>
       {subtitle && (

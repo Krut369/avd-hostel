@@ -21,12 +21,9 @@ export function ReviewsContent() {
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="ornament-divider justify-center mb-6">
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: COLORS.primary }}>Testimonials</span>
-            </div>
             <h1
-              className="text-5xl sm:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
+              style={{ color: COLORS.textPrimary }}
             >
               Student <span className="gradient-text italic">Stories</span>
             </h1>
@@ -44,7 +41,7 @@ export function ReviewsContent() {
             style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
           >
             <div className="text-center">
-              <div className="text-5xl font-bold" style={{ fontFamily: "Playfair Display, serif", color: COLORS.primary }}>5.0</div>
+              <div className="text-5xl font-bold" style={{ color: COLORS.primary }}>5.0</div>
               <StarRating rating={5} />
               <div className="text-xs mt-1" style={{ color: COLORS.textPrimary }}>Overall Rating</div>
             </div>
@@ -60,8 +57,8 @@ export function ReviewsContent() {
 
       {/* Reviews Masonry */}
       <section
-        className="py-24 px-4 sm:px-6 lg:px-8 border-t"
-        style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+        className="py-24 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: COLORS.background }}
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -108,7 +105,7 @@ export function ReviewsContent() {
                   <div>
                     <div
                       className="font-bold text-base"
-                      style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                      style={{ color: COLORS.textPrimary }}
                     >
                       {review.name}
                     </div>
@@ -136,7 +133,7 @@ export function ReviewsContent() {
               </div>
               <h3
                 className="font-bold text-lg mb-2"
-                style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                style={{ color: COLORS.textPrimary }}
               >
                 Share Your Story
               </h3>

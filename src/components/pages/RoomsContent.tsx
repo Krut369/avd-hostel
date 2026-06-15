@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, View, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, View, X, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { hostelData } from "@/data/hostel";
 import { CTASection } from "@/components/sections/CTASection";
 import { COLORS } from "@/constants/colors";
 
 const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  Premium: { bg: "bg-amber-500", text: "text-white", border: "border-amber-400" },
+  Premium: { bg: "bg-[var(--accent)]", text: "text-white", border: "border-[var(--accent-light)]" },
   Standard: { bg: "bg-blue-500", text: "text-white", border: "border-blue-400" },
   Economy: { bg: "bg-emerald-500", text: "text-white", border: "border-emerald-400" },
   Juniors: { bg: "bg-purple-500", text: "text-white", border: "border-purple-400" },
@@ -39,12 +39,9 @@ export function RoomsContent() {
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="ornament-divider justify-center mb-6">
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: COLORS.primary }}>Accommodation</span>
-            </div>
             <h1
-              className="text-5xl sm:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
+              style={{ color: COLORS.textPrimary }}
             >
               Find Your Perfect <span className="gradient-text italic">Room</span>
             </h1>
@@ -57,8 +54,8 @@ export function RoomsContent() {
 
       {/* Rooms */}
       <section
-        className="py-24 px-4 sm:px-6 lg:px-8 border-t"
-        style={{ backgroundColor: COLORS.background, borderColor: `${COLORS.primary}15` }}
+        className="py-24 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: COLORS.background }}
       >
         <div className="max-w-7xl mx-auto space-y-16">
           {hostelData.livingSpaces.map((room, idx) => {
@@ -125,7 +122,7 @@ export function RoomsContent() {
 
                   <h2
                     className="text-4xl font-bold mb-2"
-                    style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+                    style={{ color: COLORS.textPrimary }}
                   >
                     {room.title}
                   </h2>
@@ -153,9 +150,10 @@ export function RoomsContent() {
 
                   <a
                     href={`mailto:harisaurabh.hostel@gmail.com?subject=Room Enquiry: ${room.title}`}
-                    className="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-amber-500/25 hover:scale-105 transition-all duration-300 text-sm"
+                    className="group inline-flex items-center gap-2 px-7 py-3.5 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 text-sm bg-premium-gradient"
                   >
                     Enquire About This Room
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </div>
               </motion.div>

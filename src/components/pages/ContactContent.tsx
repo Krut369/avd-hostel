@@ -6,6 +6,7 @@ import { CheckCircle, ChevronLeft } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 import { hostelData } from "@/data/hostel";
 import { INDIAN_STATES, GUJARAT_DISTRICTS, GUJARAT_CITIES } from "@/constants/locations";
+import { PhoneInput, validatePhoneNumber } from "@/components/ui/PhoneInput";
 
 // Custom CSS for transitions, steps, and shakes
 const customStyles = `
@@ -47,7 +48,13 @@ export function ContactContent() {
     firstName: "",
     middleName: "",
     lastName: "",
+    contactCountryCode: "+91",
+    contactCountryIso: "IN",
+    contactCountryName: "India",
     contactNumber: "",
+    fatherCountryCode: "+91",
+    fatherCountryIso: "IN",
+    fatherCountryName: "India",
     fatherContact: "",
     city: "",
     district: "",
@@ -125,6 +132,19 @@ export function ContactContent() {
       }
     });
 
+    if (step === 1) {
+      const isContactValid = validatePhoneNumber(formData.contactNumber, formData.contactCountryIso);
+      const isFatherValid = validatePhoneNumber(formData.fatherContact, formData.fatherCountryIso);
+      if (!isContactValid) {
+        invalid["contactNumber"] = true;
+        if (!firstInvalidField) firstInvalidField = "contactNumber";
+      }
+      if (!isFatherValid) {
+        invalid["fatherContact"] = true;
+        if (!firstInvalidField) firstInvalidField = "fatherContact";
+      }
+    }
+
     if (Object.keys(invalid).length > 0) {
       setShakingFields(invalid);
       setTimeout(() => setShakingFields({}), 600); // Clear shake after animation
@@ -162,6 +182,14 @@ export function ContactContent() {
 
     setIsSubmitting(true);
 
+    // Construct submission payload with country code prepended
+    const payload = {
+      ...formData,
+      contactNumber: `${formData.contactCountryCode} ${formData.contactNumber}`,
+      fatherContact: `${formData.fatherCountryCode} ${formData.fatherContact}`,
+    };
+    console.log("Submitting enquiry payload:", payload);
+
     // Simulate database write / network delay
     setTimeout(() => {
       setIsSubmitting(false);
@@ -181,7 +209,7 @@ export function ContactContent() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let particles: Array<{
+    const particles: Array<{
       x: number;
       y: number;
       vx: number;
@@ -248,7 +276,13 @@ export function ContactContent() {
       firstName: "",
       middleName: "",
       lastName: "",
+      contactCountryCode: "+91",
+      contactCountryIso: "IN",
+      contactCountryName: "India",
       contactNumber: "",
+      fatherCountryCode: "+91",
+      fatherCountryIso: "IN",
+      fatherCountryName: "India",
       fatherContact: "",
       city: "",
       district: "",
@@ -279,14 +313,11 @@ export function ContactContent() {
       <section className="relative pt-28 pb-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative z-10 animate-fade-in">
-          <div className="ornament-divider justify-center mb-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: COLORS.primary }}>Reach Out</span>
-          </div>
           <h1
             className="text-5xl sm:text-6xl font-bold mb-6"
-            style={{ fontFamily: "Playfair Display, serif", color: COLORS.textPrimary }}
+            style={{ color: COLORS.textPrimary }}
           >
-            Admission Enquiry
+            Admission <span className="gradient-text italic">Enquiry</span>
           </h1>
           <p className="text-lg max-w-xl mx-auto font-medium" style={{ color: COLORS.textPrimary }}>
             Fill out the details below in 3 quick steps and our admissions team will contact you shortly.
@@ -298,8 +329,8 @@ export function ContactContent() {
       <section className="px-4 sm:px-6 lg:px-8 relative z-10 animate-fade-in">
         <div className="max-w-3xl mx-auto w-full">
           <div
-            className="rounded-3xl p-6 md:p-8 border shadow-xl transition-all duration-300 bg-white"
-            style={{ borderColor: COLORS.borderGold }}
+            className="rounded-3xl p-6 md:p-8 border transition-all duration-300"
+            style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
           >
             {!isSubmitted ? (
               <form onSubmit={handleSubmit} className="space-y-8">
@@ -310,55 +341,55 @@ export function ContactContent() {
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                       style={{
-                        backgroundColor: step >= 1 ? COLORS.primary : COLORS.borderLight,
-                        color: step >= 1 ? COLORS.textWhite : COLORS.textMuted
+                        backgroundColor: step >= 1 ? COLORS.primary : "#FFF1ED",
+                        color: step >= 1 ? COLORS.textWhite : COLORS.primary
                       }}
                     >
                       1
                     </div>
                     <span
                       className="text-xs font-bold tracking-wider uppercase hidden sm:inline"
-                      style={{ color: step === 1 ? COLORS.primary : COLORS.textMuted }}
+                      style={{ color: COLORS.primary }}
                     >
                       Personal Details
                     </span>
                   </div>
 
-                  <div className="flex-1 h-0.5 mx-4" style={{ backgroundColor: COLORS.borderLight }} />
+                  <div className="flex-1 h-0.5 mx-4" style={{ backgroundColor: COLORS.primaryTint }} />
 
                   <div className="flex items-center gap-2.5">
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                       style={{
-                        backgroundColor: step >= 2 ? COLORS.primary : COLORS.borderLight,
-                        color: step >= 2 ? COLORS.textWhite : COLORS.textMuted
+                        backgroundColor: step >= 2 ? COLORS.primary : "#FFF1ED",
+                        color: step >= 2 ? COLORS.textWhite : COLORS.primary
                       }}
                     >
                       2
                     </div>
                     <span
                       className="text-xs font-bold tracking-wider uppercase hidden sm:inline"
-                      style={{ color: step === 2 ? COLORS.primary : COLORS.textMuted }}
+                      style={{ color: COLORS.primary }}
                     >
                       Residence
                     </span>
                   </div>
 
-                  <div className="flex-1 h-0.5 mx-4" style={{ backgroundColor: COLORS.borderLight }} />
+                  <div className="flex-1 h-0.5 mx-4" style={{ backgroundColor: COLORS.primaryTint }} />
 
                   <div className="flex items-center gap-2.5">
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                       style={{
-                        backgroundColor: step >= 3 ? COLORS.primary : COLORS.borderLight,
-                        color: step >= 3 ? COLORS.textWhite : COLORS.textMuted
+                        backgroundColor: step >= 3 ? COLORS.primary : "#FFF1ED",
+                        color: step >= 3 ? COLORS.textWhite : COLORS.primary
                       }}
                     >
                       3
                     </div>
                     <span
                       className="text-xs font-bold tracking-wider uppercase hidden sm:inline"
-                      style={{ color: step === 3 ? COLORS.primary : COLORS.textMuted }}
+                      style={{ color: COLORS.primary }}
                     >
                       Academics
                     </span>
@@ -369,8 +400,8 @@ export function ContactContent() {
                 {step === 1 && (
                   <div className="space-y-6 animate-fade-in">
                     <div className="pb-1">
-                      <h3 className="text-lg font-bold" style={{ color: COLORS.textPrimary }}>Personal Information</h3>
-                      <p className="text-xs mt-0.5" style={{ color: COLORS.textMuted }}>Please fill your primary communication details.</p>
+                      <h3 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>Personal Information</h3>
+                      <p className="text-[11px] mt-0.5" style={{ color: COLORS.textMuted }}>Please fill your primary communication details.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -437,50 +468,50 @@ export function ContactContent() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       {/* Contact Number */}
-                      <div className={`space-y-1 ${shakingFields.contactNumber ? "animate-shake" : ""}`}>
-                        <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="contactNumber">
-                          Contact Number <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          id="contactNumber"
-                          type="tel"
-                          placeholder="Mobile No. (10 digits)"
-                          maxLength={10}
-                          pattern="[0-9]*"
-                          inputMode="numeric"
-                          value={formData.contactNumber}
-                          onChange={(e) => handleInputChange("contactNumber", e.target.value)}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.contactNumber 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        />
-                      </div>
+                      <PhoneInput
+                        id="contactNumber"
+                        label="Contact Number"
+                        required
+                        value={formData.contactNumber}
+                        countryCode={formData.contactCountryCode}
+                        countryIso={formData.contactCountryIso}
+                        shaking={!!shakingFields.contactNumber}
+                        onChange={(data) => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            contactNumber: data.number,
+                            contactCountryCode: data.countryCode,
+                            contactCountryIso: data.countryIso,
+                            contactCountryName: data.countryName,
+                          }));
+                          if (shakingFields.contactNumber) {
+                            setShakingFields((prev) => ({ ...prev, contactNumber: false }));
+                          }
+                        }}
+                      />
 
                       {/* Father's Contact */}
-                      <div className={`space-y-1 ${shakingFields.fatherContact ? "animate-shake" : ""}`}>
-                        <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="fatherContact">
-                          Father's Contact <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          id="fatherContact"
-                          type="tel"
-                          placeholder="Emergency No. (10 digits)"
-                          maxLength={10}
-                          pattern="[0-9]*"
-                          inputMode="numeric"
-                          value={formData.fatherContact}
-                          onChange={(e) => handleInputChange("fatherContact", e.target.value)}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.fatherContact 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        />
-                      </div>
+                      <PhoneInput
+                        id="fatherContact"
+                        label="Father's Contact"
+                        required
+                        value={formData.fatherContact}
+                        countryCode={formData.fatherCountryCode}
+                        countryIso={formData.fatherCountryIso}
+                        shaking={!!shakingFields.fatherContact}
+                        onChange={(data) => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            fatherContact: data.number,
+                            fatherCountryCode: data.countryCode,
+                            fatherCountryIso: data.countryIso,
+                            fatherCountryName: data.countryName,
+                          }));
+                          if (shakingFields.fatherContact) {
+                            setShakingFields((prev) => ({ ...prev, fatherContact: false }));
+                          }
+                        }}
+                      />
                     </div>
                   </div>
                 )}
@@ -489,8 +520,8 @@ export function ContactContent() {
                 {step === 2 && (
                   <div className="space-y-6 animate-fade-in">
                     <div className="pb-1">
-                      <h3 className="text-lg font-bold" style={{ color: COLORS.textPrimary }}>Location & Residence</h3>
-                      <p className="text-xs mt-0.5" style={{ color: COLORS.textMuted }}>Please inform us about your residential location details.</p>
+                      <h3 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>Location & Residence</h3>
+                      <p className="text-[11px] mt-0.5" style={{ color: COLORS.textMuted }}>Please inform us about your residential location details.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -500,14 +531,14 @@ export function ContactContent() {
                           City / Village <span className="text-red-500">*</span>
                         </label>
                         {isManualCity || formData.state !== "Gujarat" ? (
-                          <div className="flex gap-2">
+                          <div className="relative">
                             <input
                               id="city"
                               type="text"
                               placeholder="Type City or Village"
                               value={formData.city}
                               onChange={(e) => handleInputChange("city", e.target.value)}
-                              className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
                                 shakingFields.city 
                                   ? "border-red-400 focus:border-red-400 bg-red-50/10" 
                                   : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
@@ -518,10 +549,10 @@ export function ContactContent() {
                               <button
                                 type="button"
                                 onClick={() => { setIsManualCity(false); handleInputChange("city", ""); }}
-                                className="px-3 py-2 border rounded-xl text-xs hover:bg-stone-100 transition-colors bg-white font-medium whitespace-nowrap"
-                                style={{ color: COLORS.textSecondary, borderColor: COLORS.borderLight }}
+                                className="text-[10px] font-bold mt-1.5 flex items-center gap-1 hover:underline transition-all duration-200 cursor-pointer"
+                                style={{ color: COLORS.primary }}
                               >
-                                Back to List
+                                ← Select from list
                               </button>
                             )}
                           </div>
@@ -559,14 +590,14 @@ export function ContactContent() {
                           District <span className="text-red-500">*</span>
                         </label>
                         {isManualDistrict || formData.state !== "Gujarat" ? (
-                          <div className="flex gap-2">
+                          <div className="relative">
                             <input
                               id="district"
                               type="text"
                               placeholder="Type District Name"
                               value={formData.district}
                               onChange={(e) => handleInputChange("district", e.target.value)}
-                              className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
                                 shakingFields.district 
                                   ? "border-red-400 focus:border-red-400 bg-red-50/10" 
                                   : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
@@ -577,10 +608,10 @@ export function ContactContent() {
                               <button
                                 type="button"
                                 onClick={() => { setIsManualDistrict(false); handleInputChange("district", ""); }}
-                                className="px-3 py-2 border rounded-xl text-xs hover:bg-stone-100 transition-colors bg-white font-medium whitespace-nowrap"
-                                style={{ color: COLORS.textSecondary, borderColor: COLORS.borderLight }}
+                                className="text-[10px] font-bold mt-1.5 flex items-center gap-1 hover:underline transition-all duration-200 cursor-pointer"
+                                style={{ color: COLORS.primary }}
                               >
-                                Back to List
+                                ← Select from list
                               </button>
                             )}
                           </div>
@@ -642,8 +673,8 @@ export function ContactContent() {
                 {step === 3 && (
                   <div className="space-y-6 animate-fade-in">
                     <div className="pb-1">
-                      <h3 className="text-lg font-bold" style={{ color: COLORS.textPrimary }}>Academic Details</h3>
-                      <p className="text-xs mt-0.5" style={{ color: COLORS.textMuted }}>Please supply your previous academic history.</p>
+                      <h3 className="text-xl font-bold" style={{ color: COLORS.textPrimary }}>Academic Details</h3>
+                      <p className="text-[11px] mt-0.5" style={{ color: COLORS.textMuted }}>Please supply your previous academic history.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -653,14 +684,14 @@ export function ContactContent() {
                           School / College <span className="text-red-500">*</span>
                         </label>
                         {isManualSchool ? (
-                          <div className="flex gap-2">
+                          <div className="relative">
                             <input
                               id="school"
                               type="text"
                               placeholder="Type School/College Name"
                               value={formData.school}
                               onChange={(e) => handleInputChange("school", e.target.value)}
-                              className={`flex-1 px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
                                 shakingFields.school 
                                   ? "border-red-400 focus:border-red-400 bg-red-50/10" 
                                   : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
@@ -670,10 +701,10 @@ export function ContactContent() {
                             <button
                               type="button"
                               onClick={() => { setIsManualSchool(false); handleInputChange("school", ""); }}
-                              className="px-3 py-2 border rounded-xl text-xs hover:bg-stone-100 transition-colors bg-white font-medium whitespace-nowrap"
-                              style={{ color: COLORS.textSecondary, borderColor: COLORS.borderLight }}
+                              className="text-[10px] font-bold mt-1.5 flex items-center gap-1 hover:underline transition-all duration-200 cursor-pointer"
+                              style={{ color: COLORS.primary }}
                             >
-                              Back to List
+                              ← Select from list
                             </button>
                           </div>
                         ) : (
@@ -837,7 +868,7 @@ export function ContactContent() {
                 <div className="space-y-1.5">
                   <h3 className="text-2xl font-extrabold" style={{ color: COLORS.textPrimary }}>Thank You, {formData.firstName}!</h3>
                   <p className="max-w-sm mx-auto text-xs leading-relaxed" style={{ color: COLORS.textPrimary }}>
-                    Your enquiry has been registered. Our admissions team will contact you at <strong style={{ color: COLORS.primary }}>{formData.contactNumber}</strong> shortly.
+                    Your enquiry has been registered. Our admissions team will contact you at <strong style={{ color: COLORS.primary }}>{formData.contactCountryCode} {formData.contactNumber}</strong> shortly.
                   </p>
                 </div>
 
@@ -859,7 +890,7 @@ export function ContactContent() {
                     </div>
                     <div>
                       <span style={{ color: COLORS.textMuted }} className="block">Contact Phone</span>
-                      <span className="font-semibold" style={{ color: COLORS.textPrimary }}>{formData.contactNumber}</span>
+                      <span className="font-semibold" style={{ color: COLORS.textPrimary }}>{formData.contactCountryCode} {formData.contactNumber}</span>
                     </div>
                     <div>
                       <span style={{ color: COLORS.textMuted }} className="block">Location</span>
