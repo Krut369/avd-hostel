@@ -11,27 +11,27 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      
+
       {/* About Section */}
       <CampusHighlightsSection />
       <AmenitiesSection />
-      
+
       {/* Rooms Section */}
       <FeaturedRoomsSection />
-      
+
       {/* Arrival Section */}
       <div id="arrival">
         <ArrivalContent />
       </div>
-      
+
       {/* Gallery Section */}
       <div id="gallery">
         <GalleryContent />
       </div>
-      
+
       {/* Reviews Section */}
       <TestimonialsSection />
-      
+
       {/* Contact Section */}
       <CTASection />
     </>

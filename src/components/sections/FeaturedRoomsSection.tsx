@@ -2,11 +2,24 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, View, X, ChevronLeft, ChevronRight, Snowflake, Users, DoorOpen, Wind, Shirt, Box, Maximize } from "lucide-react";
+import {
+  Check,
+  ArrowRight,
+  View,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Snowflake,
+  Users,
+  DoorOpen,
+  Wind,
+  Shirt,
+  Box,
+  Maximize,
+} from "lucide-react";
 import { hostelData } from "@/data/hostel";
 import { COLORS } from "@/constants/colors";
 import { SectionHeader } from "../ui/SectionHeader";
-
 
 const categoryColors: Record<string, string> = {
   Premium: "bg-amber-500 text-white",
@@ -16,26 +29,62 @@ const categoryColors: Record<string, string> = {
 };
 
 const featureIconMap: Record<string, React.ReactNode> = {
-  "Smart AC": <Snowflake className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "Split AC": <Snowflake className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "2 Sharing": <Users className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "3 Sharing": <Users className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "6 Sharing": <Users className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "Attached Bathroom": <DoorOpen className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "Attached Bath": <DoorOpen className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
+  "Smart AC": (
+    <Snowflake className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "Split AC": (
+    <Snowflake className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "2 Sharing": (
+    <Users className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "3 Sharing": (
+    <Users className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "6 Sharing": (
+    <Users className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "Attached Bathroom": (
+    <DoorOpen className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "Attached Bath": (
+    <DoorOpen className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
   "Study Table": (
-    <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" style={{ color: COLORS.primary }}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M5 10v8m14-8v8M4 6h16a1 1 0 011 1v3H3V7a1 1 0 011-1z" />
+    <svg
+      className="w-4 h-4 shrink-0"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+      style={{ color: COLORS.primary }}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 10h18M5 10v8m14-8v8M4 6h16a1 1 0 011 1v3H3V7a1 1 0 011-1z"
+      />
     </svg>
   ),
-  "Personal Wardrobe": <Box className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "Laundry Bag": <Shirt className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "Ventilated": <Wind className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
-  "Spacious": <Maximize className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />,
+  "Personal Wardrobe": (
+    <Box className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  "Laundry Bag": (
+    <Shirt className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  Ventilated: (
+    <Wind className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
+  Spacious: (
+    <Maximize className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
+  ),
 };
 
 export function FeaturedRoomsSection() {
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{
+    images: string[];
+    index: number;
+  } | null>(null);
   const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -54,7 +103,8 @@ export function FeaturedRoomsSection() {
 
   const navigate = (dir: 1 | -1) => {
     if (!lightbox) return;
-    const next = (lightbox.index + dir + lightbox.images.length) % lightbox.images.length;
+    const next =
+      (lightbox.index + dir + lightbox.images.length) % lightbox.images.length;
     setLightbox({ ...lightbox, index: next });
   };
 
@@ -67,9 +117,14 @@ export function FeaturedRoomsSection() {
   };
 
   return (
-    <section id="rooms" className="py-24 px-4 sm:px-6 lg:px-8 overflow-hidden" style={{ backgroundColor: COLORS.background }}>
-      <style dangerouslySetInnerHTML={{
-        __html: `
+    <section
+      id="rooms"
+      className="py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      style={{ backgroundColor: COLORS.background }}
+    >
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .scrollbar-none::-webkit-scrollbar {
           display: none;
         }
@@ -77,7 +132,9 @@ export function FeaturedRoomsSection() {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
-      `}} />
+      `,
+        }}
+      />
 
       <div className="max-w-7xl mx-auto">
         <motion.div
@@ -96,7 +153,6 @@ export function FeaturedRoomsSection() {
           <p className="text-center text-gray-500 max-w-xl mx-auto text-sm">
             Four thoughtfully designed room categories to match every need and budget. Click any card image to view the room gallery.
           </p> */}
-
 
           <SectionHeader
             title="Explore Our Rooms"
@@ -119,23 +175,41 @@ export function FeaturedRoomsSection() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
                   className="snap-start shrink-0 rounded-3xl overflow-hidden shadow-sm transition-all duration-500 border"
-                  style={{ 
-                    backgroundColor: COLORS.surface, 
+                  style={{
+                    backgroundColor: COLORS.surface,
                     borderColor: COLORS.borderGold,
-                    width: isExpanded 
-                      ? (isMobile ? "290px" : "700px") 
-                      : (isMobile ? "290px" : "350px")
+                    width: isExpanded
+                      ? isMobile
+                        ? "290px"
+                        : "700px"
+                      : isMobile
+                        ? "290px"
+                        : "350px",
                   }}
                 >
-                  <div className={`${isExpanded ? "flex flex-col sm:flex-row items-stretch" : "flex flex-col justify-between"} h-full`}>
+                  <div
+                    className={`${isExpanded ? "flex flex-col sm:flex-row items-stretch" : "flex flex-col justify-between"} h-full`}
+                  >
                     {/* Image Column */}
                     <div
                       className="relative overflow-hidden cursor-pointer shrink-0"
                       onClick={() => openLightbox(room.images, 0)}
                       style={{
-                        width: !isExpanded ? "100%" : (isMobile ? "100%" : "350px"),
-                        height: !isExpanded ? "208px" : (isMobile ? "208px" : "100%"),
-                        minHeight: !isExpanded ? "208px" : (isMobile ? "208px" : "450px")
+                        width: !isExpanded
+                          ? "100%"
+                          : isMobile
+                            ? "100%"
+                            : "350px",
+                        height: !isExpanded
+                          ? "208px"
+                          : isMobile
+                            ? "208px"
+                            : "100%",
+                        minHeight: !isExpanded
+                          ? "208px"
+                          : isMobile
+                            ? "208px"
+                            : "450px",
                       }}
                     >
                       <div
@@ -165,23 +239,44 @@ export function FeaturedRoomsSection() {
                     </div>
 
                     {/* Content Column */}
-                    <div 
+                    <div
                       className="p-5 flex flex-col justify-between flex-grow"
                       style={{
-                        width: !isExpanded ? "100%" : (isMobile ? "100%" : "350px")
+                        width: !isExpanded
+                          ? "100%"
+                          : isMobile
+                            ? "100%"
+                            : "350px",
                       }}
                     >
                       <div>
-                        <h3 className="text-xl font-bold mb-1" style={{ color: COLORS.textPrimary }}>
+                        <h3
+                          className="text-xl font-bold mb-1"
+                          style={{ color: COLORS.textPrimary }}
+                        >
                           {room.title}
                         </h3>
-                        <p className="text-xs italic mb-3" style={{ color: COLORS.primary }}>{room.tagline}</p>
+                        <p
+                          className="text-xs italic mb-3"
+                          style={{ color: COLORS.primary }}
+                        >
+                          {room.tagline}
+                        </p>
 
                         {/* Features Grid (All Amenities shown here) */}
                         <div className="grid grid-cols-2 gap-2 mb-4">
                           {room.features.map((f) => (
-                            <div key={f} className="flex items-center gap-1.5 text-[11px]" style={{ color: COLORS.textPrimary }}>
-                              {featureIconMap[f] || <Check className="w-3.5 h-3.5 shrink-0" style={{ color: COLORS.primary }} />}
+                            <div
+                              key={f}
+                              className="flex items-center gap-1.5 text-[11px]"
+                              style={{ color: COLORS.textPrimary }}
+                            >
+                              {featureIconMap[f] || (
+                                <Check
+                                  className="w-3.5 h-3.5 shrink-0"
+                                  style={{ color: COLORS.primary }}
+                                />
+                              )}
                               {f}
                             </div>
                           ))}
@@ -203,10 +298,16 @@ export function FeaturedRoomsSection() {
                           <button
                             onClick={() => setExpandedCardId(room.id)}
                             className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-xs font-semibold rounded-xl border hover:-translate-y-0.5 hover:shadow transition-all duration-300 cursor-pointer bg-white"
-                            style={{ borderColor: COLORS.primary, color: COLORS.primary }}
+                            style={{
+                              borderColor: COLORS.primary,
+                              color: COLORS.primary,
+                            }}
                           >
                             <span>View Details</span>
-                            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" style={{ color: COLORS.primary }} />
+                            <ArrowRight
+                              className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform"
+                              style={{ color: COLORS.primary }}
+                            />
                           </button>
                         </div>
                       )}
@@ -222,23 +323,36 @@ export function FeaturedRoomsSection() {
                             className="overflow-hidden mt-4 pt-4 border-t"
                             style={{ borderColor: `${COLORS.border}50` }}
                           >
-                            <p className="text-[10px] uppercase font-bold tracking-wider mb-2 text-stone-400">Description</p>
-                            <p className="text-xs leading-relaxed mb-5" style={{ color: COLORS.textSecondary }}>
+                            <p className="text-[10px] uppercase font-bold tracking-wider mb-2 text-stone-400">
+                              Description
+                            </p>
+                            <p
+                              className="text-xs leading-relaxed mb-5"
+                              style={{ color: COLORS.textSecondary }}
+                            >
                               {room.description}
                             </p>
 
                             {/* Room Gallery Thumbnails */}
                             {room.images.length > 1 && (
                               <div className="mb-4">
-                                <p className="text-[10px] uppercase font-bold tracking-wider mb-2 text-stone-400">Room Gallery</p>
+                                <p className="text-[10px] uppercase font-bold tracking-wider mb-2 text-stone-400">
+                                  Room Gallery
+                                </p>
                                 <div className="flex gap-2">
                                   {room.images.map((img, idx) => (
                                     <button
                                       key={idx}
-                                      onClick={() => openLightbox(room.images, idx)}
+                                      onClick={() =>
+                                        openLightbox(room.images, idx)
+                                      }
                                       className="w-10 h-10 rounded-lg overflow-hidden border border-stone-200 hover:border-primary transition-colors focus:outline-none cursor-pointer"
                                     >
-                                      <img src={img} alt="" className="w-full h-full object-cover" />
+                                      <img
+                                        src={img}
+                                        alt=""
+                                        className="w-full h-full object-cover"
+                                      />
                                     </button>
                                   ))}
                                 </div>
@@ -259,10 +373,16 @@ export function FeaturedRoomsSection() {
                               <button
                                 onClick={() => setExpandedCardId(null)}
                                 className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-xs font-semibold rounded-xl border hover:-translate-y-0.5 hover:shadow transition-all duration-300 cursor-pointer bg-white"
-                                style={{ borderColor: COLORS.primary, color: COLORS.primary }}
+                                style={{
+                                  borderColor: COLORS.primary,
+                                  color: COLORS.primary,
+                                }}
                               >
                                 <span>Close Details</span>
-                                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform rotate-180" style={{ color: COLORS.primary }} />
+                                <ArrowRight
+                                  className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform rotate-180"
+                                  style={{ color: COLORS.primary }}
+                                />
                               </button>
                             </div>
                           </motion.div>
@@ -276,10 +396,10 @@ export function FeaturedRoomsSection() {
           </div>
 
           {/* Right fade overlay to match background color */}
-          <div 
+          <div
             className="absolute top-0 right-0 bottom-8 w-28 pointer-events-none z-10"
             style={{
-              background: `linear-gradient(to right, transparent, ${COLORS.background})`
+              background: `linear-gradient(to right, transparent, ${COLORS.background})`,
             }}
           />
         </div>
@@ -302,7 +422,10 @@ export function FeaturedRoomsSection() {
               <X className="w-5 h-5" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(-1); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(-1);
+              }}
               className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -317,7 +440,10 @@ export function FeaturedRoomsSection() {
               onClick={(e) => e.stopPropagation()}
             />
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(1); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(1);
+              }}
               className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
               <ChevronRight className="w-6 h-6" />
