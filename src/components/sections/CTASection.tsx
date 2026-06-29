@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, ChevronLeft } from "lucide-react";
+import { CheckCircle, ChevronLeft, ChevronDown } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 import { hostelData } from "@/data/hostel";
 import { INDIAN_STATES, GUJARAT_DISTRICTS, GUJARAT_CITIES } from "@/constants/locations";
@@ -72,6 +72,71 @@ export function CTASection() {
   const [isManualSchool, setIsManualSchool] = useState(false);
   const [isManualDistrict, setIsManualDistrict] = useState(false);
   const [isManualCity, setIsManualCity] = useState(false);
+
+  // Helper functions to check if steps are fully completed (all required fields filled/valid)
+  const isStep1Completed = () => {
+    return (
+      formData.firstName.trim().length >= 2 &&
+      formData.middleName.trim().length >= 2 &&
+      formData.lastName.trim().length >= 2 &&
+      validatePhoneNumber(formData.contactNumber, formData.contactCountryIso) &&
+      validatePhoneNumber(formData.fatherContact, formData.fatherCountryIso)
+    );
+  };
+
+  const isStep2Completed = () => {
+    return (
+      formData.city.trim().length >= 2 &&
+      formData.district.trim().length >= 2 &&
+      formData.state.trim().length >= 2
+    );
+  };
+
+  const isStep3Completed = () => {
+    return (
+      formData.school.trim().length >= 2 &&
+      formData.course.trim().length >= 2
+    );
+  };
+
+  const isFieldValid = (field: string) => {
+    const val = formData[field as keyof typeof formData];
+    if (!val || val.trim() === "") return false;
+    if (field === "contactNumber") {
+      return validatePhoneNumber(val, formData.contactCountryIso);
+    }
+    if (field === "fatherContact") {
+      return validatePhoneNumber(val, formData.fatherCountryIso);
+    }
+    return val.trim().length >= 2;
+  };
+
+  const getProgressPercent = () => {
+    const requiredFields = [
+      formData.firstName,
+      formData.middleName,
+      formData.lastName,
+      formData.contactNumber,
+      formData.fatherContact,
+      formData.city,
+      formData.district,
+      formData.state,
+      formData.school,
+      formData.course,
+    ];
+    const validRequiredCount = requiredFields.filter((val, index) => {
+      if (!val || val.trim() === "") return false;
+      if (index === 3) {
+        return validatePhoneNumber(formData.contactNumber, formData.contactCountryIso);
+      }
+      if (index === 4) {
+        return validatePhoneNumber(formData.fatherContact, formData.fatherCountryIso);
+      }
+      return val.trim().length >= 2;
+    }).length;
+
+    return Math.round((validRequiredCount / requiredFields.length) * 100);
+  };
 
   // Confetti Canvas Ref
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -327,61 +392,127 @@ export function CTASection() {
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="space-y-8">
               
+              {/* Sleek Completion Progress Bar Tracker */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider" style={{ color: COLORS.primary }}>
+                  <span>Form Completion Progress</span>
+                  <span>{getProgressPercent()}% Completed</span>
+                </div>
+                <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden relative">
+                  <motion.div 
+                    className="h-full rounded-full"
+                    style={{ 
+                      backgroundImage: `linear-gradient(to right, ${COLORS.primaryLight}, ${COLORS.primary})`,
+                    }}
+                    animate={{ width: `${getProgressPercent()}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              </div>
+
               {/* Sleek Step Indicator Tracker */}
               <div className="flex items-center justify-between pb-6 border-b" style={{ borderBottomColor: COLORS.borderLight }}>
                 <div className="flex items-center gap-2.5">
                   <div
                     className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                     style={{
-                      backgroundColor: step >= 1 ? COLORS.primary : "#FFF1ED",
-                      color: step >= 1 ? COLORS.textWhite : COLORS.primary
+                      backgroundColor: isStep1Completed() ? COLORS.success : step >= 1 ? COLORS.primary : "#FFF1ED",
+                      color: isStep1Completed() || step >= 1 ? COLORS.textWhite : COLORS.primary
                     }}
                   >
-                    1
+                    {isStep1Completed() ? (
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : "1"}
                   </div>
                   <span
                     className="text-xs font-bold tracking-wider uppercase hidden sm:inline"
-                    style={{ color: COLORS.primary }}
+                    style={{ color: isStep1Completed() ? COLORS.success : COLORS.primary }}
                   >
                     Personal Details
                   </span>
                 </div>
 
-                <div className="flex-1 h-0.5 mx-4" style={{ backgroundColor: COLORS.primaryTint }} />
+                {/* Connecting line 1-2 */}
+                <div className="flex-1 h-0.5 mx-4 bg-stone-100 rounded-full overflow-hidden relative">
+                  <motion.div 
+                    className="h-full absolute left-0 top-0"
+                    style={{ backgroundColor: isStep1Completed() ? COLORS.success : COLORS.primary }}
+                    animate={{ 
+                      width: isStep1Completed() 
+                        ? "100%" 
+                        : `${(
+                            (formData.firstName ? 1 : 0) + 
+                            (formData.middleName ? 1 : 0) + 
+                            (formData.lastName ? 1 : 0) + 
+                            (formData.contactNumber ? 1 : 0) + 
+                            (formData.fatherContact ? 1 : 0)
+                          ) * 20}%` 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
 
                 <div className="flex items-center gap-2.5">
                   <div
                     className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                     style={{
-                      backgroundColor: step >= 2 ? COLORS.primary : "#FFF1ED",
-                      color: step >= 2 ? COLORS.textWhite : COLORS.primary
+                      backgroundColor: isStep2Completed() ? COLORS.success : step >= 2 ? COLORS.primary : "#FFF1ED",
+                      color: isStep2Completed() || step >= 2 ? COLORS.textWhite : COLORS.primary
                     }}
                   >
-                    2
+                    {isStep2Completed() ? (
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : "2"}
                   </div>
                   <span
                     className="text-xs font-bold tracking-wider uppercase hidden sm:inline"
-                    style={{ color: COLORS.primary }}
+                    style={{ color: isStep2Completed() ? COLORS.success : COLORS.primary }}
                   >
                     Residence
                   </span>
                 </div>
 
-                <div className="flex-1 h-0.5 mx-4" style={{ backgroundColor: COLORS.primaryTint }} />
+                {/* Connecting line 2-3 */}
+                <div className="flex-1 h-0.5 mx-4 bg-stone-100 rounded-full overflow-hidden relative">
+                  <motion.div 
+                    className="h-full absolute left-0 top-0"
+                    style={{ backgroundColor: isStep2Completed() ? COLORS.success : COLORS.primary }}
+                    animate={{ 
+                      width: !isStep1Completed() 
+                        ? "0%" 
+                        : isStep2Completed() 
+                          ? "100%" 
+                          : `${(
+                              (formData.city ? 1 : 0) + 
+                              (formData.district ? 1 : 0) + 
+                              (formData.state ? 1 : 0)
+                            ) * 33.3}%` 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
 
                 <div className="flex items-center gap-2.5">
                   <div
                     className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                     style={{
-                      backgroundColor: step >= 3 ? COLORS.primary : "#FFF1ED",
-                      color: step >= 3 ? COLORS.textWhite : COLORS.primary
+                      backgroundColor: isStep3Completed() ? COLORS.success : step >= 3 ? COLORS.primary : "#FFF1ED",
+                      color: isStep3Completed() || step >= 3 ? COLORS.textWhite : COLORS.primary
                     }}
                   >
-                    3
+                    {isStep3Completed() ? (
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : "3"}
                   </div>
                   <span
                     className="text-xs font-bold tracking-wider uppercase hidden sm:inline"
-                    style={{ color: COLORS.primary }}
+                    style={{ color: isStep3Completed() ? COLORS.success : COLORS.primary }}
                   >
                     Academics
                   </span>
@@ -402,19 +533,30 @@ export function CTASection() {
                       <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="firstName">
                         First Name <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        id="firstName"
-                        type="text"
-                        placeholder="Student Name"
-                        value={formData.firstName}
-                        onChange={(e) => handleInputChange("firstName", e.target.value)}
-                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                          shakingFields.firstName 
-                            ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                            : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                        }`}
-                        style={{ color: COLORS.textPrimary }}
-                      />
+                      <div className="relative">
+                        <input
+                          id="firstName"
+                          type="text"
+                          placeholder="Student Name"
+                          value={formData.firstName}
+                          onChange={(e) => handleInputChange("firstName", e.target.value)}
+                          className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            shakingFields.firstName 
+                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                              : isFieldValid("firstName")
+                                ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                          } focus:ring-2 focus:ring-amber-500/10`}
+                          style={{ color: COLORS.textPrimary }}
+                        />
+                        {isFieldValid("firstName") && (
+                          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                            <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Middle Name */}
@@ -422,19 +564,30 @@ export function CTASection() {
                       <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="middleName">
                         Middle Name <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        id="middleName"
-                        type="text"
-                        placeholder="Father Name"
-                        value={formData.middleName}
-                        onChange={(e) => handleInputChange("middleName", e.target.value)}
-                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                          shakingFields.middleName 
-                            ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                            : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                        }`}
-                        style={{ color: COLORS.textPrimary }}
-                      />
+                      <div className="relative">
+                        <input
+                          id="middleName"
+                          type="text"
+                          placeholder="Father Name"
+                          value={formData.middleName}
+                          onChange={(e) => handleInputChange("middleName", e.target.value)}
+                          className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            shakingFields.middleName 
+                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                              : isFieldValid("middleName")
+                                ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                          } focus:ring-2 focus:ring-amber-500/10`}
+                          style={{ color: COLORS.textPrimary }}
+                        />
+                        {isFieldValid("middleName") && (
+                          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                            <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Last Name */}
@@ -442,19 +595,30 @@ export function CTASection() {
                       <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="lastName">
                         Last Name <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        id="lastName"
-                        type="text"
-                        placeholder="Surname"
-                        value={formData.lastName}
-                        onChange={(e) => handleInputChange("lastName", e.target.value)}
-                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                          shakingFields.lastName 
-                            ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                            : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                        }`}
-                        style={{ color: COLORS.textPrimary }}
-                      />
+                      <div className="relative">
+                        <input
+                          id="lastName"
+                          type="text"
+                          placeholder="Surname"
+                          value={formData.lastName}
+                          onChange={(e) => handleInputChange("lastName", e.target.value)}
+                          className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            shakingFields.lastName 
+                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                              : isFieldValid("lastName")
+                                ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                          } focus:ring-2 focus:ring-amber-500/10`}
+                          style={{ color: COLORS.textPrimary }}
+                        />
+                        {isFieldValid("lastName") && (
+                          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                            <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -517,63 +681,41 @@ export function CTASection() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {/* City / Village */}
-                    <div className={`space-y-1 ${shakingFields.city ? "animate-shake" : ""}`}>
-                      <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="city">
-                        City / Village <span className="text-red-500">*</span>
+                    {/* State */}
+                    <div className={`space-y-1 ${shakingFields.state ? "animate-shake" : ""}`}>
+                      <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="state">
+                        State <span className="text-red-500">*</span>
                       </label>
-                      {isManualCity || formData.state !== "Gujarat" ? (
-                        <div className="relative">
-                          <input
-                            id="city"
-                            type="text"
-                            placeholder="Type City or Village"
-                            value={formData.city}
-                            onChange={(e) => handleInputChange("city", e.target.value)}
-                            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                              shakingFields.city 
-                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                            }`}
-                            style={{ color: COLORS.textPrimary }}
-                          />
-                          {formData.state === "Gujarat" && (
-                            <button
-                              type="button"
-                              onClick={() => { setIsManualCity(false); handleInputChange("city", ""); }}
-                              className="text-[10px] font-bold mt-1.5 flex items-center gap-1 hover:underline transition-all duration-200 cursor-pointer"
-                              style={{ color: COLORS.primary }}
-                            >
-                              ← Select from list
-                            </button>
-                          )}
-                        </div>
-                      ) : (
+                      <div className="relative">
                         <select
-                          id="city"
-                          value={formData.city}
-                          onChange={(e) => {
-                            if (e.target.value === "Other") {
-                              setIsManualCity(true);
-                              handleInputChange("city", "");
-                            } else {
-                              handleInputChange("city", e.target.value);
-                            }
-                          }}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.city 
+                          id="state"
+                          value={formData.state}
+                          onChange={(e) => handleStateChange(e.target.value)}
+                          className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            shakingFields.state 
                               ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
+                              : isFieldValid("state")
+                                ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                          } focus:ring-2 focus:ring-amber-500/10 appearance-none`}
                           style={{ color: COLORS.textPrimary }}
                         >
-                          <option value="">Select City/Village</option>
-                          {GUJARAT_CITIES.map((city) => (
-                            <option key={city} value={city}>{city}</option>
+                          <option value="">Select State</option>
+                          {INDIAN_STATES.map((st) => (
+                            <option key={st} value={st}>{st}</option>
                           ))}
-                          <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
                         </select>
-                      )}
+                        {isFieldValid("state") && (
+                          <span className="absolute right-7 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                            <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        )}
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+                          <ChevronDown className="w-4 h-4" />
+                        </span>
+                      </div>
                     </div>
 
                     {/* District */}
@@ -589,13 +731,22 @@ export function CTASection() {
                             placeholder="Type District Name"
                             value={formData.district}
                             onChange={(e) => handleInputChange("district", e.target.value)}
-                            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
                               shakingFields.district 
                                 ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                            }`}
+                                : isFieldValid("district")
+                                  ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            } focus:ring-2 focus:ring-amber-500/10`}
                             style={{ color: COLORS.textPrimary }}
                           />
+                          {isFieldValid("district") && (
+                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                              <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
                           {formData.state === "Gujarat" && (
                             <button
                               type="button"
@@ -608,54 +759,127 @@ export function CTASection() {
                           )}
                         </div>
                       ) : (
-                        <select
-                          id="district"
-                          value={formData.district}
-                          onChange={(e) => {
-                            if (e.target.value === "Other") {
-                              setIsManualDistrict(true);
-                              handleInputChange("district", "");
-                            } else {
-                              handleInputChange("district", e.target.value);
-                            }
-                          }}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.district 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        >
-                          <option value="">Select District</option>
-                          {GUJARAT_DISTRICTS.map((dist) => (
-                            <option key={dist} value={dist}>{dist}</option>
-                          ))}
-                          <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
-                        </select>
+                        <div className="relative">
+                          <select
+                            id="district"
+                            value={formData.district}
+                            onChange={(e) => {
+                              if (e.target.value === "Other") {
+                                setIsManualDistrict(true);
+                                handleInputChange("district", "");
+                              } else {
+                                handleInputChange("district", e.target.value);
+                              }
+                            }}
+                            className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.district 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : isFieldValid("district")
+                                  ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            } focus:ring-2 focus:ring-amber-500/10 appearance-none`}
+                            style={{ color: COLORS.textPrimary }}
+                          >
+                            <option value="">Select District</option>
+                            {GUJARAT_DISTRICTS.map((dist) => (
+                              <option key={dist} value={dist}>{dist}</option>
+                            ))}
+                            <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
+                          </select>
+                          {isFieldValid("district") && (
+                            <span className="absolute right-7 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                              <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+                            <ChevronDown className="w-4 h-4" />
+                          </span>
+                        </div>
                       )}
                     </div>
 
-                    {/* State */}
-                    <div className={`space-y-1 ${shakingFields.state ? "animate-shake" : ""}`}>
-                      <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="state">
-                        State <span className="text-red-500">*</span>
+                    {/* City / Village */}
+                    <div className={`space-y-1 ${shakingFields.city ? "animate-shake" : ""}`}>
+                      <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="city">
+                        City / Village <span className="text-red-500">*</span>
                       </label>
-                      <select
-                        id="state"
-                        value={formData.state}
-                        onChange={(e) => handleStateChange(e.target.value)}
-                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                          shakingFields.state 
-                            ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                            : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                        }`}
-                        style={{ color: COLORS.textPrimary }}
-                      >
-                        <option value="">Select State</option>
-                        {INDIAN_STATES.map((st) => (
-                          <option key={st} value={st}>{st}</option>
-                        ))}
-                      </select>
+                      {isManualCity || formData.state !== "Gujarat" ? (
+                        <div className="relative">
+                          <input
+                            id="city"
+                            type="text"
+                            placeholder="Type City or Village"
+                            value={formData.city}
+                            onChange={(e) => handleInputChange("city", e.target.value)}
+                            className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.city 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : isFieldValid("city")
+                                  ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            } focus:ring-2 focus:ring-amber-500/10`}
+                            style={{ color: COLORS.textPrimary }}
+                          />
+                          {isFieldValid("city") && (
+                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                              <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
+                          {formData.state === "Gujarat" && (
+                            <button
+                              type="button"
+                              onClick={() => { setIsManualCity(false); handleInputChange("city", ""); }}
+                              className="text-[10px] font-bold mt-1.5 flex items-center gap-1 hover:underline transition-all duration-200 cursor-pointer"
+                              style={{ color: COLORS.primary }}
+                            >
+                              ← Select from list
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <select
+                            id="city"
+                            value={formData.city}
+                            onChange={(e) => {
+                              if (e.target.value === "Other") {
+                                setIsManualCity(true);
+                                handleInputChange("city", "");
+                              } else {
+                                handleInputChange("city", e.target.value);
+                              }
+                            }}
+                            className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.city 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : isFieldValid("city")
+                                  ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            } focus:ring-2 focus:ring-amber-500/10 appearance-none`}
+                            style={{ color: COLORS.textPrimary }}
+                          >
+                            <option value="">Select City/Village</option>
+                            {GUJARAT_CITIES.map((city) => (
+                              <option key={city} value={city}>{city}</option>
+                            ))}
+                            <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
+                          </select>
+                          {isFieldValid("city") && (
+                            <span className="absolute right-7 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                              <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+                            <ChevronDown className="w-4 h-4" />
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -683,13 +907,22 @@ export function CTASection() {
                             placeholder="Type School/College Name"
                             value={formData.school}
                             onChange={(e) => handleInputChange("school", e.target.value)}
-                            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
                               shakingFields.school 
                                 ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                            }`}
+                                : isFieldValid("school")
+                                  ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            } focus:ring-2 focus:ring-amber-500/10`}
                             style={{ color: COLORS.textPrimary }}
                           />
+                          {isFieldValid("school") && (
+                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                              <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
                           <button
                             type="button"
                             onClick={() => { setIsManualSchool(false); handleInputChange("school", ""); }}
@@ -700,30 +933,44 @@ export function CTASection() {
                           </button>
                         </div>
                       ) : (
-                        <select
-                          id="school"
-                          value={formData.school}
-                          onChange={(e) => {
-                            if (e.target.value === "Other") {
-                              setIsManualSchool(true);
-                              handleInputChange("school", "");
-                            } else {
-                              handleInputChange("school", e.target.value);
-                            }
-                          }}
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                            shakingFields.school 
-                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                              : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                          }`}
-                          style={{ color: COLORS.textPrimary }}
-                        >
-                          <option value="">Select School/College</option>
-                          {hostelData.institutions.map((item) => (
-                            <option key={item} value={item}>{item}</option>
-                          ))}
-                          <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
-                        </select>
+                        <div className="relative">
+                          <select
+                            id="school"
+                            value={formData.school}
+                            onChange={(e) => {
+                              if (e.target.value === "Other") {
+                                setIsManualSchool(true);
+                                handleInputChange("school", "");
+                              } else {
+                                handleInputChange("school", e.target.value);
+                              }
+                            }}
+                            className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                              shakingFields.school 
+                                ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                                : isFieldValid("school")
+                                  ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                  : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                            } focus:ring-2 focus:ring-amber-500/10 appearance-none`}
+                            style={{ color: COLORS.textPrimary }}
+                          >
+                            <option value="">Select School/College</option>
+                            {hostelData.institutions.map((item) => (
+                              <option key={item} value={item}>{item}</option>
+                            ))}
+                            <option value="Other" className="font-semibold text-amber-700">Other (Type Manually)</option>
+                          </select>
+                          {isFieldValid("school") && (
+                            <span className="absolute right-7 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                              <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+                            <ChevronDown className="w-4 h-4" />
+                          </span>
+                        </div>
                       )}
                     </div>
 
@@ -732,19 +979,30 @@ export function CTASection() {
                       <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="course">
                         Course / Std <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        id="course"
-                        type="text"
-                        placeholder="e.g. B.Tech / Class XII"
-                        value={formData.course}
-                        onChange={(e) => handleInputChange("course", e.target.value)}
-                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
-                          shakingFields.course 
-                            ? "border-red-400 focus:border-red-400 bg-red-50/10" 
-                            : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
-                        }`}
-                        style={{ color: COLORS.textPrimary }}
-                      />
+                      <div className="relative">
+                        <input
+                          id="course"
+                          type="text"
+                          placeholder="e.g. B.Tech / Class XII"
+                          value={formData.course}
+                          onChange={(e) => handleInputChange("course", e.target.value)}
+                          className={`w-full pl-3.5 pr-10 py-2.5 rounded-xl border text-sm focus:outline-none focus:bg-white transition-all duration-200 ${
+                            shakingFields.course 
+                              ? "border-red-400 focus:border-red-400 bg-red-50/10" 
+                              : isFieldValid("course")
+                                ? "border-emerald-500/40 focus:border-emerald-500 bg-emerald-50/5"
+                                : "border-slate-200 focus:border-amber-700 bg-[#FDFCF9]/50"
+                          } focus:ring-2 focus:ring-amber-500/10`}
+                          style={{ color: COLORS.textPrimary }}
+                        />
+                        {isFieldValid("course") && (
+                          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+                            <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Semester */}
@@ -752,18 +1010,23 @@ export function CTASection() {
                       <label className="block text-[11px] font-bold tracking-wider uppercase" style={{ color: COLORS.textMuted }} htmlFor="semester">
                         Semester
                       </label>
-                      <select
-                        id="semester"
-                        value={formData.semester}
-                        onChange={(e) => handleInputChange("semester", e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-[#FDFCF9]/50 text-sm focus:bg-white transition-all duration-200 focus:outline-none"
-                        style={{ color: COLORS.textPrimary }}
-                      >
-                        <option value="">Semester (Optional)</option>
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                          <option key={sem} value={sem.toString()}>Semester {sem}</option>
-                        ))}
-                      </select>
+                      <div className="relative">
+                        <select
+                          id="semester"
+                          value={formData.semester}
+                          onChange={(e) => handleInputChange("semester", e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-[#FDFCF9]/50 text-sm focus:bg-white transition-all duration-200 focus:outline-none appearance-none"
+                          style={{ color: COLORS.textPrimary }}
+                        >
+                          <option value="">Semester (Optional)</option>
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                            <option key={sem} value={sem.toString()}>Semester {sem}</option>
+                          ))}
+                        </select>
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+                          <ChevronDown className="w-4 h-4" />
+                        </span>
+                      </div>
                     </div>
                   </div>
 

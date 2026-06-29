@@ -145,7 +145,7 @@ export function TestimonialsSection() {
         {/* Section Header (Fades away as scroll begins to focus entirely on the stories) */}
         <motion.div
           style={{ opacity: headerOpacity, y: headerY }}
-          className="absolute top-10 sm:top-14 left-0 right-0 text-center max-w-3xl mx-auto z-20 px-6 sm:px-8 select-none"
+          className="relative text-center max-w-3xl mx-auto z-20 px-6 sm:px-8 select-none mt-6 sm:mt-10 lg:mt-12"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[#C44D28]/10 text-[#C44D28] mb-3">
             <Sparkles className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export function TestimonialsSection() {
         </motion.div>
 
         {/* Content Container */}
-        <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 flex-1 flex flex-col justify-center items-center relative z-10 mt-16 sm:mt-20 lg:mt-24">
+        <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 flex-1 flex flex-col justify-center items-center relative z-10 mt-6 sm:mt-8 lg:mt-10">
           
           {/* Cards Stack (Dynamic layering, scale and translation offsets) */}
           <div className="flex-1 relative h-[460px] lg:h-[390px] w-full overflow-visible">

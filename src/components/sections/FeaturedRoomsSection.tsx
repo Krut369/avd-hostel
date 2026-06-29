@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import {
   Check,
   ArrowRight,
@@ -85,8 +85,11 @@ export function FeaturedRoomsSection() {
     images: string[];
     index: number;
   } | null>(null);
-  const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
+  const [expandedCardId, setExpandedCardId] = useState<number | null>(1);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -94,6 +97,112 @@ export function FeaturedRoomsSection() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const isFirstRender = useRef(true);
+  const isProgrammaticScroll = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Scroll Progress Tracking for sticky vertical section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    let index = Math.floor(latest * hostelData.livingSpaces.length);
+    if (index >= hostelData.livingSpaces.length) index = hostelData.livingSpaces.length - 1;
+    if (index < 0) index = 0;
+    setCurrentSlideIndex(index);
+    const activeRoom = hostelData.livingSpaces[index];
+    if (activeRoom && activeRoom.id !== expandedCardId) {
+      setExpandedCardId(activeRoom.id);
+    }
+  });
+
+  const scrollToSlide = (index: number) => {
+    if (!sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const sectionStart = rect.top + scrollTop;
+    const sectionHeight = rect.height;
+    
+    // Calculate vertical scroll offset corresponding to index
+    const targetScroll =
+      sectionStart +
+      (index / hostelData.livingSpaces.length) * (sectionHeight - window.innerHeight);
+    
+    window.scrollTo({
+      top: targetScroll,
+      behavior: "smooth",
+    });
+  };
+
+  // Helper to calculate deterministic final target scroll position for centering
+  const getTargetScrollLeft = (
+    expandedId: number,
+    isMobileSize: boolean,
+    containerWidth: number
+  ) => {
+    const W_col = isMobileSize ? 290 : 350;
+    const W_exp = isMobileSize ? 290 : 700;
+    const G = 24; // gap-6 is 24px
+    const P = isMobileSize ? 16 : 32; // px-4 is 16px, sm:px-8 is 32px
+
+    let currentOffset = P;
+    let targetOffset = P;
+    let targetWidth = W_col;
+
+    for (let i = 0; i < hostelData.livingSpaces.length; i++) {
+      const room = hostelData.livingSpaces[i];
+      const width = room.id === expandedId ? W_exp : W_col;
+      if (room.id === expandedId) {
+        targetOffset = currentOffset;
+        targetWidth = width;
+      }
+      currentOffset += width + G;
+    }
+
+    return targetOffset - (containerWidth - targetWidth) / 2;
+  };
+
+  // Smooth scroll to active card when expandedCardId changes
+  useEffect(() => {
+    if (expandedCardId === null) return;
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const targetScrollLeft = getTargetScrollLeft(
+      expandedCardId,
+      isMobile,
+      container.clientWidth
+    );
+
+    if (isFirstRender.current) {
+      container.scrollLeft = targetScrollLeft;
+      isFirstRender.current = false;
+    } else {
+      isProgrammaticScroll.current = true;
+      container.scrollTo({
+        left: targetScrollLeft,
+        behavior: "smooth",
+      });
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        isProgrammaticScroll.current = false;
+      }, 600); // Wait for smooth scroll animation to finish
+    }
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [expandedCardId, isMobile]);
 
   const openLightbox = (images: string[], index: number) => {
     setLightbox({ images, index });
@@ -118,8 +227,9 @@ export function FeaturedRoomsSection() {
 
   return (
     <section
+      ref={sectionRef}
       id="rooms"
-      className="py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative h-[250vh] w-full"
       style={{ backgroundColor: COLORS.background }}
     >
       <style
@@ -136,7 +246,8 @@ export function FeaturedRoomsSection() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="max-w-7xl mx-auto w-full">
         <motion.div
           className="mb-12"
           initial={{ opacity: 0, y: 30 }}
@@ -164,7 +275,10 @@ export function FeaturedRoomsSection() {
 
         {/* Horizontal Slider Layout */}
         <div className="relative">
-          <div className="flex items-stretch overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-none px-4 sm:px-8">
+          <div
+            ref={scrollContainerRef}
+            className="flex items-stretch overflow-x-hidden gap-6 pb-8 snap-x snap-mandatory scrollbar-none px-4 sm:px-8"
+          >
             {hostelData.livingSpaces.map((room, i) => {
               const isExpanded = expandedCardId === room.id;
               return (
@@ -193,7 +307,13 @@ export function FeaturedRoomsSection() {
                     {/* Image Column */}
                     <div
                       className="relative overflow-hidden cursor-pointer shrink-0"
-                      onClick={() => openLightbox(room.images, 0)}
+                      onClick={() => {
+                        if (!isExpanded) {
+                          scrollToSlide(i);
+                        } else {
+                          openLightbox(room.images, 0);
+                        }
+                      }}
                       style={{
                         width: !isExpanded
                           ? "100%"
@@ -296,7 +416,7 @@ export function FeaturedRoomsSection() {
                             <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                           </a>
                           <button
-                            onClick={() => setExpandedCardId(room.id)}
+                            onClick={() => scrollToSlide(i)}
                             className="group/btn flex items-center justify-center gap-1 flex-1 px-3 py-2.5 text-xs font-semibold rounded-xl border hover:-translate-y-0.5 hover:shadow transition-all duration-300 cursor-pointer bg-white"
                             style={{
                               borderColor: COLORS.primary,
@@ -403,7 +523,63 @@ export function FeaturedRoomsSection() {
             }}
           />
         </div>
+
+        {/* Navigation Controls (Dots & Arrows) */}
+        <div className="flex flex-col items-center mt-6 w-full">
+          <div className="flex items-center space-x-6">
+            <button
+              onClick={() => {
+                const prevIndex =
+                  (currentSlideIndex - 1 + hostelData.livingSpaces.length) %
+                  hostelData.livingSpaces.length;
+                scrollToSlide(prevIndex);
+              }}
+              className="p-2.5 rounded-full border transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm flex items-center justify-center bg-white cursor-pointer z-20"
+              style={{
+                borderColor: COLORS.borderGold,
+                color: COLORS.primary,
+              }}
+              aria-label="Previous room"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center space-x-2">
+              {hostelData.livingSpaces.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollToSlide(i)}
+                  className="h-1.5 rounded-full transition-all duration-300 cursor-pointer z-20"
+                  style={{
+                    width: currentSlideIndex === i ? "20px" : "6px",
+                    backgroundColor:
+                      currentSlideIndex === i ? COLORS.primary : COLORS.border,
+                  }}
+                  aria-label={`Go to room ${i + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                const nextIndex =
+                  (currentSlideIndex + 1) % hostelData.livingSpaces.length;
+                scrollToSlide(nextIndex);
+              }}
+              className="p-2.5 rounded-full border transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm flex items-center justify-center bg-white cursor-pointer z-20"
+              style={{
+                borderColor: COLORS.borderGold,
+                color: COLORS.primary,
+              }}
+              aria-label="Next room"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
       </div>
+    </div>
 
       {/* Lightbox for Room Gallery */}
       <AnimatePresence>
