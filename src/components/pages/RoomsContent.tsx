@@ -2,20 +2,49 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, View, X, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import {
+  Check,
+  View,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ArrowRight,
+} from "lucide-react";
 import { hostelData } from "@/data/hostel";
 import { CTASection } from "@/components/sections/CTASection";
 import { COLORS } from "@/constants/colors";
 
-const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  Premium: { bg: "bg-[var(--accent)]", text: "text-white", border: "border-[var(--accent-light)]" },
-  Standard: { bg: "bg-blue-500", text: "text-white", border: "border-blue-400" },
-  Economy: { bg: "bg-emerald-500", text: "text-white", border: "border-emerald-400" },
-  Juniors: { bg: "bg-purple-500", text: "text-white", border: "border-purple-400" },
+const categoryColors: Record<
+  string,
+  { bg: string; text: string; border: string }
+> = {
+  Premium: {
+    bg: "bg-[var(--accent)]",
+    text: "text-white",
+    border: "border-[var(--accent-light)]",
+  },
+  Standard: {
+    bg: "bg-blue-500",
+    text: "text-white",
+    border: "border-blue-400",
+  },
+  Economy: {
+    bg: "bg-emerald-500",
+    text: "text-white",
+    border: "border-emerald-400",
+  },
+  Juniors: {
+    bg: "bg-purple-500",
+    text: "text-white",
+    border: "border-purple-400",
+  },
 };
 
 export function RoomsContent() {
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{
+    images: string[];
+    index: number;
+  } | null>(null);
 
   const openLightbox = (images: string[], index: number) => {
     setLightbox({ images, index });
@@ -25,7 +54,8 @@ export function RoomsContent() {
 
   const navigate = (dir: 1 | -1) => {
     if (!lightbox) return;
-    const next = (lightbox.index + dir + lightbox.images.length) % lightbox.images.length;
+    const next =
+      (lightbox.index + dir + lightbox.images.length) % lightbox.images.length;
     setLightbox({ ...lightbox, index: next });
   };
 
@@ -38,15 +68,24 @@ export function RoomsContent() {
       >
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             <h1
               className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
               style={{ color: COLORS.textPrimary }}
             >
-              Find Your Perfect <span className="gradient-text italic">Room</span>
+              Find Your Perfect{" "}
+              <span className="gradient-text italic">Room</span>
             </h1>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: COLORS.textPrimary }}>
-              Four thoughtfully curated room types — each designed to support your academic journey and personal growth.
+            <p
+              className="text-lg max-w-xl mx-auto"
+              style={{ color: COLORS.textPrimary }}
+            >
+              Four thoughtfully curated room types — each designed to support
+              your academic journey and personal growth.
             </p>
           </motion.div>
         </div>
@@ -59,7 +98,8 @@ export function RoomsContent() {
       >
         <div className="max-w-7xl mx-auto space-y-16">
           {hostelData.livingSpaces.map((room, idx) => {
-            const colors = categoryColors[room.category] || categoryColors.Premium;
+            const colors =
+              categoryColors[room.category] || categoryColors.Premium;
             return (
               <motion.div
                 key={room.id}
@@ -79,10 +119,14 @@ export function RoomsContent() {
                     >
                       <div
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                        style={{ backgroundImage: `url('${room.images[0]}'), linear-gradient(135deg, ${COLORS.primaryTint}, ${COLORS.background})` }}
+                        style={{
+                          backgroundImage: `url('${room.images[0]}'), linear-gradient(135deg, ${COLORS.primaryTint}, ${COLORS.background})`,
+                        }}
                       />
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="text-white text-sm font-semibold bg-black/50 px-3 py-1.5 rounded-full">View Gallery</span>
+                        <span className="text-white text-sm font-semibold bg-black/50 px-3 py-1.5 rounded-full">
+                          View Gallery
+                        </span>
                       </div>
                     </div>
                     {/* Thumbnails */}
@@ -94,11 +138,15 @@ export function RoomsContent() {
                       >
                         <div
                           className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                          style={{ backgroundImage: `url('${img}'), linear-gradient(135deg, ${COLORS.background}, ${COLORS.primaryTint})` }}
+                          style={{
+                            backgroundImage: `url('${img}'), linear-gradient(135deg, ${COLORS.background}, ${COLORS.primaryTint})`,
+                          }}
                         />
                         {i === 1 && room.images.length > 3 && (
                           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                            <span className="text-white font-bold">+{room.images.length - 3}</span>
+                            <span className="text-white font-bold">
+                              +{room.images.length - 3}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -107,14 +155,21 @@ export function RoomsContent() {
                 </div>
 
                 {/* Content */}
-                <div className={idx % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""}>
+                <div
+                  className={
+                    idx % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""
+                  }
+                >
                   <div className="flex items-center gap-3 mb-4">
                     {room.tour360Available && (
                       <span
                         className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border bg-white"
                         style={{ borderColor: COLORS.borderGold }}
                       >
-                        <View className="w-3 h-3" style={{ color: COLORS.primary }} />
+                        <View
+                          className="w-3 h-3"
+                          style={{ color: COLORS.primary }}
+                        />
                         360° Tour
                       </span>
                     )}
@@ -126,8 +181,18 @@ export function RoomsContent() {
                   >
                     {room.title}
                   </h2>
-                  <p className="italic text-base mb-4" style={{ color: COLORS.primary }}>{room.tagline}</p>
-                  <p className="leading-relaxed mb-8" style={{ color: COLORS.textPrimary }}>{room.description}</p>
+                  <p
+                    className="italic text-base mb-4"
+                    style={{ color: COLORS.primary }}
+                  >
+                    {room.tagline}
+                  </p>
+                  <p
+                    className="leading-relaxed mb-8"
+                    style={{ color: COLORS.textPrimary }}
+                  >
+                    {room.description}
+                  </p>
 
                   {/* Features grid */}
                   <div className="grid grid-cols-2 gap-3 mb-8">
@@ -135,7 +200,10 @@ export function RoomsContent() {
                       <div
                         key={feature}
                         className="flex items-center gap-2.5 border rounded-xl px-4 py-3"
-                        style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
+                        style={{
+                          backgroundColor: COLORS.surface,
+                          borderColor: COLORS.borderGold,
+                        }}
                       >
                         <div
                           className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
@@ -143,7 +211,12 @@ export function RoomsContent() {
                         >
                           <Check className="w-3 h-3 text-white" />
                         </div>
-                        <span className="text-sm font-medium" style={{ color: COLORS.textPrimary }}>{feature}</span>
+                        <span
+                          className="text-sm font-medium"
+                          style={{ color: COLORS.textPrimary }}
+                        >
+                          {feature}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -179,7 +252,10 @@ export function RoomsContent() {
               <X className="w-5 h-5" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(-1); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(-1);
+              }}
               className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -194,7 +270,10 @@ export function RoomsContent() {
               onClick={(e) => e.stopPropagation()}
             />
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(1); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(1);
+              }}
               className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
               <ChevronRight className="w-6 h-6" />

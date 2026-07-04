@@ -69,7 +69,10 @@ export function Navbar() {
       });
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
 
     // Also listen to scroll to reset to "home" when at top
     const handleScroll = () => {
@@ -79,7 +82,15 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
 
-    const sectionIds = ["home", "about", "rooms", "arrival", "gallery", "reviews", "contact"];
+    const sectionIds = [
+      "home",
+      "about",
+      "rooms",
+      "arrival",
+      "gallery",
+      "reviews",
+      "contact",
+    ];
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -110,7 +121,10 @@ export function Navbar() {
 
   const isHome = pathname === "/";
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     const targetId = href.split("#")[1];
     if (targetId && isHome) {
       e.preventDefault();
@@ -138,9 +152,17 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3 group">
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 group"
+            >
               <div className="w-22 h-22 overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <img src="/logo.png" alt="AVD Logo" className="w-full h-full object-contain" />
+                <img
+                  src="/logo.png"
+                  alt="AVD Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               {/* <div className="block">
                 <div
@@ -156,20 +178,22 @@ export function Navbar() {
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
-                const active = isHome ? (activeSection === link.id) : (pathname === link.href.split("#")[0]);
+                const active = isHome
+                  ? activeSection === link.id
+                  : pathname === link.href.split("#")[0];
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
                     className={`px-4 py-2 rounded-lg text-sm transition-all duration-300 relative group nav-link ${
-                      active ? "font-semibold" : "font-medium hover:font-semibold"
+                      active
+                        ? "font-semibold"
+                        : "font-medium hover:font-semibold"
                     }`}
                     data-text={link.label}
                     style={{
-                      color: active
-                        ? COLORS.primary
-                        : COLORS.textPrimary
+                      color: active ? COLORS.primary : COLORS.textPrimary,
                     }}
                   >
                     {link.label}
@@ -207,7 +231,10 @@ export function Navbar() {
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-40 lg:hidden overflow-y-auto"
-            style={{ background: "rgba(255, 244, 236, 0.98)", backdropFilter: "blur(20px)" }}
+            style={{
+              background: "rgba(255, 244, 236, 0.98)",
+              backdropFilter: "blur(20px)",
+            }}
           >
             <div className="flex flex-col min-h-screen pt-24 pb-12 px-8">
               <div className="flex flex-col gap-1">
@@ -223,17 +250,24 @@ export function Navbar() {
                       onClick={(e) => handleNavClick(e, link.href)}
                       className="flex items-center justify-between py-3 text-2xl font-semibold border-b transition-all duration-300 hover:pl-2"
                       style={{
-                        color: (isHome && activeSection === link.id) ? COLORS.primary : COLORS.textPrimary,
-                        borderBottomColor: `${COLORS.primary}15`
+                        color:
+                          isHome && activeSection === link.id
+                            ? COLORS.primary
+                            : COLORS.textPrimary,
+                        borderBottomColor: `${COLORS.primary}15`,
                       }}
                     >
                       <span>{link.label}</span>
-                      {(isHome && activeSection === link.id) && (
+                      {isHome && activeSection === link.id && (
                         <motion.span
                           layoutId="mobile-nav-indicator"
                           className="w-2.5 h-2.5 rounded-full mr-2"
                           style={{ backgroundColor: COLORS.primary }}
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30,
+                          }}
                         />
                       )}
                     </Link>
@@ -255,7 +289,10 @@ export function Navbar() {
                   Apply Now
                 </Link>
               </motion.div>
-              <div className="mt-auto pt-12 text-sm" style={{ color: COLORS.textMuted }}>
+              <div
+                className="mt-auto pt-12 text-sm"
+                style={{ color: COLORS.textMuted }}
+              >
                 Atmiya Vidya Dham · Vallabh Vidyanagar
               </div>
             </div>
