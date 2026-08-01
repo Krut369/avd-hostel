@@ -52,40 +52,14 @@ export function CampusHighlightsSection() {
     <div
       ref={containerRef}
       id="about"
-      className="relative h-[220vh] w-full"
+      className="relative h-[200vh] w-full"
       style={{ backgroundColor: COLORS.background }}
     >
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="max-w-6xl w-full mx-auto flex flex-col items-center space-y-4 sm:space-y-6">
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center py-6 sm:py-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="max-w-4xl w-full mx-auto flex flex-col items-center">
 
-          {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="w-full max-w-2xl text-center space-y-2"
-          >
-            {/* Badge */}
-            <div className="flex justify-center mb-2">
-              <span className="section-badge">
-                🏛️ &nbsp;Our Campus
-              </span>
-            </div>
-            <h2
-              className="text-3xl sm:text-4xl font-bold font-serif leading-tight"
-              style={{ color: COLORS.textPrimary }}
-            >
-              The Sanctuary of{" "}
-              <span className="italic gradient-text">Growth</span>
-            </h2>
-            <p className="text-xs sm:text-sm leading-relaxed text-gray-500 font-medium max-w-xl mx-auto font-sans">
-              Beyond architecture lies an environment carefully curated for spiritual alignment. Our sacred spaces are designed to foster inner peace and intellectual clarity.
-            </p>
-          </motion.div>
-
-          {/* Active Highlight Text Block */}
-          <div className="w-full max-w-2xl text-center min-h-[100px] sm:min-h-[115px] flex flex-col items-center justify-center">
+          {/* Active Highlight Text Block (Spacious & Clean Layout) */}
+          <div className="w-full max-w-2xl text-center flex flex-col items-center justify-center mb-6 sm:mb-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
@@ -93,47 +67,51 @@ export function CampusHighlightsSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="space-y-1.5"
+                className="space-y-2.5"
               >
-                <span
-                  className="inline-block px-3 py-0.5 text-[10px] sm:text-xs font-bold tracking-wider uppercase rounded-full font-sans"
-                  style={{
-                    backgroundColor: COLORS.primaryTint,
-                    color: COLORS.primary,
-                  }}
-                >
-                  {slides[currentSlide].tag}
-                </span>
-                <h3
-                  className="text-xl sm:text-2xl lg:text-3xl font-bold font-serif tracking-tight"
-                  style={{ color: COLORS.textPrimary }}
-                >
+                {/* Single Clean Pill Tag */}
+                <div className="flex justify-center">
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase rounded-full font-sans border border-[#C44D28]/20 shadow-sm"
+                    style={{
+                      backgroundColor: `${COLORS.primary}12`,
+                      color: COLORS.primary,
+                    }}
+                  >
+                    🏛️ &nbsp;{slides[currentSlide].tag}
+                  </span>
+                </div>
+
+                {/* Main Heading */}
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif tracking-tight text-[#0F172A] leading-tight">
                   {slides[currentSlide].title}
                   <span
-                    className="block text-[10px] sm:text-xs font-semibold mt-1 uppercase tracking-widest italic font-sans"
+                    className="block text-xs sm:text-sm font-semibold mt-1 uppercase tracking-widest italic font-sans"
                     style={{ color: COLORS.secondary }}
                   >
                     — {slides[currentSlide].subtitle} —
                   </span>
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto leading-relaxed font-sans">
+                </h2>
+
+                {/* Description Paragraph with Clear Gap */}
+                <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto leading-relaxed font-sans pt-1">
                   {slides[currentSlide].description}
                 </p>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Card Stack Container (Neat Bounds) */}
-          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-xl lg:max-w-3xl h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] mx-auto select-none mt-2">
+          {/* Card Stack Container (Well-Separated with Generous Margin) */}
+          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl h-[210px] sm:h-[250px] md:h-[280px] lg:h-[300px] mx-auto select-none my-4">
             {slides.map((slide, i) => {
               const pos = getStackPosition(i, currentSlide);
               const prevPos = getStackPosition(i, prevSlideRef.current);
               const isActive = pos === 0;
 
               // Refined stack offsets to prevent bottom overflow
-              let yVal: number | string | (number | string)[] = pos === 0 ? 0 : pos === 1 ? 12 : 20;
+              let yVal: number | string | (number | string)[] = pos === 0 ? 0 : pos === 1 ? 10 : 16;
               if (prevPos === 0 && pos === 2) {
-                yVal = [0, "-110%", 20];
+                yVal = [0, "-110%", 16];
               }
 
               return (
@@ -144,24 +122,24 @@ export function CampusHighlightsSection() {
                     transformOrigin: "center center",
                     borderColor: COLORS.borderGold,
                     boxShadow: isActive
-                      ? "0 20px 35px -8px rgba(0,0,0,0.18), 0 6px 12px -4px rgba(0,0,0,0.06)"
-                      : "0 6px 12px -4px rgba(0,0,0,0.05)",
+                      ? "0 20px 35px -8px rgba(196,77,40,0.18), 0 6px 12px -2px rgba(0,0,0,0.05)"
+                      : "0 4px 10px -2px rgba(0,0,0,0.04)",
                     cursor: isActive ? "pointer" : "default",
                   }}
                   animate={{
                     scale: pos === 0 ? 1 : pos === 1 ? 0.95 : 0.90,
                     y: yVal,
-                    x: pos === 0 ? 0 : pos === 1 ? 14 : -14,
-                    rotate: pos === 0 ? 0 : pos === 1 ? -2.5 : 2.5,
+                    x: pos === 0 ? 0 : pos === 1 ? 12 : -12,
+                    rotate: pos === 0 ? 0 : pos === 1 ? -2 : 2,
                   }}
-                  whileHover={isActive ? { y: -4, scale: 1.01 } : {}}
+                  whileHover={isActive ? { y: -3, scale: 1.01 } : {}}
                   transition={{
                     default: { type: "spring", stiffness: 280, damping: 24 },
                     y: (prevPos === 0 && pos === 2)
                       ? { duration: 0.6, ease: "easeInOut" }
                       : { type: "spring", stiffness: 280, damping: 24 },
                   }}
-                  className="absolute inset-0 rounded-2xl sm:rounded-3xl overflow-hidden border shadow-xl bg-white touch-none"
+                  className="absolute inset-0 rounded-2xl sm:rounded-3xl overflow-hidden border bg-white touch-none"
                   onClick={() => isActive && nextSlide()}
                 >
                   {/* Background image */}
@@ -191,7 +169,7 @@ export function CampusHighlightsSection() {
 
                   {/* Active card info bar at bottom */}
                   {isActive && (
-                    <div className="absolute bottom-4 left-5 right-5 flex items-center justify-between text-white pointer-events-none font-sans">
+                    <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white pointer-events-none font-sans">
                       <p className="text-[10px] sm:text-xs uppercase tracking-widest font-semibold opacity-90">
                         Scroll or click to explore
                       </p>
@@ -206,17 +184,17 @@ export function CampusHighlightsSection() {
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center space-x-5 pt-1">
+          <div className="flex items-center space-x-4 mt-4">
             {/* Prev */}
             <motion.button
               onClick={prevSlide}
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.92 }}
-              className="p-2.5 rounded-full border transition-all duration-300 shadow-sm flex items-center justify-center bg-white cursor-pointer"
+              className="p-2 rounded-full border transition-all duration-300 shadow-sm flex items-center justify-center bg-white cursor-pointer"
               style={{ borderColor: COLORS.borderGold, color: COLORS.primary }}
               aria-label="Previous slide"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </motion.button>
@@ -228,12 +206,12 @@ export function CampusHighlightsSection() {
                   key={i}
                   onClick={() => scrollToSlide(i)}
                   animate={{
-                    width: currentSlide === i ? 20 : 8,
+                    width: currentSlide === i ? 18 : 6,
                     backgroundColor: currentSlide === i ? COLORS.primary : COLORS.border,
                   }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  className="h-2 rounded-full cursor-pointer"
-                  style={{ minWidth: 8 }}
+                  className="h-1.5 rounded-full cursor-pointer"
+                  style={{ minWidth: 6 }}
                   aria-label={`Go to slide ${i + 1}`}
                 />
               ))}
@@ -248,11 +226,12 @@ export function CampusHighlightsSection() {
               style={{ borderColor: COLORS.borderGold, color: COLORS.primary }}
               aria-label="Next slide"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </motion.button>
           </div>
+
         </div>
       </div>
     </div>

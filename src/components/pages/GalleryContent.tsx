@@ -391,62 +391,25 @@ export function GalleryContent() {
     }, 100);
   };
 
-  // Wheel vertical scroll category switching (registered as non-passive listener)
+  // Wheel horizontal scroll support (non-blocking)
   useEffect(() => {
     const container = outerContainerRef.current;
     if (!container) return;
 
     const handleDOMWheel = (e: WheelEvent) => {
-      const isScrollDown = e.deltaY > 0;
-      const isScrollUp = e.deltaY < 0;
-
-      // Determine if we are exiting the gallery boundaries
-      const isExitingDown =
-        isScrollDown && currentIdx === categories.length - 1;
-      const isExitingUp = isScrollUp && currentIdx === 0;
-
-      // If we are NOT exiting (switching chapters, scrolling horizontally, or locked at boundaries),
-      // we must prevent default vertical page scrolling to stay locked on screen!
-      if (!isExitingDown && !isExitingUp) {
-        e.preventDefault();
-      } else {
-        // Provide a 1.2-second safety lock when landing at boundaries to prevent accidental exit
-        const now = Date.now();
-        if (now - lastScrollTime.current < 1200) {
-          e.preventDefault();
-        }
-      }
-
-      // If user is scrolling horizontally (trackpad/horizontal wheel), scroll horizontal cards
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
         const scrollContainer = scrollContainerRef.current;
         if (scrollContainer) {
           scrollContainer.scrollLeft += e.deltaX;
         }
-        return;
-      }
-
-      const now = Date.now();
-
-      // Cooldown window (750ms) to ensure smooth transition between chapters
-      if (now - lastScrollTime.current < 750) {
-        return;
-      }
-
-      if (isScrollDown && nextCategory) {
-        lastScrollTime.current = now;
-        selectTimelineCategory(nextCategory.id);
-      } else if (isScrollUp && prevCategory) {
-        lastScrollTime.current = now;
-        selectTimelineCategory(prevCategory.id);
       }
     };
 
-    container.addEventListener("wheel", handleDOMWheel, { passive: false });
+    container.addEventListener("wheel", handleDOMWheel, { passive: true });
     return () => {
       container.removeEventListener("wheel", handleDOMWheel);
     };
-  }, [selectedCat, currentIdx, nextCategory, prevCategory]);
+  }, []);
 
   // Mouse Drag scrolling logic
   const handleMouseDown = (e: React.MouseEvent) => {

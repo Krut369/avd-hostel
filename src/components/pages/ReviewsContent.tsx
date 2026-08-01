@@ -198,8 +198,6 @@ export function ReviewsContent() {
           </div>
         </div>
       </section>
-
-      <CTASection />
     </>
   );
 }

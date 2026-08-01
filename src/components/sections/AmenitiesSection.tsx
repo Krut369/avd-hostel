@@ -309,7 +309,7 @@ export function AmenitiesSection() {
 
       </div>
 
-      <style jsx global>{`
+      <style>{`
         @keyframes amenitiesInfiniteScroll {
           0% {
             transform: translateX(0);
