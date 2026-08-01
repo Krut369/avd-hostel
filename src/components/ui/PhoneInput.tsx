@@ -205,7 +205,9 @@ export function PhoneInput({
           className={`flex rounded-xl border transition-all duration-200 ${
             showError
               ? "border-red-400 bg-red-50/5 focus-within:border-red-400"
-              : "border-slate-200 focus-within:border-amber-700 bg-[#FDFCF9]/50 focus-within:bg-white"
+              : isValid
+                ? "border-emerald-500/40 bg-emerald-50/5 focus-within:border-emerald-500"
+                : "border-slate-200 focus-within:border-amber-700 bg-[#FDFCF9]/50 focus-within:bg-white"
           }`}
         >
           {/* Country code selector trigger */}
@@ -239,10 +241,19 @@ export function PhoneInput({
             value={value}
             onChange={handlePhoneInputChange}
             onBlur={() => setTouched(true)}
-            className="flex-grow px-4 py-2.5 bg-transparent text-sm focus:outline-none rounded-r-xl"
+            className={`flex-grow pl-4 ${isValid ? "pr-10" : "pr-4"} py-2.5 bg-transparent text-sm focus:outline-none rounded-r-xl`}
             style={{ color: COLORS.textPrimary }}
           />
         </div>
+
+        {/* Success checkmark */}
+        {isValid && (
+          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-emerald-500 pointer-events-none">
+            <svg className="w-4 h-4 animate-scale-up" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+        )}
 
         {/* Dropdown list popup */}
         {isOpen && (

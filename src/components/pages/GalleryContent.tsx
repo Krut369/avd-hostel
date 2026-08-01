@@ -1,465 +1,912 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  X, ChevronLeft, ChevronRight, ChevronUp, ChevronDown,
-  Dumbbell, Utensils, Trophy, Church, Calendar, BedDouble, LayoutGrid, Sparkles,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Trophy,
+  Calendar,
+  ZoomIn,
+  ZoomOut,
+  Smile,
+  School,
+  Building,
+  Dumbbell,
+  Music,
 } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 
-const BASE = "https://www.avdvvn.org/assets/images";
+// ─── Interfaces ──────────────────────────────────────────────────────────────
+interface Category {
+  id: string;
+  title: string;
+  description: string;
+  coverImage: string;
+  count: number;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  gradient: string;
+}
 
-// ─── Gallery items — all from avdvvn.org (no local files needed) ──────────────
-const galleryItems = [
-  // Rooms ✅ local files
-  { src: "/ac-room/1.jpg",       cat: "Rooms",  label: "AC Room" },
-  { src: "/ac-room/2.jpg",       cat: "Rooms",  label: "AC Room" },
-  { src: "/ac-room/3.jpg",       cat: "Rooms",  label: "AC Room" },
-  { src: "/ac-room/4.jpg",       cat: "Rooms",  label: "AC Room" },
-  { src: "/non-ac-room/1.jpg",   cat: "Rooms",  label: "Non-AC Room" },
-  { src: "/non-ac-room/2.jpg",   cat: "Rooms",  label: "Non-AC Room" },
-  { src: "/dormitory/1.jpg",     cat: "Rooms",  label: "Dormitory" },
-  { src: "/dormitory/2.jpg",     cat: "Rooms",  label: "Dormitory" },
-  { src: "/junior-room/1.jpg",   cat: "Rooms",  label: "Junior Room" },
-  { src: "/junior-room/2.jpg",   cat: "Rooms",  label: "Junior Room" },
-  // Rooms — from AVD website
-  { src: `${BASE}/r1.png`,       cat: "Rooms",  label: "Student Room" },
-  { src: `${BASE}/r2.png`,       cat: "Rooms",  label: "Student Room" },
-  { src: `${BASE}/r3.jpg`,       cat: "Rooms",  label: "Student Room" },
-  { src: `${BASE}/r4.jpg`,       cat: "Rooms",  label: "Student Room" },
+interface Memory {
+  id: string;
+  category: string;
+  title: string;
+  date: string;
+  description: string;
+  image: string;
+}
 
-  // Gym — from AVD website
-  { src: `${BASE}/gym.jpg`,      cat: "Gym",    label: "Gymnasium" },
-
-  // Dining — from AVD website
-  { src: `${BASE}/dh1.jpg`,      cat: "Dining", label: "Dining Hall" },
-  { src: `${BASE}/dh2.jpg`,      cat: "Dining", label: "Dining Hall" },
-  { src: `${BASE}/dh3.jpg`,      cat: "Dining", label: "Food Service" },
-  { src: `${BASE}/dh4.jpg`,      cat: "Dining", label: "Mess Hall" },
-
-  // Sports — from AVD website
-  { src: `${BASE}/s1.jpg`,       cat: "Sports", label: "Sports Ground" },
-  { src: `${BASE}/s2.jpg`,       cat: "Sports", label: "Cricket Match" },
-  { src: `${BASE}/s3.jpg`,       cat: "Sports", label: "Cricket Match" },
-  { src: `${BASE}/s4.jpg`,       cat: "Sports", label: "Cricket Match" },
-  { src: `${BASE}/s5.jpg`,       cat: "Sports", label: "Sports Activity" },
-  { src: `${BASE}/s6.jpg`,       cat: "Sports", label: "Sports Activity" },
-  { src: `${BASE}/s7.jpg`,       cat: "Sports", label: "Sports Activity" },
-  { src: `${BASE}/s8.jpg`,       cat: "Sports", label: "Sports Activity" },
-  { src: `${BASE}/s9.jpg`,       cat: "Sports", label: "Cricket Team" },
-  { src: `${BASE}/s10.jpg`,      cat: "Sports", label: "Cricket Team" },
-
-  // Temple — from AVD website
-  { src: `${BASE}/t1.jpeg`,      cat: "Temple", label: "Shree Swaminarayan Mandir" },
-  { src: `${BASE}/t2.jpeg`,      cat: "Temple", label: "Mandir View" },
-  { src: `${BASE}/t3.jpeg`,      cat: "Temple", label: "Mandir Grounds" },
-  { src: `${BASE}/t4.jpeg`,      cat: "Temple", label: "Temple Entrance" },
-  { src: `${BASE}/t5.jpeg`,      cat: "Temple", label: "Temple Interior" },
-  { src: `${BASE}/t6.jpeg`,      cat: "Temple", label: "Mandir Panorama" },
-
-  // Events — from AVD website
-  { src: `${BASE}/e1.jpg`,       cat: "Events", label: "Cultural Event" },
-  { src: `${BASE}/e2.jpg`,       cat: "Events", label: "Cultural Event" },
-  { src: `${BASE}/e3.jpg`,       cat: "Events", label: "Cultural Event" },
-  { src: `${BASE}/e4.jpg`,       cat: "Events", label: "Cultural Event" },
-  { src: `${BASE}/e15.jpg`,      cat: "Events", label: "Cultural Program" },
-  { src: `${BASE}/e16.jpg`,      cat: "Events", label: "Cultural Program" },
-  { src: `${BASE}/e18.jpg`,      cat: "Events", label: "Campus Event" },
-  { src: `${BASE}/e19.jpg`,      cat: "Events", label: "Campus Event" },
-
-  // Shibir — from AVD website
-  { src: `${BASE}/e13.jpg`,      cat: "Shibir", label: "Satsang Shibir" },
-  { src: `${BASE}/e14.jpg`,      cat: "Shibir", label: "Evening Sabha" },
-  { src: `${BASE}/e5.jpg`,       cat: "Shibir", label: "Youth Shibir Activity" },
-  { src: `${BASE}/e6.jpg`,       cat: "Shibir", label: "Pravachan Session" },
-  { src: `${BASE}/e7.jpg`,       cat: "Shibir", label: "Group Meditation" },
-  { src: `${BASE}/e8.jpg`,       cat: "Shibir", label: "Interactive Session" },
-];
-
-// ─── Category cards — all thumbnails use real URLs (no nulls, no 404s) ────────
-const categoryData = [
+// ─── Category Data ───────────────────────────────────────────────────────────
+const categories: Category[] = [
   {
-    id: "All",    label: "All Photos",           count: 49,
-    img: "/ac-room/1.jpg",
-    icon: <LayoutGrid className="w-7 h-7" />,
-    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.secondary}22 100%)`,
+    id: "campus",
+    title: "Campus Life",
+    description:
+      "Serene Swaminarayan temple, reading rooms, prayer halls, and gardens where friendships grow.",
+    coverImage: "https://www.avdvvn.org/assets/images/t1.jpeg",
+    count: 4,
+    icon: School,
+    gradient: "linear-gradient(135deg, #7A3723 0%, #C44D28 100%)",
   },
   {
-    id: "Gym",    label: "Gymnasium",            count: 1,
-    img: `${BASE}/gym.jpg`,
-    icon: <Dumbbell className="w-7 h-7" />,
-    gradient: "linear-gradient(135deg, #6366f122 0%, #8b5cf622 100%)",
+    id: "rooms",
+    title: "Rooms & Facilities",
+    description:
+      "Comfortable air-conditioned rooms, dormitories, a fitness gymnasium, and hygienic dining hall.",
+    coverImage: "/ac-room/2.jpg",
+    count: 4,
+    icon: Building,
+    gradient: "linear-gradient(135deg, #654126 0%, #8A5B36 100%)",
   },
   {
-    id: "Dining", label: "Dining Hall",          count: 4,
-    img: `${BASE}/dh1.jpg`,
-    icon: <Utensils className="w-7 h-7" />,
-    gradient: `linear-gradient(135deg, ${COLORS.primary}15 0%, ${COLORS.secondary}15 100%)`,
+    id: "sports",
+    title: "Sports & Fitness",
+    description:
+      "Energy meets camaraderie. Highlights from annual cricket matches, volleyball, and indoor sports.",
+    coverImage: "https://www.avdvvn.org/assets/images/s9.jpg",
+    count: 4,
+    icon: Dumbbell,
+    gradient: "linear-gradient(135deg, #0f5132 0%, #198754 100%)",
   },
   {
-    id: "Rooms",  label: "Living Rooms",         count: 14,
-    img: "/ac-room/2.jpg",
-    icon: <BedDouble className="w-7 h-7" />,
-    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryLight}22 100%)`,
+    id: "events",
+    title: "Seminars & Events",
+    description:
+      "Character building Satsang Shibirs, placement orientations, and insightful guest lectures.",
+    coverImage: "https://www.avdvvn.org/assets/images/e13.jpg",
+    count: 4,
+    icon: Calendar,
+    gradient: "linear-gradient(135deg, #1d3557 0%, #457b9d 100%)",
   },
   {
-    id: "Sports", label: "Sports & Cricket",    count: 10,
-    img: `${BASE}/s9.jpg`,
-    icon: <Trophy className="w-7 h-7" />,
-    gradient: "linear-gradient(135deg, #10b98122 0%, #065f4622 100%)",
+    id: "festivals",
+    title: "Festivals & Culture",
+    description:
+      "Vibrant colors of Holi, traditional diyas during Diwali, and cultural programs celebrated together.",
+    coverImage:
+      "https://images.unsplash.com/photo-1561489396-888724a1543d?auto=format&fit=crop&w=800&q=80",
+    count: 4,
+    icon: Music,
+    gradient: "linear-gradient(135deg, #9e2a2b 0%, #e07a5f 100%)",
   },
   {
-    id: "Temple", label: "Swaminarayan Mandir", count: 6,
-    img: `${BASE}/t1.jpeg`,
-    icon: <Church className="w-7 h-7" />,
-    gradient: `linear-gradient(135deg, ${COLORS.primary}22 0%, ${COLORS.primaryDark}22 100%)`,
-  },
-  {
-    id: "Events", label: "Cultural Events",     count: 8,
-    img: `${BASE}/e1.jpg`,
-    icon: <Calendar className="w-7 h-7" />,
-    gradient: "linear-gradient(135deg, #ec489922 0%, #be185d22 100%)",
-  },
-  {
-    id: "Shibir", label: "Shibir",    count: 6,
-    img: `${BASE}/e13.jpg`,
-    icon: <Sparkles className="w-7 h-7" />,
-    gradient: "linear-gradient(135deg, #f59e0b22 0%, #d9770622 100%)",
+    id: "achievements",
+    title: "Achievements",
+    description:
+      "Honoring Gold Medalists, placement milestones, hackathon wins, and championship trophies.",
+    coverImage:
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
+    count: 4,
+    icon: Trophy,
+    gradient: "linear-gradient(135deg, #3d348b 0%, #7678ed 100%)",
   },
 ];
 
-const filterTabs = ["All", "Rooms", "Gym", "Dining", "Sports", "Temple", "Events", "Shibir"];
+// ─── Memory / Story Data ──────────────────────────────────────────────────────
+const memoriesData: Memory[] = [
+  // 1. Campus Life
+  {
+    id: "camp-1",
+    category: "campus",
+    title: "Quiet Study Nights",
+    date: "October 12, 2025",
+    description:
+      "Late night studies at the reading hall. A quiet zone dedicated to academic focus and peer learning.",
+    image:
+      "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "camp-2",
+    category: "campus",
+    title: "Evening Prayer Assembly",
+    date: "Daily assembly",
+    description:
+      "Coming together as one family in the prayer hall to find peace, seek blessings, and recharge spiritually.",
+    image: "/prayer-hall.jpg",
+  },
+  {
+    id: "camp-3",
+    category: "campus",
+    title: "Sunrise at Swaminarayan Mandir",
+    date: "September 5, 2025",
+    description:
+      "The serene stone temple within the campus courtyard reflecting the golden early morning sunlight.",
+    image: "https://www.avdvvn.org/assets/images/t1.jpeg",
+  },
+  {
+    id: "camp-4",
+    category: "campus",
+    title: "Friendship Under the Trees",
+    date: "August 24, 2025",
+    description:
+      "Lively discussions and shared stories under the shade of neem trees during afternoon breaks.",
+    image:
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+  },
 
-// ─── Category card ────────────────────────────────────────────────────────────
-function CategoryCard({
-  cat,
-  isActive,
-  gridClass,
-  onClick,
-}: {
-  cat: (typeof categoryData)[0];
-  isActive: boolean;
-  gridClass: string;
-  onClick: () => void;
-}) {
-  const [imgOk, setImgOk] = useState(true);
+  // 2. Rooms & Facilities
+  {
+    id: "room-1",
+    category: "rooms",
+    title: "Home Away From Home",
+    date: "Semester Start 2025",
+    description:
+      "Setting up sharing rooms with books and laptops. Safe, comfortable spaces for sleep and growth.",
+    image: "/ac-room/s2.jpg",
+  },
+  {
+    id: "room-2",
+    category: "rooms",
+    title: "Endless Hostel Talks",
+    date: "July 18, 2025",
+    description:
+      "Late night brainstorming sessions and laughter in the dormitory, building bonds that last a lifetime.",
+    image: "/dormitory/1.jpg",
+  },
+  {
+    id: "room-3",
+    category: "rooms",
+    title: "Wholesome Dining",
+    date: "Daily Meal",
+    description:
+      "Freshly prepared, hygienic pure-vegetarian meals served in the mess hall with pure hospitality.",
+    image: "https://www.avdvvn.org/assets/images/dh1.jpg",
+  },
+  {
+    id: "room-4",
+    category: "rooms",
+    title: "Morning Gym Workouts",
+    date: "Daily Fitness",
+    description:
+      "Maintaining peak physical health at our fully equipped gym, promoting a balanced mind and active body.",
+    image: "https://www.avdvvn.org/assets/images/gym.jpg",
+  },
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55 }}
-      className={`group relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 ${gridClass} h-[180px] md:h-[260px]`}
-      style={{
-        background: cat.gradient,
-      }}
-      onClick={onClick}
-    >
-      {/* Thumbnail */}
-      {imgOk && cat.img && (
-        <img
-          src={cat.img}
-          alt={cat.label}
-          loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          onError={() => setImgOk(false)}
-        />
-      )}
+  // 3. Sports & Fitness
+  {
+    id: "sport-1",
+    category: "sports",
+    title: "Inter-Hostel Cricket Finals",
+    date: "March 15, 2025",
+    description:
+      "Lifting the cricket trophy after a dramatic last-over victory. A celebration of teamwork and determination.",
+    image: "https://www.avdvvn.org/assets/images/s9.jpg",
+  },
+  {
+    id: "sport-2",
+    category: "sports",
+    title: "Volleyball Under the Floodlights",
+    date: "February 28, 2025",
+    description:
+      "High-voltage action and teamwork during the annual evening floodlight volleyball championship.",
+    image:
+      "https://images.unsplash.com/photo-1592656094267-764a450201c5?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "sport-3",
+    category: "sports",
+    title: "Campus Running & Drills",
+    date: "Weekly Fitness",
+    description:
+      "Students building stamina and athletic skills on our open sports ground during early morning drills.",
+    image: "https://www.avdvvn.org/assets/images/s1.jpg",
+  },
+  {
+    id: "sport-4",
+    category: "sports",
+    title: "Badminton Doubles League",
+    date: "January 10, 2025",
+    description:
+      "Fast-paced rallies and strategic communication in the final match of the doubles indoor championship.",
+    image:
+      "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+  },
 
-      {/* Gradient overlay */}
-      <div
-        className="absolute inset-0 transition-all duration-300"
-        style={{
-          background: imgOk && cat.img
-            ? "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)"
-            : "linear-gradient(to top, rgba(0,0,0,0.12) 0%, transparent 100%)",
-        }}
-      />
+  // 4. Seminars & Events
+  {
+    id: "event-1",
+    category: "events",
+    title: "Satsang Shibir Assembly",
+    date: "August 12, 2025",
+    description:
+      "Listening to spiritual discourses and moral guidance from revered Swamijis, focusing on inner values.",
+    image: "https://www.avdvvn.org/assets/images/e13.jpg",
+  },
+  {
+    id: "event-2",
+    category: "events",
+    title: "Annual Cultural Evening",
+    date: "April 20, 2025",
+    description:
+      "Students staging dramas, executing speeches, and singing devotional hymns to honor culture and roots.",
+    image: "https://www.avdvvn.org/assets/images/e1.jpg",
+  },
+  {
+    id: "event-3",
+    category: "events",
+    title: "Interactive Guidance Talks",
+    date: "September 15, 2025",
+    description:
+      "A close-knit conversation with industry alumni, answering questions about career pathways and core values.",
+    image: "https://www.avdvvn.org/assets/images/e8.jpg",
+  },
+  {
+    id: "event-4",
+    category: "events",
+    title: "Career Pathfinder Seminar",
+    date: "July 5, 2025",
+    description:
+      "Academic mentors holding workshops for new students on mapping engineering and technology goals.",
+    image:
+      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
+  },
 
-      {/* Icon fallback */}
-      {(!imgOk || !cat.img) && (
-        <div
-          className="absolute inset-0 flex items-center justify-center"
-          style={{ color: COLORS.primary, opacity: 0.35 }}
-        >
-          <div className="scale-150">{cat.icon}</div>
-        </div>
-      )}
+  // 5. Festivals & Culture
+  {
+    id: "fest-1",
+    category: "festivals",
+    title: "Holi: Festival of Joy",
+    date: "March 21, 2025",
+    description:
+      "SPLASH of dry colors! Celebrating Holi in the open quadrangle with organic colors, music, and brotherhood.",
+    image:
+      "https://images.unsplash.com/photo-1561489396-888724a1543d?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "fest-2",
+    category: "festivals",
+    title: "Diwali: Festival of Lights",
+    date: "November 1, 2025",
+    description:
+      "Symmetrical clay diyas light up all three wings of the hostel, celebrating good over evil in true community.",
+    image:
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "fest-3",
+    category: "festivals",
+    title: "Janmashtami Dahi Handi",
+    date: "August 18, 2025",
+    description:
+      "Students forming a multi-tier human pyramid to break the Dahi Handi, celebrating Krishna Janmashtami.",
+    image:
+      "https://images.unsplash.com/photo-1506084868230-bb9d95c24759?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "fest-4",
+    category: "festivals",
+    title: "Independence Flag Hoisting",
+    date: "August 15, 2025",
+    description:
+      "Saluting the Tricolor on a crisp morning, singing the National Anthem, and committing to country service.",
+    image:
+      "https://images.unsplash.com/photo-1532375810709-75b1da00537c?auto=format&fit=crop&w=800&q=80",
+  },
 
-      {/* Active ring */}
-      {isActive && (
-        <div className="absolute inset-0 border border-white/30 rounded-2xl md:rounded-3xl z-10 pointer-events-none" />
-      )}
+  // 6. Achievements
+  {
+    id: "ach-1",
+    category: "achievements",
+    title: "National Hackathon Winners",
+    date: "May 10, 2025",
+    description:
+      "Hostel coders winning the grand prize at a national developer competition, coding all through the night.",
+    image:
+      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "ach-2",
+    category: "achievements",
+    title: "Placement Celebration",
+    date: "Placement Season 2025",
+    description:
+      "Happy students sharing high-package job offers from global software giants and consulting firms.",
+    image:
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "ach-3",
+    category: "achievements",
+    title: "Academic Gold Medalists",
+    date: "SPU Convocation 2025",
+    description:
+      "Congratulating our brilliant toppers who received university gold medals for securing outstanding ranks.",
+    image:
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "ach-4",
+    category: "achievements",
+    title: "Lifting the Championship Shield",
+    date: "CVM Sports Meet 2025",
+    description:
+      "AVD hostel team hoisting the overall inter-college sports shield, crowning a dominant athletic year.",
+    image:
+      "https://images.unsplash.com/photo-1578269174936-2709b5a8c040?auto=format&fit=crop&w=800&q=80",
+  },
+];
 
-      {/* Badge */}
-      {!isActive && (
-        <div
-          className="absolute top-2.5 right-2.5 z-20 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider shadow"
-          style={{
-            backgroundColor: "rgba(0,0,0,0.45)",
-            color: "#fff",
-          }}
-        >
-          {`${cat.count} photo${cat.count !== 1 ? "s" : ""}`}
-        </div>
-      )}
-
-      {/* Text */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5 z-10">
-        <p
-          className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-2"
-          style={{ color: COLORS.background }}
-        >
-          {cat.id === "All" ? "Collection" : "Category"}
-        </p>
-        <h3
-          className="text-xs sm:text-sm md:text-xl font-bold leading-tight drop-shadow tracking-wide"
-          style={{
-            color: COLORS.background,
-          }}
-        >
-          {cat.label}
-        </h3>
-      </div>
-    </motion.div>
-  );
-}
-
-// ─── Lightbox image ───────────────────────────────────────────────────────────
-function LightboxImage({ src, label }: { src: string; label: string }) {
-  const [ok, setOk] = useState(true);
-
-  if (!ok) {
-    return (
-      <div className="flex flex-col items-center gap-4 text-white/50 p-10 rounded-2xl border border-white/10 bg-white/5 max-w-xs text-center">
-        <LayoutGrid className="w-10 h-10 opacity-25" />
-        <p className="text-sm font-semibold text-white/60">Image unavailable</p>
-      </div>
-    );
-  }
-
-  return (
-    <motion.img
-      key={src}
-      initial={{ opacity: 0, scale: 0.92 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      src={src}
-      alt={label}
-      loading="lazy"
-      className="max-h-[85vh] max-w-[85vw] object-contain rounded-xl shadow-2xl"
-      onError={() => setOk(false)}
-    />
-  );
-}
-
-// ─── Main component ───────────────────────────────────────────────────────────
+// ─── Main Gallery Component ───────────────────────────────────────────────────
 export function GalleryContent() {
-  const [active, setActive] = useState<string | null>(null);
-  const [lightbox, setLightbox] = useState<{ src: string; index: number; cat: string } | null>(null);
-  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [selectedCat, setSelectedCat] = useState<string>("campus");
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
 
-  const getFiltered = (cat: string | null) =>
-    !cat || cat === "All" ? galleryItems : galleryItems.filter((g) => g.cat === cat);
+  // Horizontal Scroll Drag & Swipe references
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const outerContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const walkRef = useRef(0);
 
-  const filtered = getFiltered(lightbox?.cat ?? active);
+  // Touch Swipe (for mobile boundary checks)
+  const touchStartX = useRef(0);
+  const touchWalk = useRef(0);
 
-  const handleCategoryClick = (cat: string) => {
-    const key = cat === "All" ? null : cat;
-    setActive(key);
-    const items = getFiltered(cat);
-    if (items.length > 0) setLightbox({ src: items[0].src, index: 0, cat });
-  };
+  // Scroll Wheel page change cooldown
+  const lastScrollTime = useRef(0);
 
-  const navigate = (dir: 1 | -1) => {
-    if (!lightbox) return;
-    const next = (lightbox.index + dir + filtered.length) % filtered.length;
-    setLightbox({ src: filtered[next].src, index: next, cat: lightbox.cat });
-  };
+  // Selected Category Index & Neighbours
+  const currentIdx = categories.findIndex((c) => c.id === selectedCat);
+  const currentCategory = categories[currentIdx];
+  const nextCategory =
+    currentIdx < categories.length - 1 ? categories[currentIdx + 1] : null;
+  const prevCategory = currentIdx > 0 ? categories[currentIdx - 1] : null;
 
-  const getGridClass = (id: string, isExpanded: boolean) => {
-    if (!isExpanded) {
-      switch (id) {
-        case "All":
-          return "col-span-2 md:col-span-2";
-        case "Gym":
-          return "col-span-1 md:col-span-1";
-        case "Dining":
-          return "col-span-1 md:col-span-1";
-        case "Rooms":
-          return "col-span-2 md:col-span-2";
-        case "Sports":
-          return "col-span-2 md:col-span-3";
-        default:
-          return "col-span-1";
+  const filteredMemories = memoriesData.filter(
+    (m) => m.category === selectedCat,
+  );
+
+  // Timeline category selection click handler (resets horizontal scroll)
+  const selectTimelineCategory = (catId: string) => {
+    setSelectedCat(catId);
+    // Reset horizontal container scroll position
+    setTimeout(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({ left: 0, behavior: "smooth" });
       }
-    } else {
-      switch (id) {
-        case "All":
-          return "col-span-2 md:col-span-2";
-        case "Gym":
-          return "col-span-1 md:col-span-1";
-        case "Dining":
-          return "col-span-1 md:col-span-1";
-        case "Rooms":
-          return "col-span-2 md:col-span-2";
-        case "Sports":
-          return "col-span-2 md:col-span-1";
-        case "Temple":
-          return "col-span-1 md:col-span-1";
-        case "Events":
-          return "col-span-1 md:col-span-1";
-        case "Shibir":
-          return "col-span-2 md:col-span-3";
-        default:
-          return "col-span-1";
+    }, 100);
+  };
+
+  // Wheel horizontal scroll support (non-blocking)
+  useEffect(() => {
+    const container = outerContainerRef.current;
+    if (!container) return;
+
+    const handleDOMWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        const scrollContainer = scrollContainerRef.current;
+        if (scrollContainer) {
+          scrollContainer.scrollLeft += e.deltaX;
+        }
+      }
+    };
+
+    container.addEventListener("wheel", handleDOMWheel, { passive: true });
+    return () => {
+      container.removeEventListener("wheel", handleDOMWheel);
+    };
+  }, []);
+
+  // Mouse Drag scrolling logic
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    setIsDragging(true);
+    setStartX(e.pageX - container.offsetLeft);
+    setScrollLeft(container.scrollLeft);
+    walkRef.current = 0;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 1.5; // Drag sensitivity
+    walkRef.current = walk;
+    container.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const isAtRight =
+      container.scrollLeft + container.clientWidth >=
+      container.scrollWidth - 25;
+    const isAtLeft = container.scrollLeft <= 25;
+    const walk = walkRef.current;
+
+    // Check overshoot to trigger page turn
+    if (isAtRight && walk < -60) {
+      if (nextCategory) {
+        selectTimelineCategory(nextCategory.id);
+      }
+    } else if (isAtLeft && walk > 60) {
+      if (prevCategory) {
+        selectTimelineCategory(prevCategory.id);
+      }
+    }
+    walkRef.current = 0;
+  };
+
+  // Mobile Touch Swipe triggers for chapter boundary turns
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchWalk.current = 0;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchWalk.current = e.touches[0].clientX - touchStartX.current;
+  };
+
+  const handleTouchEnd = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const isAtRight =
+      container.scrollLeft + container.clientWidth >=
+      container.scrollWidth - 30;
+    const isAtLeft = container.scrollLeft <= 30;
+    const walk = touchWalk.current;
+
+    if (isAtRight && walk < -50) {
+      if (nextCategory) {
+        selectTimelineCategory(nextCategory.id);
+      }
+    } else if (isAtLeft && walk > 50) {
+      if (prevCategory) {
+        selectTimelineCategory(prevCategory.id);
       }
     }
   };
 
-  const displayedCategories = showAllCategories
-    ? categoryData
-    : [
-        categoryData[0], // All
-        categoryData[1], // Gym
-        categoryData[2], // Dining
-        categoryData[3], // Rooms
-        categoryData[4], // Sports
-      ];
+  // Lightbox keyboard listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxIndex === null) return;
+      if (e.key === "Escape") {
+        setLightboxIndex(null);
+        setIsZoomed(false);
+      } else if (e.key === "ArrowRight") {
+        setLightboxIndex((prev) =>
+          prev !== null ? (prev + 1) % filteredMemories.length : null,
+        );
+        setIsZoomed(false);
+      } else if (e.key === "ArrowLeft") {
+        setLightboxIndex((prev) =>
+          prev !== null
+            ? (prev - 1 + filteredMemories.length) % filteredMemories.length
+            : null,
+        );
+        setIsZoomed(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, filteredMemories]);
 
   return (
-    <>
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section
-        className="relative pt-28 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden"
-        style={{ backgroundColor: COLORS.background }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
-              style={{ color: COLORS.textPrimary }}
-            >
-              Our <span className="gradient-text italic">Gallery</span>
-            </h1>
-            <p className="text-lg max-w-xl mx-auto font-medium" style={{ color: COLORS.textSecondary }}>
-              Rooms · Gym · Dining · Sports · Temple · Events · Shibir — click any card to explore.
-            </p>
-          </motion.div>
+    <div
+      ref={outerContainerRef}
+      className="min-h-screen relative overflow-hidden transition-colors py-24"
+      style={{ backgroundColor: COLORS.background }}
+    >
+      {/* Background Ambience decoration */}
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* ─── SECTION HEADER ──────────────────────────────────────────────── */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight text-neutral-800">
+            Explore{" "}
+            <span className="gradient-text italic font-serif">
+              Student Life
+            </span>
+          </h2>
+
+          <p className="text-sm sm:text-base md:text-lg leading-relaxed text-neutral-600 font-medium">
+            Every memory tells a story. Explore life at Atmiya Vidya Dham
+            through experiences, celebrations, achievements, and everyday
+            moments.
+          </p>
         </div>
-      </section>
 
-      {/* ── Category Grid ─────────────────────────────────────────── */}
-      <section
-        className="py-14 px-4 sm:px-6 lg:px-8"
-        style={{ backgroundColor: COLORS.background }}
-      >
-        <div className="max-w-6xl mx-auto">
+        {/* ─── MOBILE CATEGORY PILLS FILTER BAR ───────────────────────────── */}
+        <div className="flex md:hidden gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none snap-x">
+          {categories.map((cat) => {
+            const isActive = cat.id === selectedCat;
+            return (
+              <button
+                key={`mobile-timeline-${cat.id}`}
+                onClick={() => selectTimelineCategory(cat.id)}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap snap-center transition-all cursor-pointer ${
+                  isActive
+                    ? "bg-amber-600 text-white shadow-sm"
+                    : "bg-white text-neutral-600 border border-neutral-200"
+                }`}
+              >
+                {cat.title}
+              </button>
+            );
+          })}
+        </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
-            {displayedCategories.map((cat, i) => {
-              const isActive = active === cat.id || (active === null && cat.id === "All");
-              return (
-                <CategoryCard
-                  key={`${cat.id}-${i}`}
-                  cat={cat as (typeof categoryData)[0]}
-                  isActive={isActive}
-                  gridClass={getGridClass(cat.id, showAllCategories)}
-                  onClick={() => handleCategoryClick(cat.id)}
-                />
-              );
-            })}
+        {/* ─── TIMELINE + GALLERY ROW ─────────────────────────────────────── */}
+        <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-stretch">
+          {/* Vertical Timeline Navigation (Desktop only) */}
+          <div className="w-[245px] shrink-0 hidden md:flex flex-col py-6 relative justify-center pr-4 border-r border-neutral-200/30">
+            <div className="space-y-3 relative z-10 w-full">
+              {categories.map((cat) => {
+                const isActive = cat.id === selectedCat;
+                const Icon = cat.icon;
+                return (
+                  <button
+                    key={`timeline-${cat.id}`}
+                    onClick={() => selectTimelineCategory(cat.id)}
+                    className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border-l-4 transition-all duration-300 text-left cursor-pointer group focus:outline-none ${
+                      isActive
+                        ? "shadow-sm"
+                        : "border-transparent text-neutral-500 hover:bg-neutral-100/55 hover:text-neutral-800"
+                    }`}
+                    style={
+                      isActive
+                        ? {
+                            borderColor: COLORS.primary,
+                            backgroundColor: `${COLORS.primary}0D`,
+                          }
+                        : {}
+                    }
+                  >
+                    <Icon
+                      className={`w-5 h-5 transition-colors duration-300 ${
+                        isActive ? "" : "text-neutral-400 group-hover:text-neutral-600"
+                      }`}
+                      style={isActive ? { color: COLORS.primary } : {}}
+                    />
+                    <span
+                      className={`text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                        isActive ? "font-extrabold" : "text-neutral-500"
+                      }`}
+                      style={isActive ? { color: COLORS.primary } : {}}
+                    >
+                      {cat.title}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex justify-center mt-8">
-            {!showAllCategories ? (
-              <button
-                onClick={() => setShowAllCategories(true)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 active:scale-95"
-                style={{
-                  borderColor: `${COLORS.primary}40`,
-                  color: COLORS.primary,
-                  backgroundColor: COLORS.background,
-                }}
+          {/* Active Chapter Container (Right side) */}
+          <div className="flex-1 flex flex-col justify-between overflow-hidden">
+            {/* Active Category Meta Header */}
+            <div className="mb-4">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-600 mb-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+                <span>
+                  Chapter {currentIdx + 1} of {categories.length}:{" "}
+                  {currentCategory?.title}
+                </span>
+              </div>
+              <p className="text-sm text-neutral-600 font-light max-w-2xl leading-relaxed">
+                {currentCategory?.description}
+              </p>
+            </div>
+
+            {/* Film-strip Scrapbook Slider */}
+            <div className="overflow-hidden relative py-8">
+
+
+              {/* Horizontal Scroll Area */}
+              <div
+                ref={scrollContainerRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUpOrLeave}
+                onMouseLeave={handleMouseUpOrLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                className={`flex gap-6 md:gap-8 overflow-x-auto py-10 px-4 scrollbar-none snap-x snap-mandatory ${
+                  isDragging ? "cursor-grabbing select-none" : "cursor-grab"
+                }`}
+                style={{ scrollBehavior: "auto" }}
               >
-                <ChevronDown className="w-4 h-4" />
-                View More
-              </button>
-            ) : (
-              <button
-                onClick={() => setShowAllCategories(false)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 active:scale-95"
-                style={{
-                  borderColor: `${COLORS.primary}40`,
-                  color: COLORS.primary,
-                  backgroundColor: COLORS.background,
-                }}
-              >
-                <ChevronUp className="w-4 h-4" />
-                View Less
-              </button>
-            )}
+                {/* Main Cards List */}
+                {filteredMemories.map((memory, index) => {
+                  // Alternate rotations for organic scrapbook aesthetic
+                  const rotation =
+                    index % 2 === 0
+                      ? index % 4 === 0
+                        ? -1.5
+                        : 2
+                      : index % 3 === 0
+                        ? -2
+                        : 1;
+                  return (
+                    <motion.div
+                      key={memory.id}
+                      initial={{ opacity: 0, x: 80, rotate: rotation }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.12 }}
+                      whileHover={{
+                        rotate: 0,
+                        scale: 1.03,
+                        y: -6,
+                        transition: { duration: 0.3 },
+                      }}
+                      className="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 bg-white border border-neutral-200/80 rounded-2xl p-4 shadow-md hover:shadow-[0_15px_30px_rgba(0,0,0,0.12)] hover:border-amber-500/30 transition-shadow snap-start relative group"
+                    >
+                      {/* Polaroid-style photo mounting */}
+                      <div
+                        className="aspect-[4/3] rounded-xl overflow-hidden relative cursor-pointer mb-5 border border-neutral-100 bg-neutral-50"
+                        onClick={() => setLightboxIndex(index)}
+                      >
+                        <img
+                          src={memory.image}
+                          alt={memory.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        {/* Overlay glow on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-60 group-hover:opacity-20 transition-opacity" />
+
+                        {/* Corner Tape Detail (Scrapbook feel) */}
+                        <div className="absolute -top-1 -left-3 w-10 h-4 bg-amber-600/5 backdrop-blur-sm origin-top-left rotate-[-30deg] border border-amber-600/10 pointer-events-none" />
+                        <div className="absolute -top-1 -right-3 w-10 h-4 bg-amber-600/5 backdrop-blur-sm origin-top-right rotate-[30deg] border border-amber-600/10 pointer-events-none" />
+                      </div>
+
+                      {/* Scrapbook content details */}
+                      <div className="space-y-2 relative">
+                        {/* Date Stamp */}
+                        <div className="flex items-center gap-1.5 text-[10px] text-amber-600 font-bold uppercase tracking-wider">
+                          <Calendar className="w-3.5 h-3.5" />
+                          <span>{memory.date}</span>
+                        </div>
+
+                        <h3 className="text-lg md:text-xl font-bold text-neutral-800 tracking-wide group-hover:text-amber-600 transition-colors">
+                          {memory.title}
+                        </h3>
+
+                        {/* Description quote */}
+                        <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed line-clamp-3 group-hover:text-neutral-700 transition-colors">
+                          "{memory.description}"
+                        </p>
+                      </div>
+
+                      {/* Film code bottom accent */}
+                      <div className="mt-4 pt-3 border-t border-neutral-100 flex justify-between text-[8px] font-mono text-neutral-400 uppercase tracking-widest">
+                        <span>AVD-MEM-00{index + 1}</span>
+                        <span>KODAK PX 400</span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+
+            </div>
+
+            {/* Bottom pagination & navigation */}
+            <div className="mt-4 flex items-center justify-between text-neutral-500 text-xs">
+              <div>
+                <span>
+                  Chapter {currentIdx + 1} of {categories.length}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (prevCategory) {
+                      selectTimelineCategory(prevCategory.id);
+                    }
+                  }}
+                  disabled={!prevCategory}
+                  className={`p-1 rounded-md transition-all cursor-pointer ${
+                    prevCategory
+                      ? "hover:bg-neutral-200 hover:text-neutral-800"
+                      : "opacity-35 cursor-not-allowed"
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <div className="flex gap-1">
+                  {categories.map((c) => (
+                    <div
+                      key={`dot-${c.id}`}
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        c.id === selectedCat
+                          ? "w-4 bg-amber-600"
+                          : "w-1.5 bg-neutral-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={() => {
+                    if (nextCategory) {
+                      selectTimelineCategory(nextCategory.id);
+                    }
+                  }}
+                  disabled={!nextCategory}
+                  className={`p-1 rounded-md transition-all cursor-pointer ${
+                    nextCategory
+                      ? "hover:bg-neutral-200 hover:text-neutral-800"
+                      : "opacity-35 cursor-not-allowed"
+                  }`}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
-
-          {/* Count hint */}
-          <motion.p
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="text-center mt-8 text-sm"
-            style={{ color: COLORS.textMuted }}
-          >
-            {getFiltered(active).length} photo{getFiltered(active).length !== 1 ? "s" : ""} in{" "}
-            <span>{active ?? "All"}</span> — click a card to browse
-          </motion.p>
         </div>
-      </section>
+      </div>
 
-      {/* ── Lightbox ──────────────────────────────────────────────── */}
+      {/* ─── FULLSCREEN CINEMATIC LIGHTBOX STORY VIEWER ──────────────────────── */}
       <AnimatePresence>
-        {lightbox && (
+        {lightboxIndex !== null && (
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
-            onClick={() => setLightbox(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/98 flex items-center justify-center p-4 backdrop-blur-md"
+            onClick={() => {
+              setLightboxIndex(null);
+              setIsZoomed(false);
+            }}
           >
-            <button
-              onClick={() => setLightbox(null)}
-              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            {/* Control Bar (Top) */}
+            <div className="absolute top-5 left-5 right-5 flex justify-between items-center z-55">
+              <div className="text-white/40 text-xs font-mono tracking-widest uppercase">
+                {currentCategory?.title} / Story {lightboxIndex + 1}
+              </div>
 
+              <div className="flex items-center gap-3">
+                {/* Zoom Toggle */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsZoomed(!isZoomed);
+                  }}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/10 cursor-pointer"
+                  title="Toggle Zoom"
+                >
+                  {isZoomed ? (
+                    <ZoomOut className="w-5 h-5" />
+                  ) : (
+                    <ZoomIn className="w-5 h-5" />
+                  )}
+                </button>
+
+                {/* Close Button */}
+                <button
+                  onClick={() => {
+                    setLightboxIndex(null);
+                    setIsZoomed(false);
+                  }}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/10 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Left Nav Arrow */}
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(-1); }}
-              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) =>
+                  prev !== null
+                    ? (prev - 1 + filteredMemories.length) %
+                      filteredMemories.length
+                    : null,
+                );
+                setIsZoomed(false);
+              }}
+              className="absolute left-4 md:left-8 w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-colors z-10 cursor-pointer"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
 
-            <div className="flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-              <LightboxImage
-                src={lightbox.src}
-                label={filtered[lightbox.index]?.label ?? "Gallery"}
-              />
+            {/* Center Story Box */}
+            <div
+              className="flex flex-col md:flex-row items-center gap-6 max-w-6xl max-h-[85vh] w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Image Frame */}
+              <div className="flex-1 flex justify-center items-center overflow-hidden h-[40vh] md:h-[60vh] rounded-2xl relative bg-neutral-950 border border-white/10">
+                <motion.img
+                  key={filteredMemories[lightboxIndex].image}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{
+                    opacity: 1,
+                    scale: isZoomed ? 1.4 : 1,
+                    cursor: isZoomed ? "zoom-out" : "zoom-in",
+                  }}
+                  transition={{ duration: 0.3 }}
+                  src={filteredMemories[lightboxIndex].image}
+                  alt={filteredMemories[lightboxIndex].title}
+                  onClick={() => setIsZoomed(!isZoomed)}
+                  className="max-w-full max-h-full object-contain rounded-xl select-none"
+                />
+              </div>
+
+              {/* Memory Context Sidebar */}
+              <div className="w-full md:w-[350px] space-y-4 text-left p-2 md:p-6 self-center">
+                <div className="flex items-center gap-2 text-xs text-amber-500 font-bold uppercase tracking-wider">
+                  <Calendar className="w-4 h-4" />
+                  <span>{filteredMemories[lightboxIndex].date}</span>
+                </div>
+
+                <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight font-serif tracking-wide">
+                  {filteredMemories[lightboxIndex].title}
+                </h2>
+
+                <div className="w-12 h-0.5 bg-amber-500/50" />
+
+                <p className="text-sm md:text-base text-neutral-300 font-light leading-relaxed italic">
+                  "{filteredMemories[lightboxIndex].description}"
+                </p>
+
+                <div className="pt-4 flex items-center gap-2 text-[10px] text-neutral-500 font-mono uppercase tracking-widest border-t border-white/5">
+                  <span>Hostel Memories</span>
+                  <span>•</span>
+                  <span>AVD Campus</span>
+                </div>
+              </div>
             </div>
 
+            {/* Right Nav Arrow */}
             <button
-              onClick={(e) => { e.stopPropagation(); navigate(1); }}
-              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) =>
+                  prev !== null ? (prev + 1) % filteredMemories.length : null,
+                );
+                setIsZoomed(false);
+              }}
+              className="absolute right-4 md:right-8 w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-colors z-10 cursor-pointer"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
 
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
-              <p className="text-white/80 text-sm font-semibold">{filtered[lightbox.index]?.label}</p>
-              <p className="text-white/40 text-xs">{lightbox.index + 1} / {filtered.length}</p>
+            {/* Bottom Keyboard Hint */}
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 hidden md:block text-[10px] text-neutral-500 font-semibold uppercase tracking-widest pointer-events-none">
+              Use Left / Right Arrows to navigate • ESC to close
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
