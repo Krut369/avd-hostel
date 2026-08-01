@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { hostelData } from "@/data/hostel";
 import { COLORS } from "@/constants/colors";
@@ -98,7 +97,7 @@ export function Footer() {
                   { href: "/contact", label: "Contact" },
                 ].map((link) => (
                   <li key={link.href}>
-                    <Link
+                    <a
                       href={link.href}
                       className="text-sm transition-all duration-300 flex items-center gap-2.5 group"
                       style={{ color: COLORS.textSecondary }}
@@ -116,7 +115,7 @@ export function Footer() {
                         style={{ backgroundColor: `${COLORS.primary}40` }}
                       />
                       {link.label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>

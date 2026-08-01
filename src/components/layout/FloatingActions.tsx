@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { COLORS } from "@/constants/colors";
@@ -94,7 +93,7 @@ export function FloatingActions() {
           style={{ backgroundColor: `${COLORS.primary}35` }}
         />
 
-        <Link
+        <a
           href="/#contact"
           aria-label="Apply Now"
           onMouseEnter={() => setShowContactTooltip(true)}
@@ -108,7 +107,7 @@ export function FloatingActions() {
           >
             <MessageCircle className="w-5 h-5 text-white" />
           </motion.div>
-        </Link>
+        </a>
       </div>
     </div>
   );

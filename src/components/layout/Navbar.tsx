@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { COLORS } from "@/constants/colors";
 
@@ -22,7 +20,13 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [scrollProgress, setScrollProgress] = useState(0);
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState("/");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPathname(window.location.pathname);
+    }
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -147,7 +151,7 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <Link
+            <a
               href="/"
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 group"
@@ -159,7 +163,7 @@ export function Navbar() {
                   className="w-full h-full object-contain"
                 />
               </div>
-            </Link>
+            </a>
 
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-0.5">
@@ -168,7 +172,7 @@ export function Navbar() {
                   ? activeSection === link.id
                   : pathname === link.href.split("#")[0];
                 return (
-                  <Link
+                  <a
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
@@ -188,17 +192,17 @@ export function Navbar() {
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
-                  </Link>
+                  </a>
                 );
               })}
-              <Link
+              <a
                 href="/#contact"
                 onClick={(e) => handleNavClick(e, "/#contact")}
                 className="ml-4 px-5 py-2.5 text-white text-sm font-semibold rounded-lg glass-shine hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300"
                 style={{ backgroundColor: COLORS.primary }}
               >
                 Apply Now
-              </Link>
+              </a>
             </div>
 
             {/* Mobile toggle */}
@@ -261,7 +265,7 @@ export function Navbar() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.045, duration: 0.35 }}
                     >
-                      <Link
+                      <a
                         href={link.href}
                         onClick={(e) => handleNavClick(e, link.href)}
                         className={`flex items-center justify-between py-3.5 text-2xl font-semibold border-b transition-all duration-300 hover:pl-2 ${
@@ -281,7 +285,7 @@ export function Navbar() {
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                           />
                         )}
-                      </Link>
+                      </a>
                     </motion.div>
                   );
                 })}
@@ -293,14 +297,14 @@ export function Navbar() {
                 transition={{ delay: 0.35 }}
                 className="mt-8"
               >
-                <Link
+                <a
                   href="/#contact"
                   onClick={(e) => handleNavClick(e, "/#contact")}
                   className="block w-full text-center py-4 text-white text-lg font-bold rounded-2xl shadow-lg active:scale-95 transition-all duration-300 glass-shine"
                   style={{ backgroundColor: COLORS.primary }}
                 >
                   Apply Now
-                </Link>
+                </a>
               </motion.div>
 
               <motion.div
