@@ -9,36 +9,8 @@ import { INDIAN_STATES, GUJARAT_DISTRICTS, GUJARAT_CITIES } from "@/constants/lo
 import { PhoneInput, validatePhoneNumber } from "@/components/ui/PhoneInput";
 import { SectionHeader } from "../ui/SectionHeader";
 
-// Custom CSS for transitions, steps, and shakes
-const customStyles = `
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    15%, 45%, 75% { transform: translateX(-4px); }
-    30%, 60%, 90% { transform: translateX(4px); }
-  }
-
-  @keyframes scaleUp {
-    from { transform: scale(0.97); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .animate-shake {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-  }
-
-  .animate-scale-up {
-    animation: scaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  }
-`;
+// Note: fadeIn, shake, scaleUp keyframes and their animation classes
+// are defined in globals.css
 
 export function CTASection() {
   // Stepper State
@@ -141,15 +113,7 @@ export function CTASection() {
   // Confetti Canvas Ref
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Inject Styles on Mount
-  useEffect(() => {
-    const sheet = document.createElement("style");
-    sheet.innerHTML = customStyles;
-    document.head.appendChild(sheet);
-    return () => {
-      document.head.removeChild(sheet);
-    };
-  }, []);
+  // Styles are in globals.css (no injection needed)
 
   // Define required fields per step
   const stepRequiredFields: Record<number, string[]> = {
@@ -376,36 +340,40 @@ export function CTASection() {
       )}
 
       <div className="max-w-3xl mx-auto w-full relative z-10">
-        {/* Header Section */}
+        {/* Header */}
+        <SectionHeader
+          badge="Admissions"
+          title="Admission"
+          titleHighlight="Enquiry"
+          subtitle="Fill out the details below in 3 quick steps and our admissions team will contact you shortly."
+        />
 
-          <SectionHeader
-                  title="Admission Enquiry"
-                  titleHighlight="Enquiry"
-                  subtitle="  Fill out the details below in 3 quick steps and our admissions team will contact you shortly.
-          "
-                />
         {/* Stepper Card */}
         <div
           className="rounded-3xl p-6 md:p-8 border transition-all duration-300"
-          style={{ backgroundColor: COLORS.surface, borderColor: COLORS.borderGold }}
+          style={{
+            backgroundColor: COLORS.surface,
+            borderColor: COLORS.borderGold,
+            boxShadow: "0 8px 32px -8px rgba(196,77,40,0.10), 0 2px 8px -2px rgba(196,77,40,0.06)",
+          }}
         >
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="space-y-8">
               
-              {/* Sleek Completion Progress Bar Tracker */}
+              {/* Progress Bar */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider" style={{ color: COLORS.primary }}>
-                  <span>Form Completion Progress</span>
-                  <span>{getProgressPercent()}% Completed</span>
+                <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest" style={{ color: COLORS.primary }}>
+                  <span>Form Progress</span>
+                  <span>{getProgressPercent()}%</span>
                 </div>
-                <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden relative">
-                  <motion.div 
+                <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: `${COLORS.primary}12` }}>
+                  <motion.div
                     className="h-full rounded-full"
-                    style={{ 
+                    style={{
                       backgroundImage: `linear-gradient(to right, ${COLORS.primaryLight}, ${COLORS.primary})`,
                     }}
                     animate={{ width: `${getProgressPercent()}%` }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   />
                 </div>
               </div>
