@@ -311,7 +311,6 @@ export function ContactContent() {
 
       {/* Hero */}
       <section className="relative pt-28 pb-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative z-10 animate-fade-in">
           <h1
             className="text-5xl sm:text-6xl font-bold mb-6"

@@ -40,15 +40,7 @@ export function RoomsContent() {
         className="relative pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
         style={{ backgroundColor: COLORS.background }}
       >
-        {/* Background decoration */}
-        <div
-          className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl opacity-15 pointer-events-none"
-          style={{ backgroundColor: COLORS.primary }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl opacity-10 pointer-events-none"
-          style={{ backgroundColor: COLORS.secondary }}
-        />
+
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div

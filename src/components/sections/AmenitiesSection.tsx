@@ -4,7 +4,7 @@ import React from "react";
 import {
   Home, Car, Shield, ShirtIcon, Dumbbell, Utensils, BookOpen,
   Heart, Users, ArrowUpDown, Trophy, Cross, Droplets,
-  GraduationCap, Star, ArrowRight, Leaf, Lock,
+  GraduationCap, Star, ArrowRight,
 } from "lucide-react";
 import { hostelData } from "@/data/hostel";
 import { COLORS } from "@/constants/colors";
@@ -28,7 +28,6 @@ const iconMap: Record<string, React.ReactNode> = {
 
 // Main campus building image matching reference UI
 const CAMPUS_IMG = "https://www.avdvvn.org/assets/images/r3.jpg";
-const CAMPUS_THUMB = "https://www.avdvvn.org/assets/images/r3.jpg";
 
 export function AmenitiesSection() {
   const amenities = hostelData.amenities;
@@ -205,107 +204,7 @@ export function AmenitiesSection() {
         </div>
 
 
-        {/* ─── 3. BOTTOM BANNER: FULL-WIDTH FEATURE CARD ─────────────────────── */}
-        <div className="bg-white rounded-[32px] border border-[#EFEBE6] p-4 sm:p-6 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-6">
-          
-          {/* Left Block: Thumbnail & Well-Being Tagline */}
-          <div className="flex flex-col sm:flex-row items-center gap-5 w-full lg:w-auto">
-            <div className="w-full sm:w-36 h-28 sm:h-24 rounded-2xl overflow-hidden shrink-0">
-              <img
-                src={CAMPUS_THUMB}
-                alt="Building thumbnail"
-                className="w-full h-full object-cover"
-              />
-            </div>
 
-            <div className="flex items-center gap-4">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 shadow-sm"
-                style={{ backgroundColor: COLORS.primary, color: "#FFFFFF" }}
-              >
-                <Heart className="w-5 h-5 fill-white text-white" />
-              </div>
-              <div>
-                <h4 className="text-lg font-bold font-serif text-[#0F172A] leading-tight">
-                  Designed for<br />Your Well-Being
-                </h4>
-                <p className="text-xs text-slate-500 mt-1 max-w-xs font-sans">
-                  Our amenities ensure you have everything you need to learn, grow, and thrive.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Middle Block: 3 Features with Separators */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-4 lg:py-0 border-y lg:border-y-0 lg:border-x border-slate-100 px-0 lg:px-8 w-full lg:w-auto">
-            
-            {/* Feature 1 */}
-            <div className="flex items-start gap-3">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                style={{ backgroundColor: `${COLORS.primary}12`, color: COLORS.primary }}
-              >
-                <Users className="w-4 h-4" />
-              </div>
-              <div>
-                <h5 className="text-xs font-bold text-[#0F172A] font-sans">Student First</h5>
-                <p className="text-[11px] text-slate-500 leading-tight mt-0.5 font-sans">
-                  Every facility is crafted with students in mind.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex items-start gap-3">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                style={{ backgroundColor: `${COLORS.primary}12`, color: COLORS.primary }}
-              >
-                <Leaf className="w-4 h-4" />
-              </div>
-              <div>
-                <h5 className="text-xs font-bold text-[#0F172A] font-sans">Sustainable</h5>
-                <p className="text-[11px] text-slate-500 leading-tight mt-0.5 font-sans">
-                  Eco-friendly practices for a better tomorrow.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex items-start gap-3">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                style={{ backgroundColor: `${COLORS.primary}12`, color: COLORS.primary }}
-              >
-                <Lock className="w-4 h-4" />
-              </div>
-              <div>
-                <h5 className="text-xs font-bold text-[#0F172A] font-sans">Safe & Secure</h5>
-                <p className="text-[11px] text-slate-500 leading-tight mt-0.5 font-sans">
-                  Your safety and comfort are our top priority.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Right Block: CTA Button */}
-          <div className="w-full lg:w-auto shrink-0 flex justify-end">
-            <a
-              href="#about"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-white font-semibold text-sm rounded-xl transition-all duration-300 hover:opacity-90 active:scale-95 shadow-md font-sans"
-              style={{ backgroundColor: COLORS.primary }}
-            >
-              <span>Explore Campus</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-
-        </div>
 
       </div>
 

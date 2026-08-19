@@ -42,17 +42,7 @@ export function ArrivalContent() {
       className="relative min-h-screen pt-24 pb-12 sm:pt-28 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col justify-center items-center"
       style={{ backgroundColor: COLORS.background }}
     >
-      {/* Background Ambient Radial Glows */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] opacity-[0.08]"
-          style={{ backgroundColor: COLORS.primary }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] opacity-[0.08]"
-          style={{ backgroundColor: COLORS.secondary }}
-        />
-      </div>
+
 
       <div className="max-w-7xl w-full mx-auto relative z-10 space-y-6 sm:space-y-8">
         

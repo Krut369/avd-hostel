@@ -58,43 +58,26 @@ export function CampusHighlightsSection() {
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center py-6 sm:py-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="max-w-4xl w-full mx-auto flex flex-col items-center">
 
-          {/* Active Highlight Text Block (Spacious & Clean Layout) */}
-          <div className="w-full max-w-2xl text-center flex flex-col items-center justify-center mb-6 sm:mb-8">
+          {/* Section Header */}
+          <div className="relative text-center max-w-3xl mx-auto z-20 px-6 sm:px-8 select-none mb-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[#C44D28]/10 text-[#C44D28] mb-3 border border-[#C44D28]/20">
+              🏛️ &nbsp;ABOUT US
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 font-serif leading-tight">
+              Campus <span className="gradient-text italic">Highlights</span>
+            </h2>
+          </div>
+
+          <div className="w-full max-w-2xl text-center flex flex-col items-center justify-center mb-6 sm:mb-8 min-h-[60px] sm:min-h-[48px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="space-y-2.5"
+                transition={{ duration: 0.35, ease: "easeOut" }}
               >
-                {/* Single Clean Pill Tag */}
-                <div className="flex justify-center">
-                  <span
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase rounded-full font-sans border border-[#C44D28]/20 shadow-sm"
-                    style={{
-                      backgroundColor: `${COLORS.primary}12`,
-                      color: COLORS.primary,
-                    }}
-                  >
-                    🏛️ &nbsp;{slides[currentSlide].tag}
-                  </span>
-                </div>
-
-                {/* Main Heading */}
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif tracking-tight text-[#0F172A] leading-tight">
-                  {slides[currentSlide].title}
-                  <span
-                    className="block text-xs sm:text-sm font-semibold mt-1 uppercase tracking-widest italic font-sans"
-                    style={{ color: COLORS.secondary }}
-                  >
-                    — {slides[currentSlide].subtitle} —
-                  </span>
-                </h2>
-
-                {/* Description Paragraph with Clear Gap */}
-                <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto leading-relaxed font-sans pt-1">
+                <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto leading-relaxed font-sans font-light">
                   {slides[currentSlide].description}
                 </p>
               </motion.div>
@@ -102,44 +85,60 @@ export function CampusHighlightsSection() {
           </div>
 
           {/* Card Stack Container (Well-Separated with Generous Margin) */}
-          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl h-[210px] sm:h-[250px] md:h-[280px] lg:h-[300px] mx-auto select-none my-4">
+          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl h-[210px] sm:h-[250px] md:h-[280px] lg:h-[300px] mx-auto select-none mt-20 sm:mt-24 mb-4">
             {slides.map((slide, i) => {
               const pos = getStackPosition(i, currentSlide);
               const prevPos = getStackPosition(i, prevSlideRef.current);
               const isActive = pos === 0;
 
-              // Refined stack offsets to prevent bottom overflow
-              let yVal: number | string | (number | string)[] = pos === 0 ? 0 : pos === 1 ? 10 : 16;
-              if (prevPos === 0 && pos === 2) {
-                yVal = [0, "-110%", 16];
+              // Top stack shifting logic
+              let yVal: number | string | (number | string)[] = pos * -36;
+              let scaleVal: number | (number)[] = 1 - pos * 0.05;
+              let xVal: number | string | (number | string)[] = 0;
+
+              // Sliding card animation when active slide goes to the back
+              const isExiting = prevPos === 0 && pos === slides.length - 1;
+              if (isExiting) {
+                yVal = [0, 240, pos * -36];
+                scaleVal = [1, 0.85, 1 - pos * 0.05];
+                xVal = [0, 60, 0];
               }
+
+              // Hardware-accelerated and composited transition optimization
+              const cardTransition = isExiting
+                ? ({
+                  type: "tween",
+                  ease: "easeInOut",
+                  duration: 0.6,
+                } as const)
+                : ({
+                  type: "spring",
+                  stiffness: 150,
+                  damping: 22,
+                  mass: 0.85,
+                } as const);
 
               return (
                 <motion.div
                   key={slide.id}
                   style={{
-                    zIndex: slides.length - pos,
-                    transformOrigin: "center center",
+                    zIndex: 50 - pos,
+                    transformOrigin: "bottom center",
                     borderColor: COLORS.borderGold,
                     boxShadow: isActive
-                      ? "0 20px 35px -8px rgba(196,77,40,0.18), 0 6px 12px -2px rgba(0,0,0,0.05)"
-                      : "0 4px 10px -2px rgba(0,0,0,0.04)",
+                      ? "0 20px 40px -10px rgba(196,77,40,0.22), 0 6px 16px -4px rgba(0,0,0,0.08)"
+                      : "0 4px 12px -2px rgba(0,0,0,0.06)",
                     cursor: isActive ? "pointer" : "default",
+                    willChange: "transform",
                   }}
                   animate={{
-                    scale: pos === 0 ? 1 : pos === 1 ? 0.95 : 0.90,
+                    scale: scaleVal,
                     y: yVal,
-                    x: pos === 0 ? 0 : pos === 1 ? 12 : -12,
-                    rotate: pos === 0 ? 0 : pos === 1 ? -2 : 2,
+                    x: xVal,
                   }}
-                  whileHover={isActive ? { y: -3, scale: 1.01 } : {}}
-                  transition={{
-                    default: { type: "spring", stiffness: 280, damping: 24 },
-                    y: (prevPos === 0 && pos === 2)
-                      ? { duration: 0.6, ease: "easeInOut" }
-                      : { type: "spring", stiffness: 280, damping: 24 },
-                  }}
-                  className="absolute inset-0 rounded-2xl sm:rounded-3xl overflow-hidden border bg-white touch-none"
+                  whileHover={isActive ? { y: -4, scale: 1.01 } : {}}
+                  transition={cardTransition}
+                  className="absolute inset-0 rounded-[28px] overflow-hidden border bg-white touch-none"
                   onClick={() => isActive && nextSlide()}
                 >
                   {/* Background image */}
@@ -156,7 +155,7 @@ export function CampusHighlightsSection() {
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0) 70%)",
+                      background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0) 70%)",
                     }}
                   />
 
@@ -167,24 +166,22 @@ export function CampusHighlightsSection() {
                     transition={{ duration: 0.3 }}
                   />
 
-                  {/* Active card info bar at bottom */}
-                  {isActive && (
-                    <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white pointer-events-none font-sans">
-                      <p className="text-[10px] sm:text-xs uppercase tracking-widest font-semibold opacity-90">
-                        Scroll or click to explore
-                      </p>
-                      <span className="text-[10px] sm:text-xs opacity-75 font-semibold">
-                        {currentSlide + 1} / {slides.length}
-                      </span>
-                    </div>
-                  )}
+                  {/* Active card info overlay */}
+                  <div className="absolute inset-x-0 bottom-0 pt-24 pb-8 px-6 bg-gradient-to-t from-black/90 via-black/35 to-transparent flex flex-col items-center justify-end text-center pointer-events-none">
+                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-white uppercase tracking-wider leading-tight drop-shadow-md">
+                      {slide.title}
+                    </h3>
+                    <p className="text-[9px] sm:text-xs font-bold tracking-[0.25em] uppercase text-orange-200 mt-2 opacity-95">
+                      {slide.subtitle}
+                    </p>
+                  </div>
                 </motion.div>
               );
             })}
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center space-x-4 mt-4">
+          <div className="flex items-center space-x-4 mt-6">
             {/* Prev */}
             <motion.button
               onClick={prevSlide}

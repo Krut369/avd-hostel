@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { COLORS } from "@/constants/colors";
@@ -20,6 +20,8 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [pathname, setPathname] = useState("/");
+  const [navVisible, setNavVisible] = useState(true);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -28,11 +30,27 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 30);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
+      
+      if (currentScrollY <= 50) {
+        setNavVisible(true);
+      } else {
+        // Hide when scrolling down, show when scrolling up
+        if (currentScrollY > lastScrollY) {
+          setNavVisible(false);
+        } else {
+          setNavVisible(true);
+        }
+      }
+      
+      lastScrollYRef.current = currentScrollY;
+      setScrolled(currentScrollY > 30);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Prevent scroll when mobile menu is open
@@ -135,80 +153,78 @@ export function Navbar() {
           <a
             href="/"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-3 group bg-white/80 backdrop-blur-xl px-3.5 py-2 rounded-full border border-white/60 shadow-md transition-all hover:scale-105"
+            className="flex items-center justify-center group bg-white/80 backdrop-blur-xl p-2 rounded-full border border-white/60 shadow-md transition-all hover:scale-105 w-11 h-11 sm:w-12 sm:h-12"
             style={{
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
             }}
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#FFF4EC] border border-[#C44D28]/25 overflow-hidden flex items-center justify-center p-1 group-hover:scale-105 transition-transform duration-300 shadow-sm">
-              <img
-                src="/logo.png"
-                alt="AVD Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs sm:text-sm font-bold font-serif tracking-tight text-[#0F172A] group-hover:text-[#C44D28] transition-colors leading-tight">
-                Atmiya Vidya Dham
-              </span>
-              <span className="text-[8px] sm:text-[9px] font-sans font-bold text-[#8A5B36] tracking-widest uppercase leading-none mt-0.5">
-                Harisaurabh Hostel
-              </span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="AVD Logo"
+              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            />
           </a>
         </div>
 
         {/* 2. CENTER: Dedicated Floating Translucent Glass Pill for Navigation Links ONLY */}
-        <nav
-          onMouseLeave={() => setHoveredLink(null)}
-          className="pointer-events-auto hidden lg:flex items-center gap-1 relative bg-white/80 backdrop-blur-xl border border-white/60 px-3 py-1.5 rounded-full shadow-lg transition-all duration-300"
-          style={{
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            boxShadow: "0 10px 30px -5px rgba(0, 0, 0, 0.08)",
-          }}
-        >
-          {navLinks.map((link) => {
-            const active = isHome
-              ? activeSection === link.id
-              : pathname === link.href.split("#")[0];
-            const isHovered = hoveredLink === link.href;
+        <AnimatePresence>
+          {navVisible && (
+            <motion.nav
+              initial={{ y: -20, opacity: 0, scale: 0.95 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: -20, opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onMouseLeave={() => setHoveredLink(null)}
+              className="pointer-events-auto hidden lg:flex items-center gap-1 relative bg-white/80 backdrop-blur-xl border border-white/60 px-3 py-1.5 rounded-full shadow-lg"
+              style={{
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)",
+                boxShadow: "0 10px 30px -5px rgba(0, 0, 0, 0.08)",
+              }}
+            >
+              {navLinks.map((link) => {
+                const active = isHome
+                  ? activeSection === link.id
+                  : pathname === link.href.split("#")[0];
+                const isHovered = hoveredLink === link.href;
 
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                onMouseEnter={() => setHoveredLink(link.href)}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`relative px-4 py-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 rounded-full z-10 flex items-center ${
-                  active ? "text-white" : "text-[#475569] hover:text-[#0F172A]"
-                }`}
-              >
-                {/* Sliding Hover Pill Background */}
-                {isHovered && !active && (
-                  <motion.div
-                    layoutId="nav-hover-pill"
-                    className="absolute inset-0 rounded-full bg-[#C44D28]/12 -z-10"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                )}
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onMouseEnter={() => setHoveredLink(link.href)}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className={`relative px-4 py-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 rounded-full z-10 flex items-center ${
+                      active ? "text-white" : "text-[#475569] hover:text-[#0F172A]"
+                    }`}
+                  >
+                    {/* Sliding Hover Pill Background */}
+                    {isHovered && !active && (
+                      <motion.div
+                        layoutId="nav-hover-pill"
+                        className="absolute inset-0 rounded-full bg-[#C44D28]/12 -z-10"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
 
-                {/* Active Terracotta Pill Background */}
-                {active && (
-                  <motion.div
-                    layoutId="nav-active-pill"
-                    className="absolute inset-0 rounded-full -z-10 shadow-sm"
-                    style={{ backgroundColor: COLORS.primary }}
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
+                    {/* Active Terracotta Pill Background */}
+                    {active && (
+                      <motion.div
+                        layoutId="nav-active-pill"
+                        className="absolute inset-0 rounded-full -z-10 shadow-sm"
+                        style={{ backgroundColor: COLORS.primary }}
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
 
-                <span>{link.label}</span>
-              </a>
-            );
-          })}
-        </nav>
+                    <span>{link.label}</span>
+                  </a>
+                );
+              })}
+            </motion.nav>
+          )}
+        </AnimatePresence>
 
         {/* 3. FAR RIGHT: Independent Contact Us Action Button & Mobile Toggle */}
         <div className="pointer-events-auto flex items-center gap-3 shrink-0">

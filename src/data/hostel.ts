@@ -137,6 +137,66 @@ export const hostelData = {
       image: "https://www.avdvvn.org/assets/images/alumni2.jpeg",
       bgPosition: "top center",
     },
+    {
+      id: 4,
+      name: "Harsh Patel",
+      tag: "Alumni (B.Tech CSE, ADIT 2022)",
+      rating: 5,
+      review:
+        "The environment at AVD is unparalleled. It's not just a hostel, but a temple of learning where I grew both academically and spiritually. The guidance from swamijis was life-changing.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      bgPosition: "top center",
+    },
+    {
+      id: 5,
+      name: "Smit Shah",
+      tag: "3rd Year Student (Mechanical, BVM)",
+      rating: 5,
+      review:
+        "Unmatched facilities and extremely hygienic food. The reading room is perfect for late-night exam prep, and the overall discipline helped me maintain a great routine.",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
+      bgPosition: "top center",
+    },
+    {
+      id: 6,
+      name: "Rajan Vyas",
+      tag: "Software Engineer, TCS (Alumni 2021)",
+      rating: 5,
+      review:
+        "AVD taught me the true meaning of brotherhood. Living with fellow students who share the same values created bonds that will last a lifetime. Highly recommended for any student!",
+      image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop&crop=face",
+      bgPosition: "top center",
+    },
+    {
+      id: 7,
+      name: "Devendra Parmar",
+      tag: "Alumni (BE Civil, GCET 2023)",
+      rating: 5,
+      review:
+        "From sports tournaments to spiritual sabhas, AVD provides a holistic development environment. The staff is incredibly supportive and the campus is always peaceful.",
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
+      bgPosition: "top center",
+    },
+    {
+      id: 8,
+      name: "Vatsal Patel",
+      tag: "MBA Student, GH Patel College",
+      rating: 5,
+      review:
+        "Staying here has been a blessing. The peaceful atmosphere of the temple and campus gave me the mental clarity to excel in my studies while building a strong character.",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+      bgPosition: "top center",
+    },
+    {
+      id: 9,
+      name: "Abhishek Joshi",
+      tag: "Data Scientist, Infosys (Alumni 2020)",
+      rating: 5,
+      review:
+        "The best years of my college life were spent at AVD. The discipline, the moral teachings, and the nourishing environment played a huge role in my professional success today.",
+      image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=400&fit=crop&crop=face",
+      bgPosition: "top center",
+    },
   ],
   transportation: [
     {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { WebsiteIntro } from "@/components/layout/WebsiteIntro";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
@@ -55,6 +56,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#FFF4EC] text-[#111827] font-sans antialiased">
+      <WebsiteIntro />
       <Navbar />
       {renderView()}
       <Footer />

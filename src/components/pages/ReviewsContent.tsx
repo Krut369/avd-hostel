@@ -15,8 +15,7 @@ export function ReviewsContent() {
         className="relative pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
         style={{ backgroundColor: COLORS.background }}
       >
-        {/* Decorative radial glows */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-3xl opacity-10 pointer-events-none" style={{ backgroundColor: COLORS.primary }} />
+
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none">
           <Quote className="w-96 h-96" style={{ color: COLORS.primary }} />
         </div>
