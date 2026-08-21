@@ -91,10 +91,7 @@ export function AmenitiesSection() {
             </h2>
 
             {/* Accent Line */}
-            <div
-              className="w-12 h-[3px] rounded-full mb-6"
-              style={{ backgroundColor: COLORS.primary }}
-            />
+            <div className="h-0.5 w-14 rounded-full bg-gradient-to-r from-[#C44D28] to-[#D86642] mb-6" />
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-md font-sans">
@@ -103,36 +100,6 @@ export function AmenitiesSection() {
             </p>
           </div>
 
-          {/* Dark Floating Card Overlay (Bottom Right over photo) */}
-          <div className="relative lg:absolute bottom-6 right-6 lg:bottom-10 lg:right-10 z-20 m-6 lg:m-0">
-            <div
-              className="rounded-3xl p-6 max-w-[300px] sm:max-w-[330px] shadow-2xl text-white backdrop-blur-md border border-white/10"
-              style={{ backgroundColor: "#0F172A" }}
-            >
-              <div className="flex items-center gap-3.5 mb-3">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-inner"
-                  style={{ backgroundColor: COLORS.primary }}
-                >
-                  <Star className="w-5 h-5 text-white fill-white" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase block font-sans">
-                    BUILT FOR
-                  </span>
-                  <h4 className="text-base font-bold font-serif leading-tight text-white">
-                    Your Success
-                  </h4>
-                </div>
-              </div>
-
-              <div className="w-full h-px bg-white/15 my-3" />
-
-              <p className="text-xs leading-relaxed text-slate-300 font-sans">
-                Thoughtfully designed amenities to support your academic and personal growth.
-              </p>
-            </div>
-          </div>
         </div>
 
 
@@ -169,13 +136,12 @@ export function AmenitiesSection() {
                 <div>
                   {/* Icon Badge */}
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
+                    className="mb-4 transition-transform duration-300 group-hover:scale-110 inline-flex items-center origin-left"
                     style={{
-                      backgroundColor: `${COLORS.primary}12`,
                       color: COLORS.primary,
                     }}
                   >
-                    {iconMap[item.title] || <Home className="w-5 h-5" />}
+                    {iconMap[item.title] || <Home className="w-6 h-6" />}
                   </div>
 
                   {/* Title */}
@@ -189,15 +155,7 @@ export function AmenitiesSection() {
                   </p>
                 </div>
 
-                {/* Bottom Action Arrow Circle */}
-                <div className="mt-6 flex items-center">
-                  <div
-                    className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center transition-colors duration-300 group-hover:bg-[#C44D28] group-hover:text-white text-slate-400"
-                    style={{ backgroundColor: `${COLORS.primary}08` }}
-                  >
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </div>
-                </div>
+
               </div>
             ))}
           </div>

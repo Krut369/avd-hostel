@@ -18,6 +18,7 @@ export function CampusHighlightsSection() {
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) return;
     let index = Math.floor(latest * slides.length);
     if (index >= slides.length) index = slides.length - 1;
     if (index < 0) index = 0;
@@ -28,6 +29,14 @@ export function CampusHighlightsSection() {
   });
 
   const scrollToSlide = (index: number) => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      if (index !== currentSlide) {
+        prevSlideRef.current = currentSlide;
+        setCurrentSlide(index);
+      }
+      return;
+    }
+    
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -52,23 +61,22 @@ export function CampusHighlightsSection() {
     <div
       ref={containerRef}
       id="about"
-      className="relative h-[200vh] w-full"
+      className="relative md:h-[200vh] w-full"
       style={{ backgroundColor: COLORS.background }}
     >
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center py-6 sm:py-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <div className="md:sticky md:top-0 md:h-screen w-full flex flex-col justify-center items-center py-12 md:py-10 px-4 sm:px-6 lg:px-8 md:overflow-hidden pb-16">
         <div className="max-w-4xl w-full mx-auto flex flex-col items-center">
 
           {/* Section Header */}
           <div className="relative text-center max-w-3xl mx-auto z-20 px-6 sm:px-8 select-none mb-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[#C44D28]/10 text-[#C44D28] mb-3 border border-[#C44D28]/20">
-              🏛️ &nbsp;ABOUT US
-            </div>
+
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 font-serif leading-tight">
               Campus <span className="gradient-text italic">Highlights</span>
             </h2>
+            <div className="h-0.5 w-14 rounded-full bg-gradient-to-r from-[#C44D28] to-[#D86642] mx-auto mt-4 mb-2" />
           </div>
 
-          <div className="w-full max-w-2xl text-center flex flex-col items-center justify-center mb-6 sm:mb-8 min-h-[60px] sm:min-h-[48px]">
+          <div className="w-full max-w-2xl text-center flex flex-col items-center justify-center mb-6 sm:mb-8 md:mb-4 min-h-[60px] sm:min-h-[48px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
@@ -85,7 +93,7 @@ export function CampusHighlightsSection() {
           </div>
 
           {/* Card Stack Container (Well-Separated with Generous Margin) */}
-          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl h-[210px] sm:h-[250px] md:h-[280px] lg:h-[300px] mx-auto select-none mt-20 sm:mt-24 mb-4">
+          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl h-[210px] sm:h-[250px] md:h-[280px] lg:h-[300px] mx-auto select-none mt-20 sm:mt-24 md:mt-20 lg:mt-16 mb-4">
             {slides.map((slide, i) => {
               const pos = getStackPosition(i, currentSlide);
               const prevPos = getStackPosition(i, prevSlideRef.current);
@@ -128,7 +136,7 @@ export function CampusHighlightsSection() {
                     boxShadow: isActive
                       ? "0 20px 40px -10px rgba(196,77,40,0.22), 0 6px 16px -4px rgba(0,0,0,0.08)"
                       : "0 4px 12px -2px rgba(0,0,0,0.06)",
-                    cursor: isActive ? "pointer" : "default",
+                    cursor: isActive ? (typeof window !== 'undefined' && window.innerWidth < 768 ? "grab" : "pointer") : "default",
                     willChange: "transform",
                   }}
                   animate={{
@@ -136,10 +144,18 @@ export function CampusHighlightsSection() {
                     y: yVal,
                     x: xVal,
                   }}
-                  whileHover={isActive ? { y: -4, scale: 1.01 } : {}}
+                  whileHover={isActive && typeof window !== 'undefined' && window.innerWidth >= 768 ? { y: -4, scale: 1.01 } : {}}
                   transition={cardTransition}
-                  className="absolute inset-0 rounded-[28px] overflow-hidden border bg-white touch-none"
-                  onClick={() => isActive && nextSlide()}
+                  drag={isActive ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.4}
+                  onDragEnd={(e, { offset }) => {
+                    if (!isActive) return;
+                    if (offset.x < -40) nextSlide();
+                    else if (offset.x > 40) prevSlide();
+                  }}
+                  className="absolute inset-0 rounded-[28px] overflow-hidden border bg-white touch-pan-y"
+                  onClick={() => isActive && typeof window !== 'undefined' && window.innerWidth >= 768 && nextSlide()}
                 >
                   {/* Background image */}
                   <div

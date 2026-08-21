@@ -18,6 +18,16 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
 
   useEffect(() => {
+    // Force scroll to top on refresh and clear hash that may cause browser jumping
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
     };

@@ -362,6 +362,23 @@ export function GalleryContent() {
   const [scrollLeft, setScrollLeft] = useState(0);
   const walkRef = useRef(0);
 
+  // Mobile Category Filter Panning
+  const mobilePillsRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (mobilePillsRef.current) {
+      const container = mobilePillsRef.current;
+      // We use setTimeout to ensure React updates DOM with the data-active attribute
+      setTimeout(() => {
+        const activeElement = container.querySelector('[data-active="true"]') as HTMLElement | null;
+        if (activeElement) {
+          const scrollTarget = activeElement.offsetLeft - container.offsetWidth / 2 + activeElement.offsetWidth / 2;
+          container.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+        }
+      }, 50);
+    }
+  }, [selectedCat]);
+
   // Touch Swipe (for mobile boundary checks)
   const touchStartX = useRef(0);
   const touchWalk = useRef(0);
@@ -518,7 +535,7 @@ export function GalleryContent() {
   return (
     <div
       ref={outerContainerRef}
-      className="min-h-screen relative overflow-hidden transition-colors py-24"
+      className="min-h-screen relative overflow-hidden transition-colors py-12 md:py-24"
       style={{ backgroundColor: COLORS.background }}
     >
       {/* Background Ambience decoration */}
@@ -526,13 +543,11 @@ export function GalleryContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ─── SECTION HEADER ──────────────────────────────────────────────── */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight text-neutral-800">
-            Explore{" "}
-            <span className="gradient-text italic font-serif">
-              Student Life
-            </span>
+        <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-[#0F172A] tracking-tight mb-4 text-center">
+            Explore <span className="text-[#C44D28]">Student Life</span>
           </h2>
+          <div className="h-0.5 w-14 rounded-full bg-gradient-to-r from-[#C44D28] to-[#D86642] mx-auto mt-2 mb-4" />
 
           <p className="text-sm sm:text-base md:text-lg leading-relaxed text-neutral-600 font-medium">
             Every memory tells a story. Explore life at Atmiya Vidya Dham
@@ -542,17 +557,18 @@ export function GalleryContent() {
         </div>
 
         {/* ─── MOBILE CATEGORY PILLS FILTER BAR ───────────────────────────── */}
-        <div className="flex md:hidden gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none snap-x">
+        <div ref={mobilePillsRef} className="flex md:hidden gap-2 overflow-x-auto pb-2 mb-4 scrollbar-none snap-x">
           {categories.map((cat) => {
             const isActive = cat.id === selectedCat;
             return (
               <button
                 key={`mobile-timeline-${cat.id}`}
                 onClick={() => selectTimelineCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap snap-center transition-all cursor-pointer ${
+                data-active={isActive ? "true" : "false"}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap snap-center transition-all cursor-pointer border ${
                   isActive
-                    ? "bg-amber-600 text-white shadow-sm"
-                    : "bg-white text-neutral-600 border border-neutral-200"
+                    ? "bg-[#C44D28] text-white border-[#C44D28] shadow-sm"
+                    : "bg-white text-neutral-600 border-[#EDE8E3]"
                 }`}
               >
                 {cat.title}
@@ -562,7 +578,7 @@ export function GalleryContent() {
         </div>
 
         {/* ─── TIMELINE + GALLERY ROW ─────────────────────────────────────── */}
-        <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-stretch">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12 items-stretch">
           {/* Vertical Timeline Navigation (Desktop only) */}
           <div className="w-[245px] shrink-0 hidden md:flex flex-col py-6 relative justify-center pr-4 border-r border-neutral-200/30">
             <div className="space-y-3 relative z-10 w-full">
@@ -610,7 +626,7 @@ export function GalleryContent() {
           {/* Active Chapter Container (Right side) */}
           <div className="flex-1 flex flex-col justify-between overflow-hidden">
             {/* Active Category Meta Header */}
-            <div className="mb-4">
+            <div className="mb-2 md:mb-4">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-600 mb-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
                 <span>
@@ -624,7 +640,7 @@ export function GalleryContent() {
             </div>
 
             {/* Film-strip Scrapbook Slider */}
-            <div className="overflow-hidden relative py-8">
+            <div className="overflow-hidden relative py-2 md:py-8">
 
 
               {/* Horizontal Scroll Area */}
@@ -637,30 +653,20 @@ export function GalleryContent() {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                className={`flex gap-6 md:gap-8 overflow-x-auto py-10 px-4 scrollbar-none snap-x snap-mandatory ${
+                className={`flex gap-6 md:gap-8 overflow-x-auto py-4 md:py-10 px-4 scrollbar-none snap-x snap-mandatory ${
                   isDragging ? "cursor-grabbing select-none" : "cursor-grab"
                 }`}
                 style={{ scrollBehavior: "auto" }}
               >
                 {/* Main Cards List */}
                 {filteredMemories.map((memory, index) => {
-                  // Alternate rotations for organic scrapbook aesthetic
-                  const rotation =
-                    index % 2 === 0
-                      ? index % 4 === 0
-                        ? -1.5
-                        : 2
-                      : index % 3 === 0
-                        ? -2
-                        : 1;
                   return (
                     <motion.div
                       key={memory.id}
-                      initial={{ opacity: 0, x: 80, rotate: rotation }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, x: 80 }}
+                      animate={{ opacity: 1, x: 0, rotate: 0 }}
                       transition={{ duration: 0.6, delay: index * 0.12 }}
                       whileHover={{
-                        rotate: 0,
                         scale: 1.03,
                         y: -6,
                         transition: { duration: 0.3 },
@@ -717,56 +723,52 @@ export function GalleryContent() {
             </div>
 
             {/* Bottom pagination & navigation */}
-            <div className="mt-4 flex items-center justify-between text-neutral-500 text-xs">
-              <div>
-                <span>
-                  Chapter {currentIdx + 1} of {categories.length}
-                </span>
+            <div className="mt-8 flex justify-center items-center gap-5">
+              <button
+                onClick={() => {
+                  if (prevCategory) {
+                    selectTimelineCategory(prevCategory.id);
+                  }
+                }}
+                disabled={!prevCategory}
+                className={`w-11 h-11 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                  prevCategory
+                    ? "bg-white border-[#EDE8E3] hover:border-[#C44D28] hover:shadow-md cursor-pointer text-[#C44D28]"
+                    : "bg-neutral-50 border-neutral-100 text-neutral-300 cursor-not-allowed opacity-50"
+                }`}
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              <div className="flex gap-2 items-center">
+                {categories.map((c) => (
+                  <div
+                    key={`dot-${c.id}`}
+                    className={`rounded-full transition-all duration-300 ${
+                      c.id === selectedCat
+                        ? "w-6 h-1.5"
+                        : "w-1.5 h-1.5 bg-[#D4D4D8]"
+                    }`}
+                    style={{ backgroundColor: c.id === selectedCat ? COLORS.primary : undefined }}
+                  />
+                ))}
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    if (prevCategory) {
-                      selectTimelineCategory(prevCategory.id);
-                    }
-                  }}
-                  disabled={!prevCategory}
-                  className={`p-1 rounded-md transition-all cursor-pointer ${
-                    prevCategory
-                      ? "hover:bg-neutral-200 hover:text-neutral-800"
-                      : "opacity-35 cursor-not-allowed"
-                  }`}
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="flex gap-1">
-                  {categories.map((c) => (
-                    <div
-                      key={`dot-${c.id}`}
-                      className={`h-1 rounded-full transition-all duration-300 ${
-                        c.id === selectedCat
-                          ? "w-4 bg-amber-600"
-                          : "w-1.5 bg-neutral-300"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <button
-                  onClick={() => {
-                    if (nextCategory) {
-                      selectTimelineCategory(nextCategory.id);
-                    }
-                  }}
-                  disabled={!nextCategory}
-                  className={`p-1 rounded-md transition-all cursor-pointer ${
-                    nextCategory
-                      ? "hover:bg-neutral-200 hover:text-neutral-800"
-                      : "opacity-35 cursor-not-allowed"
-                  }`}
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+
+              <button
+                onClick={() => {
+                  if (nextCategory) {
+                    selectTimelineCategory(nextCategory.id);
+                  }
+                }}
+                disabled={!nextCategory}
+                className={`w-11 h-11 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                  nextCategory
+                    ? "bg-white border-[#EDE8E3] hover:border-[#C44D28] hover:shadow-md cursor-pointer text-[#C44D28]"
+                    : "bg-neutral-50 border-neutral-100 text-neutral-300 cursor-not-allowed opacity-50"
+                }`}
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
@@ -833,18 +835,18 @@ export function GalleryContent() {
                 );
                 setIsZoomed(false);
               }}
-              className="absolute left-4 md:left-8 w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-colors z-10 cursor-pointer"
+              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors z-[70] cursor-pointer backdrop-blur-sm"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 md:w-6 h-5 md:h-6" />
             </button>
 
             {/* Center Story Box */}
             <div
-              className="flex flex-col md:flex-row items-center gap-6 max-w-6xl max-h-[85vh] w-full"
+              className="flex flex-col md:flex-row items-center gap-4 md:gap-6 max-w-6xl w-full h-full pt-20 pb-6 px-4 md:px-16 overflow-y-auto hide-scrollbar"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Image Frame */}
-              <div className="flex-1 flex justify-center items-center overflow-hidden h-[40vh] md:h-[60vh] rounded-2xl relative bg-neutral-950 border border-white/10">
+              <div className="w-full md:flex-1 shrink-0 flex justify-center items-center h-[55vh] md:h-[75vh] rounded-2xl relative">
                 <motion.img
                   key={filteredMemories[lightboxIndex].image}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -857,28 +859,38 @@ export function GalleryContent() {
                   src={filteredMemories[lightboxIndex].image}
                   alt={filteredMemories[lightboxIndex].title}
                   onClick={() => setIsZoomed(!isZoomed)}
-                  className="max-w-full max-h-full object-contain rounded-xl select-none"
+                  className="w-full h-full object-contain rounded-xl select-none shadow-2xl drop-shadow-2xl touch-none"
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.4}
+                  onDragEnd={(_e, { offset }) => {
+                    if (offset.x < -40) {
+                       setLightboxIndex((prev) => prev !== null ? (prev + 1) % filteredMemories.length : null);
+                    } else if (offset.x > 40) {
+                       setLightboxIndex((prev) => prev !== null ? (prev - 1 + filteredMemories.length) % filteredMemories.length : null);
+                    }
+                  }}
                 />
               </div>
 
               {/* Memory Context Sidebar */}
-              <div className="w-full md:w-[350px] space-y-4 text-left p-2 md:p-6 self-center">
-                <div className="flex items-center gap-2 text-xs text-amber-500 font-bold uppercase tracking-wider">
-                  <Calendar className="w-4 h-4" />
+              <div className="w-full md:w-[350px] shrink-0 space-y-3 text-left p-2 self-center">
+                <div className="flex items-center gap-2 text-xs md:text-sm text-amber-500 font-bold uppercase tracking-wider">
+                  <Calendar className="w-3.5 h-3.5" />
                   <span>{filteredMemories[lightboxIndex].date}</span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight font-serif tracking-wide">
+                <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight font-serif tracking-wide drop-shadow-md">
                   {filteredMemories[lightboxIndex].title}
                 </h2>
 
                 <div className="w-12 h-0.5 bg-amber-500/50" />
 
-                <p className="text-sm md:text-base text-neutral-300 font-light leading-relaxed italic">
+                <p className="text-sm md:text-base text-neutral-300 font-light leading-relaxed italic drop-shadow-sm">
                   "{filteredMemories[lightboxIndex].description}"
                 </p>
 
-                <div className="pt-4 flex items-center gap-2 text-[10px] text-neutral-500 font-mono uppercase tracking-widest border-t border-white/5">
+                <div className="pt-3 flex items-center gap-2 text-[10px] md:text-xs text-neutral-400 font-mono uppercase tracking-widest border-t border-white/10">
                   <span>Hostel Memories</span>
                   <span>•</span>
                   <span>AVD Campus</span>
@@ -895,9 +907,9 @@ export function GalleryContent() {
                 );
                 setIsZoomed(false);
               }}
-              className="absolute right-4 md:right-8 w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-colors z-10 cursor-pointer"
+              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors z-[70] cursor-pointer backdrop-blur-sm"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
             </button>
 
             {/* Bottom Keyboard Hint */}

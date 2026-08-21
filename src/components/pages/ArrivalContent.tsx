@@ -54,12 +54,7 @@ export function ArrivalContent() {
           className="max-w-3xl mx-auto text-center space-y-2"
         >
           {/* Badge */}
-          <div className="flex justify-center mb-3">
-            <span className="section-badge">
-              <Compass className="w-3.5 h-3.5" />
-              How to Find Us
-            </span>
-          </div>
+
 
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight text-[#0F172A] tracking-tight"
@@ -75,15 +70,7 @@ export function ArrivalContent() {
             We&apos;re located in the heart of Vallabh Vidyanagar — easily accessible from Anand by multiple routes.
           </p>
 
-          {/* Address Pill */}
-          <div className="pt-2">
-            <span
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border text-xs font-semibold font-sans bg-white/90 backdrop-blur-md shadow-sm border-[#EDE8E3] text-slate-600"
-            >
-              <MapPin className="w-4 h-4 shrink-0" style={{ color: COLORS.primary }} />
-              <span>Vallabh Vidyanagar, Anand, Gujarat — 388120</span>
-            </span>
-          </div>
+          {/* Address Pill Removed */}
         </motion.div>
 
         {/* ─── 2. SMART NAVIGATION MAP & ROUTES CARD ────────────────────────── */}
@@ -126,13 +113,7 @@ export function ArrivalContent() {
                 );
               })}
 
-              {/* Map Destination Badge Overlay */}
-              <div className="absolute top-4 left-4 z-20 pointer-events-none">
-                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-md text-xs font-semibold font-sans text-slate-700">
-                  <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: COLORS.primary }} />
-                  <span>Destination: Atmiya Vidya Dham (AVD)</span>
-                </div>
-              </div>
+              {/* Map Destination Badge Overlay Removed */}
             </div>
 
             {/* RIGHT COLUMN: Interactive Smart Navigation Details */}
@@ -206,7 +187,7 @@ export function ArrivalContent() {
                 </div>
 
                 {/* Routes Card Selector List */}
-                <div className="space-y-2.5">
+                <div className="hidden sm:block space-y-2.5">
                   {hostelData.transportation.map((t, idx) => {
                     const isActive = activeIdx === idx;
                     return (

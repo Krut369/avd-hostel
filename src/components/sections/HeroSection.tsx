@@ -7,9 +7,9 @@ import { COLORS } from "@/constants/colors";
 
 const stats = [
   { num: "500+", label: "Students" },
-  { num: "15+",  label: "Years Legacy" },
-  { num: "14",   label: "Amenities" },
-  { num: "4",    label: "Room Types" },
+  { num: "15+", label: "Years Legacy" },
+  { num: "14", label: "Amenities" },
+  { num: "3", label: "Room Types" },
 ];
 
 export function HeroSection() {
@@ -20,7 +20,7 @@ export function HeroSection() {
     const video = videoRef.current;
     if (!video) return;
     if (video.readyState >= 3) setVideoReady(true);
-    video.play().catch(() => {});
+    video.play().catch(() => { });
   }, []);
 
   const handleScrollDown = () => {
@@ -45,9 +45,8 @@ export function HeroSection() {
         onCanPlay={() => setVideoReady(true)}
         onPlay={() => setVideoReady(true)}
         onLoadedData={() => setVideoReady(true)}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ${
-          videoReady ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ${videoReady ? "opacity-100" : "opacity-0"
+          }`}
         style={{ zIndex: 0 }}
       >
         <source src="/intro.mp4" type="video/mp4" />
@@ -55,18 +54,16 @@ export function HeroSection() {
 
       {/* Dark overlay (video playing) */}
       <div
-        className={`absolute inset-0 z-[1] transition-opacity duration-[2000ms] ${
-          videoReady ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute inset-0 z-[1] transition-opacity duration-[2000ms] ${videoReady ? "opacity-100" : "opacity-0"
+          }`}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50" />
       </div>
 
       {/* Light fallback overlay (before video) */}
       <div
-        className={`absolute inset-0 z-[1] transition-opacity duration-[2000ms] ${
-          videoReady ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
+        className={`absolute inset-0 z-[1] transition-opacity duration-[2000ms] ${videoReady ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-[#FFF4EC]/90 via-[#FFF4EC]/80 to-[#FFF4EC]/95" />
         {/* Ambient floating dots for loading state */}
@@ -113,9 +110,8 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.9 }}
           className="w-24 h-0.5 mx-auto mb-6"
           style={{
-            backgroundImage: `linear-gradient(to right, transparent, ${
-              videoReady ? "rgba(255,255,255,0.6)" : COLORS.accent
-            }, transparent)`,
+            backgroundImage: `linear-gradient(to right, transparent, ${videoReady ? "rgba(255,255,255,0.6)" : COLORS.accent
+              }, transparent)`,
           }}
         />
 
@@ -216,7 +212,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 2 }}
           onClick={handleScrollDown}
           aria-label="Scroll down"
-          className="mt-10 mx-auto flex flex-col items-center gap-1.5 cursor-pointer focus:outline-none group"
+          className="mt-10 mb-12 md:mb-6 mx-auto flex flex-col items-center gap-1.5 cursor-pointer focus:outline-none group"
         >
           <span
             className="text-[10px] font-medium uppercase tracking-widest transition-colors duration-[2000ms]"

@@ -50,7 +50,7 @@ const featureIconMap: Record<string, React.ReactNode> = {
 };
 
 export function FeaturedRoomsSection() {
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{ title: string; images: string[]; index: number } | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null); // Default to no card expanded
   const [isMobile, setIsMobile] = useState(false);
 
@@ -61,7 +61,25 @@ export function FeaturedRoomsSection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const openLightbox = (images: string[], index: number) => setLightbox({ images, index });
+  useEffect(() => {
+    if (!isMobile || hoveredCardId === null) return;
+    
+    // Close the details panel on scroll/touchmove
+    const handleScroll = () => setHoveredCardId(null);
+
+    const timer = setTimeout(() => {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      window.addEventListener("touchmove", handleScroll, { passive: true });
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("touchmove", handleScroll);
+    };
+  }, [isMobile, hoveredCardId]);
+
+  const openLightbox = (title: string, images: string[], index: number) => setLightbox({ title, images, index });
   const closeLightbox = () => setLightbox(null);
 
   const navigate = (dir: 1 | -1) => {
@@ -92,12 +110,7 @@ export function FeaturedRoomsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="flex justify-center mb-3">
-            <span className="section-badge">
-              <Bed className="w-3.5 h-3.5" />
-              Accommodation Options
-            </span>
-          </div>
+
           
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#0F172A] tracking-tight leading-tight">
             Explore Our <span className="italic gradient-text">Rooms</span>
@@ -155,7 +168,7 @@ export function FeaturedRoomsSection() {
                     }}
                     onClick={() => {
                       if (isExpanded) {
-                        openLightbox(room.images, 0);
+                        openLightbox(room.title, room.images, 0);
                       } else {
                         setHoveredCardId(room.id);
                       }
@@ -169,13 +182,7 @@ export function FeaturedRoomsSection() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
                     {/* Top Overlay Badges */}
-                    <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
-                      <span
-                        className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md font-sans"
-                        style={{ backgroundColor: badge.bg, color: badge.text }}
-                      >
-                        {badge.label}
-                      </span>
+                    <div className="absolute top-4 left-4 right-4 flex justify-end items-center z-10">
 
                       {room.tour360Available && (
                         <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center gap-1.5 font-sans">
@@ -249,7 +256,7 @@ export function FeaturedRoomsSection() {
                                 {room.images.map((img, idx) => (
                                   <button
                                     key={idx}
-                                    onClick={() => openLightbox(room.images, idx)}
+                                    onClick={() => openLightbox(room.title, room.images, idx)}
                                     className="w-10 h-10 rounded-xl overflow-hidden border-2 transition-all duration-200 hover:border-[#C44D28] hover:scale-105 focus:outline-none cursor-pointer shadow-sm"
                                     style={{ borderColor: COLORS.border }}
                                   >
@@ -312,19 +319,23 @@ export function FeaturedRoomsSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-md"
+            className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md"
             onClick={closeLightbox}
           >
+            <div className="absolute top-6 left-6 text-white font-serif font-bold text-xl md:text-2xl tracking-wide drop-shadow-md pb-4 z-[70]">
+              {lightbox.title}
+            </div>
+
             <button
               onClick={closeLightbox}
-              className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-[70]"
             >
               <X className="w-6 h-6" />
             </button>
 
             <button
               onClick={(e) => { e.stopPropagation(); navigate(-1); }}
-              className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-[70]"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -336,19 +347,37 @@ export function FeaturedRoomsSection() {
               transition={{ duration: 0.25 }}
               src={lightbox.images[lightbox.index]}
               alt="Room view"
-              className="max-h-[82vh] max-w-[88vw] object-contain rounded-2xl shadow-2xl"
+              className="max-h-[75vh] max-w-[88vw] object-contain rounded-2xl shadow-2xl touch-none cursor-grab active:cursor-grabbing mb-8"
               onClick={(e) => e.stopPropagation()}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.4}
+              onDragEnd={(_e, { offset }) => {
+                if (offset.x < -40) navigate(1);
+                else if (offset.x > 40) navigate(-1);
+              }}
             />
 
             <button
               onClick={(e) => { e.stopPropagation(); navigate(1); }}
-              className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-[70]"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
 
-            <div className="absolute bottom-6 text-white/70 text-sm font-semibold font-sans bg-black/40 px-4 py-1.5 rounded-full border border-white/10">
-              {lightbox.index + 1} / {lightbox.images.length}
+            {/* Thumbnail Strip */}
+            <div className="absolute bottom-6 left-0 right-0 max-w-2xl mx-auto flex justify-center gap-3 px-4 overflow-x-auto hide-scrollbar z-[70]">
+              {lightbox.images.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); setLightbox({ ...lightbox, index: i }); }}
+                  className={`relative shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 ${
+                    lightbox.index === i ? "border-[#C44D28] scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"
+                  }`}
+                >
+                  <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
           </motion.div>
         )}

@@ -11,12 +11,15 @@ interface ReviewCardProps {
 
 function ReviewCard({ review }: ReviewCardProps) {
   return (
-    <div className="group relative w-60 h-60 shrink-0 rounded-2xl overflow-hidden shadow-lg bg-neutral-900 border border-neutral-200/20 cursor-pointer">
+    <div 
+      tabIndex={0}
+      className="group relative w-60 h-60 shrink-0 rounded-2xl overflow-hidden shadow-lg bg-neutral-900 border border-neutral-200/20 cursor-pointer outline-none focus:ring-2 focus:ring-[#C44D28] touch-manipulation"
+    >
       {/* Alumnus/Student Photo */}
       <img
         src={review.image}
         alt={review.name}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-105"
         onError={(e) => {
           // Fallback if image fails to load
           (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop&crop=face";
@@ -24,10 +27,10 @@ function ReviewCard({ review }: ReviewCardProps) {
       />
       
       {/* Gentle dark tint initially */}
-      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 group-focus:bg-black/40 transition-colors duration-300" />
 
-      {/* Review details overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#C44D28] via-[#C44D28]/95 to-[#E0673D]/95 p-5 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-white">
+      {/* Review details overlay on hover or focus (tap) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#C44D28] via-[#C44D28]/95 to-[#E0673D]/95 p-5 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 group-focus:translate-y-0 text-white">
         <div className="space-y-1.5">
           <Quote className="w-5 h-5 opacity-40 rotate-180 text-white shrink-0" />
           <p className="text-[11px] leading-relaxed text-slate-100 line-clamp-[5] overflow-y-auto pr-1 scrollbar-thin">
@@ -84,13 +87,11 @@ export function TestimonialsSection() {
         
         {/* Header (restored as it was) */}
         <div className="relative text-center max-w-3xl mx-auto z-20 px-6 sm:px-8 select-none mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[#C44D28]/10 text-[#C44D28] mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Voices of Atmiya</span>
-          </div>
+
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 font-serif leading-tight">
             Real Stories. <span className="gradient-text italic">Real Experiences.</span> Real Memories.
           </h2>
+          <div className="h-0.5 w-14 rounded-full bg-gradient-to-r from-[#C44D28] to-[#D86642] mx-auto mt-4 mb-2" />
           <p className="mt-2 text-xs sm:text-sm lg:text-base text-neutral-600 font-light max-w-xl mx-auto leading-relaxed hidden sm:block">
             Discover how Atmiya Vidya Dham became a second home for students from different backgrounds and batches.
           </p>
