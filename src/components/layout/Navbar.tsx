@@ -146,7 +146,7 @@ export function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-3 sm:top-5 left-0 right-0 z-50 px-4 sm:px-8 max-w-7xl mx-auto flex items-center justify-between pointer-events-none"
+        className="fixed top-3 sm:top-5 left-0 right-0 z-[100] px-4 sm:px-8 max-w-7xl mx-auto flex items-center justify-between pointer-events-none"
       >
         {/* 1. FAR LEFT: Independent Logo / Icon */}
         <div className="pointer-events-auto shrink-0">
@@ -284,9 +284,9 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 lg:hidden overflow-y-auto pt-24 pb-10 px-6"
+            className="fixed inset-0 z-[90] lg:hidden overflow-y-auto pt-24 pb-10 px-6"
             style={{
-              background: "rgba(255, 244, 236, 0.97)",
+              background: "#FFF4EC",
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
             }}

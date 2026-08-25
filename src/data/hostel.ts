@@ -9,7 +9,7 @@ export const hostelData = {
     contact: {
       phone: "+919712977261",
       phoneName: "Sharad bhai",
-      phone2 : "+919925004164",
+      phone2: "+919925004164",
       phone2Name: "Vinit bhai",
       email: "harisaurabh.hostel@gmail.com",
       address: {

@@ -67,7 +67,7 @@ export function RoomsContent() {
               className="text-base sm:text-lg max-w-xl mx-auto leading-relaxed"
               style={{ color: COLORS.textSecondary }}
             >
-              Four thoughtfully curated room types — each designed to support
+              Three thoughtfully curated room categories — each designed to support
               your academic journey and personal growth.
             </p>
           </motion.div>
