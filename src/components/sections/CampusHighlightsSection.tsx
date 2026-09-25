@@ -12,13 +12,13 @@ export function CampusHighlightsSection() {
   const prevSlideRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll Progress Tracking for linked slide transition
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) return;
     let index = Math.floor(latest * slides.length);
     if (index >= slides.length) index = slides.length - 1;
     if (index < 0) index = 0;
@@ -29,249 +29,220 @@ export function CampusHighlightsSection() {
   });
 
   const scrollToSlide = (index: number) => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      if (index !== currentSlide) {
+        prevSlideRef.current = currentSlide;
+        setCurrentSlide(index);
+      }
+      return;
+    }
+    
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const sectionStart = rect.top + scrollTop;
     const sectionHeight = rect.height;
-    
-    // Calculate the target scroll position based on slide index
     const targetScroll = sectionStart + (index / slides.length) * (sectionHeight - window.innerHeight);
-    
+
     if (index !== currentSlide) {
       prevSlideRef.current = currentSlide;
       setCurrentSlide(index);
     }
-
-    window.scrollTo({
-      top: targetScroll,
-      behavior: "smooth"
-    });
+    window.scrollTo({ top: targetScroll, behavior: "smooth" });
   };
 
-  const nextSlide = () => {
-    const nextIndex = (currentSlide + 1) % slides.length;
-    scrollToSlide(nextIndex);
-  };
+  const nextSlide = () => scrollToSlide((currentSlide + 1) % slides.length);
+  const prevSlide = () => scrollToSlide((currentSlide - 1 + slides.length) % slides.length);
 
-  const prevSlide = () => {
-    const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
-    scrollToSlide(prevIndex);
-  };
-
-  const getStackPosition = (index: number, slideVal: number) => {
-    return (index - slideVal + slides.length) % slides.length;
-  };
+  const getStackPosition = (index: number, slideVal: number) =>
+    (index - slideVal + slides.length) % slides.length;
 
   return (
     <div
       ref={containerRef}
       id="about"
-      className="relative h-[220vh] w-full"
+      className="relative md:h-[200vh] w-full"
       style={{ backgroundColor: COLORS.background }}
     >
-      {/* Sticky container that stays in the viewport */}
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="max-w-7xl w-full mx-auto flex flex-col items-center space-y-8 md:space-y-12">
-          
-          {/* Main Title Content (Centered) */}
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="w-full max-w-3xl text-center space-y-4"
-          >
-            <h2
-              className="text-4xl sm:text-5xl font-bold leading-[1.15]"
-              style={{ color: COLORS.textPrimary }}
-            >
-              The Sanctuary of <span className="italic" style={{ color: COLORS.primary }}>Growth</span>
-            </h2>
-            <p className="text-sm sm:text-base leading-relaxed text-gray-600 font-medium max-w-2xl mx-auto">
-              Beyond architecture lies an environment carefully curated for spiritual alignment. Our sacred spaces are designed to foster inner peace and intellectual clarity.
-            </p>
-          </motion.div>
+      <div className="md:sticky md:top-0 md:h-screen w-full flex flex-col justify-center items-center py-12 md:py-10 px-4 sm:px-6 lg:px-8 md:overflow-hidden pb-16">
+        <div className="max-w-4xl w-full mx-auto flex flex-col items-center">
 
-          {/* Active Highlight Details (Crossfading on Slide Change) */}
-          <div className="w-full max-w-3xl text-center min-h-[160px] flex flex-col items-center justify-center">
+          {/* Section Header */}
+          <div className="relative text-center max-w-3xl mx-auto z-20 px-6 sm:px-8 select-none mb-4">
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 font-serif leading-tight">
+              Campus <span className="gradient-text italic">Highlights</span>
+            </h2>
+            <div className="h-0.5 w-14 rounded-full bg-gradient-to-r from-[#C44D28] to-[#D86642] mx-auto mt-4 mb-2" />
+          </div>
+
+          <div className="w-full max-w-2xl text-center flex flex-col items-center justify-center mb-6 sm:mb-8 md:mb-4 min-h-[60px] sm:min-h-[48px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-3"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
               >
-                <span
-                  className="inline-block px-3 py-1 text-xs font-semibold tracking-wider uppercase rounded-full"
-                  style={{
-                    backgroundColor: COLORS.primaryTint,
-                    color: COLORS.primary,
-                  }}
-                >
-                  {slides[currentSlide].tag}
-                </span>
-                <h3
-                  className="text-2xl sm:text-3xl font-bold tracking-tight"
-                  style={{ color: COLORS.textPrimary }}
-                >
-                  {slides[currentSlide].title}
-                  <span className="block text-sm font-semibold mt-1.5 uppercase tracking-widest italic" style={{ color: COLORS.secondary }}>
-                    — {slides[currentSlide].subtitle} —
-                  </span>
-                </h3>
-                <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto leading-relaxed font-sans font-light">
                   {slides[currentSlide].description}
                 </p>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Card Stack Deck Container */}
-          <div 
-            className="relative w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-4xl h-[240px] sm:h-[320px] md:h-[400px] lg:h-[480px] mx-auto select-none mt-4"
-          >
+          {/* Card Stack Container (Well-Separated with Generous Margin) */}
+          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl h-[210px] sm:h-[250px] md:h-[280px] lg:h-[300px] mx-auto select-none mt-20 sm:mt-24 md:mt-20 lg:mt-16 mb-4">
             {slides.map((slide, i) => {
               const pos = getStackPosition(i, currentSlide);
               const prevPos = getStackPosition(i, prevSlideRef.current);
               const isActive = pos === 0;
 
-              // Calculate y offset with percentage for responsive scaling
-              let yVal: string | string[] = pos === 0 ? "0%" : pos === 1 ? "8%" : "16%";
-              if (prevPos === 0 && pos === 2) {
-                // Swipe up out of view, then return to the back of the stack
-                yVal = ["0%", "-115%", "16%"];
+              // Top stack shifting logic
+              let yVal: number | string | (number | string)[] = pos * -36;
+              let scaleVal: number | (number)[] = 1 - pos * 0.05;
+              let xVal: number | string | (number | string)[] = 0;
+
+              // Sliding card animation when active slide goes to the back
+              const isExiting = prevPos === 0 && pos === slides.length - 1;
+              if (isExiting) {
+                yVal = [0, 240, pos * -36];
+                scaleVal = [1, 0.85, 1 - pos * 0.05];
+                xVal = [0, 60, 0];
               }
+
+              // Hardware-accelerated and composited transition optimization
+              const cardTransition = isExiting
+                ? ({
+                  type: "tween",
+                  ease: "easeInOut",
+                  duration: 0.6,
+                } as const)
+                : ({
+                  type: "spring",
+                  stiffness: 150,
+                  damping: 22,
+                  mass: 0.85,
+                } as const);
 
               return (
                 <motion.div
                   key={slide.id}
                   style={{
-                    zIndex: slides.length - pos,
+                    zIndex: 50 - pos,
                     transformOrigin: "bottom center",
                     borderColor: COLORS.borderGold,
-                    boxShadow: isActive 
-                      ? "0 20px 25px -5px rgba(0,0,0,0.15), 0 10px 10px -5px rgba(0,0,0,0.05)"
-                      : "0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)",
-                    cursor: isActive ? "pointer" : "default"
+                    boxShadow: isActive
+                      ? "0 20px 40px -10px rgba(196,77,40,0.22), 0 6px 16px -4px rgba(0,0,0,0.08)"
+                      : "0 4px 12px -2px rgba(0,0,0,0.06)",
+                    cursor: isActive ? (typeof window !== 'undefined' && window.innerWidth < 768 ? "grab" : "pointer") : "default",
+                    willChange: "transform",
                   }}
                   animate={{
-                    scale: pos === 0 ? 1 : pos === 1 ? 0.95 : 0.90,
+                    scale: scaleVal,
                     y: yVal,
-                    x: pos === 0 ? 0 : pos === 1 ? 16 : -16, // slightly fan out to left/right
-                    rotate: pos === 0 ? 0 : pos === 1 ? -3 : 3,
+                    x: xVal,
                   }}
-                  whileHover={isActive ? { y: "-1.5%", scale: 1.01 } : {}}
-                  transition={{
-                    default: {
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 22,
-                    },
-                    y: (prevPos === 0 && pos === 2)
-                      ? {
-                          duration: 0.65,
-                          ease: "easeInOut",
-                        }
-                      : {
-                          type: "spring",
-                          stiffness: 260,
-                          damping: 22,
-                        }
+                  whileHover={isActive && typeof window !== 'undefined' && window.innerWidth >= 768 ? { y: -4, scale: 1.01 } : {}}
+                  transition={cardTransition}
+                  drag={isActive ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.4}
+                  onDragEnd={(e, { offset }) => {
+                    if (!isActive) return;
+                    if (offset.x < -40) nextSlide();
+                    else if (offset.x > 40) prevSlide();
                   }}
-                  className="absolute inset-0 rounded-3xl overflow-hidden border shadow-xl bg-white touch-none"
-                  onClick={() => isActive && nextSlide()}
+                  className="absolute inset-0 rounded-[28px] overflow-hidden border bg-white touch-pan-y"
+                  onClick={() => isActive && typeof window !== 'undefined' && window.innerWidth >= 768 && nextSlide()}
                 >
-                  {/* Image */}
+                  {/* Background image */}
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
                       backgroundImage: `url('${slide.image}')`,
                       backgroundPosition: "center",
                       backgroundSize: "cover",
-                      backgroundRepeat: "no-repeat"
                     }}
                   />
 
-                  {/* Gradient Overlay */}
-                  <div 
+                  {/* Gradient overlay for text contrast */}
+                  <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: "linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 55%)"
+                      background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0) 70%)",
                     }}
                   />
 
-                  {/* Dynamic Darkening Overlay for depth (solid black with opacity, doesn't leak transparency of cards) */}
+                  {/* Darkening overlay for stacked background cards */}
                   <motion.div
                     className="absolute inset-0 bg-black pointer-events-none"
-                    animate={{
-                      opacity: pos === 0 ? 0 : pos === 1 ? 0.25 : 0.45
-                    }}
+                    animate={{ opacity: pos === 0 ? 0 : pos === 1 ? 0.25 : 0.45 }}
                     transition={{ duration: 0.3 }}
                   />
 
-                  {/* Top card swipe instruction overlay */}
-                  {isActive && (
-                    <div className="absolute bottom-6 left-6 text-white pointer-events-none drop-shadow-md">
-                      <p className="text-xs uppercase tracking-widest font-semibold opacity-90">Scroll or click to cycle</p>
-                    </div>
-                  )}
+                  {/* Active card info overlay */}
+                  <div className="absolute inset-x-0 bottom-0 pt-24 pb-8 px-6 bg-gradient-to-t from-black/90 via-black/35 to-transparent flex flex-col items-center justify-end text-center pointer-events-none">
+                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-white uppercase tracking-wider leading-tight drop-shadow-md">
+                      {slide.title}
+                    </h3>
+                    <p className="text-[9px] sm:text-xs font-bold tracking-[0.25em] uppercase text-orange-200 mt-2 opacity-95">
+                      {slide.subtitle}
+                    </p>
+                  </div>
                 </motion.div>
               );
             })}
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex flex-col items-center space-y-4 w-full">
-            <div className="flex items-center space-x-6">
-              {/* Prev Button */}
-              <button
-                onClick={prevSlide}
-                className="p-3 rounded-full border transition-all duration-300 hover:scale-110 active:scale-95 shadow-md flex items-center justify-center bg-white cursor-pointer"
-                style={{
-                  borderColor: COLORS.borderGold,
-                  color: COLORS.primary,
-                }}
-                aria-label="Previous slide"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+          <div className="flex items-center space-x-4 mt-6">
+            {/* Prev */}
+            <motion.button
+              onClick={prevSlide}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              className="p-2 rounded-full border transition-all duration-300 shadow-sm flex items-center justify-center bg-white cursor-pointer"
+              style={{ borderColor: COLORS.borderGold, color: COLORS.primary }}
+              aria-label="Previous slide"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
+            </motion.button>
 
-              {/* Dot Indicators */}
-              <div className="flex items-center space-x-2">
-                {slides.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => scrollToSlide(i)}
-                    className="h-2 rounded-full transition-all duration-300 cursor-pointer"
-                    style={{
-                      width: currentSlide === i ? "24px" : "8px",
-                      backgroundColor: currentSlide === i ? COLORS.primary : COLORS.border,
-                    }}
-                    aria-label={`Go to slide ${i + 1}`}
-                  />
-                ))}
-              </div>
-
-              {/* Next Button */}
-              <button
-                onClick={nextSlide}
-                className="p-3 rounded-full border transition-all duration-300 hover:scale-110 active:scale-95 shadow-md flex items-center justify-center bg-white cursor-pointer"
-                style={{
-                  borderColor: COLORS.borderGold,
-                  color: COLORS.primary,
-                }}
-                aria-label="Next slide"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+            {/* Dot Indicators */}
+            <div className="flex items-center space-x-2">
+              {slides.map((_, i) => (
+                <motion.button
+                  key={i}
+                  onClick={() => scrollToSlide(i)}
+                  animate={{
+                    width: currentSlide === i ? 18 : 6,
+                    backgroundColor: currentSlide === i ? COLORS.primary : COLORS.border,
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="h-1.5 rounded-full cursor-pointer"
+                  style={{ minWidth: 6 }}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
             </div>
+
+            {/* Next */}
+            <motion.button
+              onClick={nextSlide}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              className="p-2.5 rounded-full border transition-all duration-300 shadow-sm flex items-center justify-center bg-white cursor-pointer"
+              style={{ borderColor: COLORS.borderGold, color: COLORS.primary }}
+              aria-label="Next slide"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.button>
           </div>
 
         </div>

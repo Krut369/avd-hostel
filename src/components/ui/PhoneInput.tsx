@@ -216,7 +216,7 @@ export function PhoneInput({
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             onKeyDown={handleKeyDown}
-            className="flex items-center gap-2 px-3.5 py-2.5 bg-[#FDFCF9]/30 text-sm font-semibold cursor-pointer border-r border-slate-200 hover:bg-stone-50 select-none shrink-0 rounded-l-xl focus:outline-none focus:bg-stone-50/50"
+            className="flex items-center gap-2 px-3.5 py-2.5 bg-[#FDFCF9]/30 text-sm font-semibold cursor-pointer border-r border-slate-200 hover:bg-stone-50 select-none shrink-0 rounded-l-xl focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0 focus:bg-stone-50/50"
             style={{ color: COLORS.textPrimary }}
           >
             <img
@@ -241,7 +241,7 @@ export function PhoneInput({
             value={value}
             onChange={handlePhoneInputChange}
             onBlur={() => setTouched(true)}
-            className={`flex-grow pl-4 ${isValid ? "pr-10" : "pr-4"} py-2.5 bg-transparent text-sm focus:outline-none rounded-r-xl`}
+            className={`flex-grow pl-4 ${isValid ? "pr-10" : "pr-4"} py-2.5 bg-transparent text-sm focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0 rounded-r-xl`}
             style={{ color: COLORS.textPrimary }}
           />
         </div>
@@ -259,7 +259,7 @@ export function PhoneInput({
         {isOpen && (
           <div
             ref={dropdownRef}
-            className="absolute left-0 mt-2 w-[280px] rounded-2xl border bg-white p-2.5 shadow-2xl focus:outline-none z-[100] animate-scale-up"
+            className="absolute left-0 mt-2 w-[280px] rounded-2xl border bg-white p-2.5 shadow-2xl focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0 z-[100] animate-scale-up"
             style={{ borderColor: COLORS.borderGold }}
           >
             <div className="flex items-center gap-2 px-3 py-2 border rounded-xl mb-2 border-stone-100 bg-stone-50/50 focus-within:border-amber-700/40 focus-within:bg-white transition-all duration-200">
